@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="KnowledgeBase" id="Project_257e" database="PostgreSQL" >
+	<comment><![CDATA[The Coral Global Knowledge database]]></comment>
+	<schema name="knowledgebase" >
+		<table name="coral_species" prior="tbl" >
+			<comment><![CDATA[Record documenting a single coral species.
+
+NB. 'class' is a protected name. As such we will append '_tax' to each of the taxonomic levels.]]></comment>
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="phylum_tax" prior="phylum" type="varchar" length="50" jt="12" mandatory="y" />
+			<column name="class_tax" type="varchar" length="50" jt="12" mandatory="y" />
+			<column name="order_tax" type="varchar" length="50" jt="12" />
+			<column name="family_tax" type="varchar" length="50" jt="12" />
+			<column name="genus_tax" type="varchar" length="50" jt="12" />
+			<column name="species_monomial_tax" type="varchar" length="50" jt="12" >
+				<comment><![CDATA[Only the species identifier. E.g. for Acroporal millepora, the value would be 'millepora'.]]></comment>
+			</column>
+			<column name="species_binomial_tax" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[The full binomial. E.g. for Acropora millepora, the value would be 'Acropora millepora'.]]></comment>
+			</column>
+			<column name="ncbi_tax_id" type="integer" jt="4" >
+				<comment><![CDATA[An optional identifier linking to the NCBI taxonomic id.]]></comment>
+			</column>
+			<index name="pk_coral_species_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="cruise" prior="collectionevent" >
+			<comment><![CDATA[A collection event]]></comment>
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" mandatory="y" />
+			<index name="pk_collection_event_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="cruise_site" prior="tbl" >
+			<comment><![CDATA[A join table for cruise_site. A cruise may visit multiple sites. A site may be part of multiple cruises.]]></comment>
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="cruise_id" type="integer" jt="4" mandatory="y" />
+			<column name="site_id" type="integer" jt="4" mandatory="y" />
+			<index name="pk_cruise_site_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_cruise_site_cruise" to_schema="knowledgebase" to_table="cruise" >
+				<fk_column name="cruise_id" pk="id" />
+			</fk>
+			<fk name="fk_cruise_site_site" to_schema="knowledgebase" to_table="site" >
+				<fk_column name="site_id" pk="id" />
+			</fk>
+		</table>
+		<table name="cruise_user" prior="collectionevent_user" >
+			<comment><![CDATA[Join table for cruise and user. Multiple users may partake in a cruise. A single user may partake in multiple cruises.]]></comment>
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="cruise_id" prior="collectionevent_id" type="integer" jt="4" mandatory="y" />
+			<column name="user_id" type="integer" jt="4" mandatory="y" />
+			<index name="pk_collectionevent_user_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_collectionevent_user" to_schema="knowledgebase" to_table="cruise" >
+				<fk_column name="cruise_id" pk="id" />
+			</fk>
+			<fk name="fk_collectionevent_user_user" to_schema="knowledgebase" to_table="user" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+		</table>
+		<table name="environment_snapshot" prior="site_snapshot" >
+			<comment><![CDATA[This is a record that documents the environment at a single site at a single time. As such it will always be associated with a site. It will always have a time and date.]]></comment>
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="snapshot_date" type="date" jt="91" mandatory="y" />
+			<column name="snapshot_time" type="time" jt="92" mandatory="y" />
+			<column name="site_id" type="integer" jt="4" mandatory="y" />
+			<column name="turbidity" type="decimal" length="6" decimal="3" jt="3" >
+				<comment><![CDATA[TODO: Check the correct format. Currently decimal ###.###.]]></comment>
+			</column>
+			<column name="sea_surface_temp" prior="sst" type="decimal" length="4" decimal="2" jt="3" >
+				<comment><![CDATA[sea surface temperature. Format: ##.##]]></comment>
+			</column>
+			<column name="sea_surface_temp_stdev" type="decimal" length="4" decimal="2" jt="3" />
+			<column name="chlorophyl_a" type="decimal" length="4" decimal="2" jt="3" >
+				<comment><![CDATA[Format ##:##]]></comment>
+			</column>
+			<column name="salinity" type="decimal" length="4" decimal="2" jt="3" />
+			<column name="ph" type="decimal" length="4" decimal="2" jt="3" />
+			<column name="dissolved_oxygen" type="decimal" length="6" decimal="3" jt="3" >
+				<comment><![CDATA[mg\L]]></comment>
+			</column>
+			<column name="mean_monthly_maximum_deg_c" type="decimal" length="4" decimal="2" jt="3" />
+			<column name="thermal_stress_anomaly_frequency" type="decimal" length="4" decimal="2" jt="3" />
+			<column name="thermal_stress_anomaly_stdev" type="decimal" length="4" decimal="2" jt="3" />
+			<index name="pk_site_snapshot_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_site_snapshot_site" to_schema="knowledgebase" to_table="site" >
+				<fk_column name="site_id" pk="id" />
+			</fk>
+		</table>
+		<table name="experiment" prior="tbl" >
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="site_id" type="integer" jt="4" mandatory="y" />
+			<column name="cruise_id" type="integer" jt="4" mandatory="y" />
+			<column name="start_time" type="time" jt="92" mandatory="y" />
+			<column name="stop_time" type="time" jt="92" mandatory="y" />
+			<index name="pk_experiment_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_experiment_site" to_schema="knowledgebase" to_table="site" >
+				<fk_column name="site_id" pk="id" />
+			</fk>
+			<fk name="fk_experiment_cruise" to_schema="knowledgebase" to_table="cruise" >
+				<fk_column name="cruise_id" pk="id" />
+			</fk>
+		</table>
+		<table name="ramp" prior="tbl" >
+			<comment><![CDATA[A single temperature ramp. Each ramp has a:
+start_time: start of the ramp in minutes measured from the beginning of the  treatment)
+start_temp
+end_time: end of the ramp in minutes measured from the beginning of the treament)
+end_temp]]></comment>
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="start_time_minutes" type="integer" jt="4" mandatory="y" >
+				<comment><![CDATA[start of the ramp measured in minutes from the beginning of the treatment]]></comment>
+			</column>
+			<column name="start_temperature" type="decimal" length="4" decimal="2" jt="3" mandatory="y" />
+			<column name="end_time_minutes" type="integer" jt="4" mandatory="y" >
+				<comment><![CDATA[end of the ramp measured in minutes from the beginning of the treatment]]></comment>
+			</column>
+			<column name="end_temperature" type="integer" jt="4" >
+				<comment><![CDATA[the end tempearture of the ramp]]></comment>
+			</column>
+			<index name="pk_ramp_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="ramping_profile" prior="tbl" >
+			<comment><![CDATA[This represents a colleciton of ramps. The collection of ramps, taken together, represent an entire ramping protocol. I.e. starting at a given temperature and changing to zero or more different tempertarues including zero or more incubations.]]></comment>
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<index name="pk_ramping_profile_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="ramping_profile_ramp" prior="tbl" >
+			<comment><![CDATA[Join table. Many-to-many. A given ramping profiles, is made up of multiple individual ramp records. A given ramp record may be used in multiple ramping_profile records.]]></comment>
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="ramping_profile_id" type="integer" jt="4" mandatory="y" />
+			<column name="ramp_id" type="integer" jt="4" mandatory="y" />
+			<index name="pk_ramping_profile_ramp_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_ramping_profile_ramp" to_schema="knowledgebase" to_table="ramping_profile" >
+				<fk_column name="ramping_profile_id" pk="id" />
+			</fk>
+			<fk name="fk_ramping_profile_ramp_ramp" to_schema="knowledgebase" to_table="ramp" >
+				<fk_column name="ramp_id" pk="id" />
+			</fk>
+		</table>
+		<table name="sample" prior="cbass_sample" >
+			<comment><![CDATA[TODO: We need to cleary define the difference  between a sample and a treatment.]]></comment>
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="sample_number" type="integer" jt="4" mandatory="y" />
+			<column name="sample_name" type="varchar" length="100" jt="12" />
+			<column name="sample_label" type="varchar" jt="12" />
+			<column name="sampling_date" type="date" jt="91" />
+			<column name="experiment_id" type="integer" jt="4" mandatory="y" />
+			<column name="sampling_protocol_id" prior="sampling_protocol" type="integer" jt="4" mandatory="y" />
+			<column name="storage_protocol_id" type="integer" jt="4" mandatory="y" />
+			<column name="fv_fm_measurement_one" type="decimal" length="3" decimal="3" jt="3" />
+			<column name="fv_fm_measurement_two" type="decimal" length="3" decimal="3" jt="3" />
+			<column name="photo_exists" type="boolean" jt="-7" mandatory="y" />
+			<column name="photo_url" type="varchar" length="100" jt="12" />
+			<column name="phtoto_name" type="varchar" length="100" jt="12" />
+			<column name="additional_info" type="varchar" length="1000" jt="12" />
+			<index name="pk_cbass_sample_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_sample_experiment" to_schema="knowledgebase" to_table="experiment" >
+				<fk_column name="experiment_id" pk="id" />
+			</fk>
+			<fk name="fk_sample_storage_protocol" to_schema="knowledgebase" to_table="storage_protocol" >
+				<fk_column name="storage_protocol_id" pk="id" />
+			</fk>
+			<fk name="fk_sample_sampling_protocol" to_schema="knowledgebase" to_table="sampling_protocol" >
+				<fk_column name="sampling_protocol_id" pk="id" />
+			</fk>
+		</table>
+		<table name="sampling_protocol" prior="tbl" >
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="protocol_url" type="varchar" length="500" jt="12" />
+			<index name="pk_sampling_protocol_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="site" prior="tbl" >
+			<comment><![CDATA[This is a record for a single site. It does not contain any data related to a particular date or time (e.g. water_temperature). Rather this sort of data should be recorded in a 'environment_snapshot'.]]></comment>
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="latitude" type="decimal" length="8" decimal="6" jt="3" mandatory="y" >
+				<comment><![CDATA[The latitude in decimal degrees. E.g. ##.######]]></comment>
+			</column>
+			<column name="longitude" type="decimal" length="9" decimal="6" jt="3" mandatory="y" >
+				<comment><![CDATA[The longitude in decimal degrees e.g. ###.######]]></comment>
+			</column>
+			<column name="name" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="abbreviation_code" type="varchar" length="4" jt="12" mandatory="y" />
+			<index name="pk_site_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="storage_protocol" prior="protocol" >
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="storage_temperature" type="integer" jt="4" >
+				<comment><![CDATA[sotrage temperature in full decimal degrees.]]></comment>
+			</column>
+			<column name="storage_buffer" type="varchar" length="100" jt="12" />
+			<column name="storage_container" type="varchar" length="50" jt="12" />
+			<column name="storage_protocol_description" type="varchar" length="1000" jt="12" />
+			<column name="protocol_url" type="varchar" length="500" jt="12" />
+			<index name="pk_protocol_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="treatment" prior="tbl" >
+			<comment><![CDATA[A single CBASS experiment will contain multiple treatments. A  treatment relates to a single coral species and has a number of genets associated to it.]]></comment>
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="coral_species_id" type="integer" jt="4" mandatory="y" />
+			<column name="number_genets" type="integer" jt="4" mandatory="y" >
+				<comment><![CDATA[The number of genets that were used for this treatment.]]></comment>
+			</column>
+			<column name="experiment_id" type="integer" jt="4" mandatory="y" />
+			<column name="treatment_protocol_id" type="integer" jt="4" mandatory="y" />
+			<index name="pk_treatment_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_treatment_coral_species" to_schema="knowledgebase" to_table="coral_species" >
+				<fk_column name="coral_species_id" pk="id" />
+			</fk>
+			<fk name="fk_treatment_experiment" to_schema="knowledgebase" to_table="experiment" >
+				<fk_column name="experiment_id" pk="id" />
+			</fk>
+			<fk name="fk_treatment" to_schema="knowledgebase" to_table="treatment_protocol" >
+				<fk_column name="treatment_protocol_id" pk="id" />
+			</fk>
+		</table>
+		<table name="treatment_protocol" prior="tbl" >
+			<comment><![CDATA[Details of ramping schedules, temperature holds and durations etc.]]></comment>
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="protocol_url" type="varchar" length="500" jt="12" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<column name="ramping_profile_id" type="integer" jt="4" mandatory="y" />
+			<column name="flow_rate_liter_per_hour" type="integer" jt="4" mandatory="y" />
+			<column name="light_level" type="integer" jt="4" mandatory="y" >
+				<comment><![CDATA[TODO: what is the unit.]]></comment>
+			</column>
+			<column name="tank_volume_liter" type="integer" jt="4" mandatory="y" />
+			<column name="sea_water_source" type="varchar" length="100" jt="12" />
+			<index name="pk_treatment_protocol_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_treatment_protocol" to_schema="knowledgebase" to_table="ramping_profile" >
+				<fk_column name="ramping_profile_id" pk="id" />
+			</fk>
+		</table>
+		<table name="user" prior="tbl" >
+			<comment><![CDATA[A KB user]]></comment>
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="is_admin" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[FALSE]]></defo>
+			</column>
+			<column name="name" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="email" type="integer" jt="4" mandatory="y" />
+			<column name="first_name" type="varchar" length="100" jt="12" />
+			<column name="last_name" type="varchar" length="100" jt="12" />
+			<column name="username" type="varchar" length="100" jt="12" mandatory="y" />
+			<index name="pk_tbl_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+	</schema>
+	<layout name="Default Layout" id="Layout_1e52" joined_routing="y" show_relation="columns" >
+		<entity schema="knowledgebase" name="coral_species" color="C1D8EE" x="1152" y="560" />
+		<entity schema="knowledgebase" name="cruise" color="C1D8EE" x="512" y="160" />
+		<entity schema="knowledgebase" name="cruise_site" color="C1D8EE" x="736" y="192" />
+		<entity schema="knowledgebase" name="cruise_user" color="C1D8EE" x="336" y="208" />
+		<entity schema="knowledgebase" name="environment_snapshot" color="C1D8EE" x="944" y="192" />
+		<entity schema="knowledgebase" name="experiment" color="C1D8EE" x="512" y="416" />
+		<entity schema="knowledgebase" name="ramp" color="C1D8EE" x="1376" y="736" />
+		<entity schema="knowledgebase" name="ramping_profile" color="C1D8EE" x="944" y="864" />
+		<entity schema="knowledgebase" name="ramping_profile_ramp" color="C1D8EE" x="1168" y="784" />
+		<entity schema="knowledgebase" name="sample" color="C1D8EE" x="144" y="448" />
+		<entity schema="knowledgebase" name="sampling_protocol" color="C1D8EE" x="432" y="720" />
+		<entity schema="knowledgebase" name="site" color="C1D8EE" x="736" y="432" />
+		<entity schema="knowledgebase" name="storage_protocol" color="C1D8EE" x="48" y="768" />
+		<entity schema="knowledgebase" name="treatment" color="C1D8EE" x="560" y="576" />
+		<entity schema="knowledgebase" name="treatment_protocol" color="C1D8EE" x="800" y="672" />
+		<entity schema="knowledgebase" name="user" color="C1D8EE" x="96" y="240" />
+		<callout x="48" y="48" pointer="Round" >
+			<comment><![CDATA[DbSchema is disconnected from the database.
+New designed tables will be saved to project file and later can be create in any database.
+Right-click the layout to create new tables. Drop this callout from its context menu.]]></comment>
+		</callout>
+	</layout>
+</project>
