@@ -110,6 +110,38 @@ NB. 'class' is a protected name. As such we will append '_tax' to each of the ta
 				<fk_column name="cruise_id" pk="id" />
 			</fk>
 		</table>
+		<table name="geome_event" prior="event" >
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="name" prior="eventid" type="integer" jt="4" mandatory="y" >
+				<comment><![CDATA[Relates to eventID in the GOME Events table]]></comment>
+			</column>
+			<column name="country" type="varchar" length="50" jt="12" />
+			<column name="locality" type="varchar" length="50" jt="12" />
+			<column name="yearcollected" type="varchar" jt="12" />
+			<index name="pk_event_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="geome_sample" prior="samples" >
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="geome_event_id" prior="event_id" type="integer" jt="4" mandatory="y" />
+			<index name="pk_samples_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_geome_sample_geome_event" to_schema="knowledgebase" to_table="geome_event" >
+				<fk_column name="geome_event_id" pk="id" />
+			</fk>
+		</table>
+		<table name="geome_tissue" prior="tbl" >
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="geome_sample_id" type="integer" length="50" jt="4" mandatory="y" />
+			<index name="pk_geome_tissue_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_geome_tissue_geome_sample" to_schema="knowledgebase" to_table="geome_sample" >
+				<fk_column name="geome_sample_id" pk="id" />
+			</fk>
+		</table>
 		<table name="ramp" prior="tbl" >
 			<comment><![CDATA[A single temperature ramp. Each ramp has a:
 start_time: start of the ramp in minutes measured from the beginning of the  treatment)
@@ -276,26 +308,35 @@ end_temp]]></comment>
 		</table>
 	</schema>
 	<layout name="Default Layout" id="Layout_1e52" joined_routing="y" show_relation="columns" >
-		<entity schema="knowledgebase" name="coral_species" color="C1D8EE" x="1152" y="560" />
-		<entity schema="knowledgebase" name="cruise" color="C1D8EE" x="512" y="160" />
-		<entity schema="knowledgebase" name="cruise_site" color="C1D8EE" x="736" y="192" />
-		<entity schema="knowledgebase" name="cruise_user" color="C1D8EE" x="336" y="208" />
-		<entity schema="knowledgebase" name="environment_snapshot" color="C1D8EE" x="944" y="192" />
-		<entity schema="knowledgebase" name="experiment" color="C1D8EE" x="512" y="416" />
-		<entity schema="knowledgebase" name="ramp" color="C1D8EE" x="1376" y="736" />
-		<entity schema="knowledgebase" name="ramping_profile" color="C1D8EE" x="944" y="864" />
-		<entity schema="knowledgebase" name="ramping_profile_ramp" color="C1D8EE" x="1168" y="784" />
-		<entity schema="knowledgebase" name="sample" color="C1D8EE" x="144" y="448" />
-		<entity schema="knowledgebase" name="sampling_protocol" color="C1D8EE" x="432" y="720" />
-		<entity schema="knowledgebase" name="site" color="C1D8EE" x="736" y="432" />
-		<entity schema="knowledgebase" name="storage_protocol" color="C1D8EE" x="48" y="768" />
-		<entity schema="knowledgebase" name="treatment" color="C1D8EE" x="560" y="576" />
-		<entity schema="knowledgebase" name="treatment_protocol" color="C1D8EE" x="800" y="672" />
-		<entity schema="knowledgebase" name="user" color="C1D8EE" x="96" y="240" />
+		<entity schema="knowledgebase" name="coral_species" color="C1D8EE" x="1120" y="512" />
+		<entity schema="knowledgebase" name="cruise" color="C1D8EE" x="480" y="208" />
+		<entity schema="knowledgebase" name="cruise_site" color="C1D8EE" x="656" y="208" />
+		<entity schema="knowledgebase" name="cruise_user" color="C1D8EE" x="304" y="192" />
+		<entity schema="knowledgebase" name="environment_snapshot" color="C1D8EE" x="848" y="176" />
+		<entity schema="knowledgebase" name="experiment" color="C1D8EE" x="464" y="368" />
+		<entity schema="knowledgebase" name="geome_event" color="C1D8EE" x="80" y="880" />
+		<entity schema="knowledgebase" name="geome_sample" color="C1D8EE" x="352" y="864" />
+		<entity schema="knowledgebase" name="geome_tissue" color="C1D8EE" x="640" y="848" />
+		<entity schema="knowledgebase" name="ramp" color="C1D8EE" x="1392" y="704" />
+		<entity schema="knowledgebase" name="ramping_profile" color="C1D8EE" x="960" y="816" />
+		<entity schema="knowledgebase" name="ramping_profile_ramp" color="C1D8EE" x="1200" y="720" />
+		<entity schema="knowledgebase" name="sample" color="C1D8EE" x="144" y="368" />
+		<entity schema="knowledgebase" name="sampling_protocol" color="C1D8EE" x="384" y="704" />
+		<entity schema="knowledgebase" name="site" color="C1D8EE" x="656" y="352" />
+		<entity schema="knowledgebase" name="storage_protocol" color="C1D8EE" x="80" y="656" />
+		<entity schema="knowledgebase" name="treatment" color="C1D8EE" x="448" y="544" />
+		<entity schema="knowledgebase" name="treatment_protocol" color="C1D8EE" x="752" y="512" />
+		<entity schema="knowledgebase" name="user" color="C1D8EE" x="112" y="192" />
 		<callout x="48" y="48" pointer="Round" >
 			<comment><![CDATA[DbSchema is disconnected from the database.
 New designed tables will be saved to project file and later can be create in any database.
 Right-click the layout to create new tables. Drop this callout from its context menu.]]></comment>
+		</callout>
+		<callout x="96" y="832" pointer="Round" >
+			<comment><![CDATA[GEOME]]></comment>
+		</callout>
+		<callout x="48" y="128" pointer="Round" >
+			<comment><![CDATA[GlobalSearch]]></comment>
 		</callout>
 	</layout>
 </project>
