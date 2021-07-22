@@ -2,34 +2,17 @@
 <project name="KnowledgeBase" id="Project_257e" database="PostgreSQL" >
 	<comment><![CDATA[The Coral Global Knowledge database]]></comment>
 	<schema name="knowledgebase" >
-		<table name="amplification_sequencing_protocol" prior="amplification_protocol" >
-			<comment><![CDATA[A subclass of the sequencing_protocol that details how a PCR amplifcation is undertaken. There will be very few records for this table as many of the sequencing_effort_barcode records will use the same amplification protocol. Hence why it is good to have this as a separate table rather than associate this information to the sequencing_effort_barcode record.]]></comment>
-			<column name="id" type="integer" jt="4" mandatory="y" />
-			<column name="primer_fwd_seq" type="varchar" length="100" jt="12" mandatory="y" >
-				<comment><![CDATA[The sequence of the fowward PCR primer.]]></comment>
-			</column>
-			<column name="primer_rev_seq" type="varchar" length="100" jt="12" mandatory="y" >
-				<comment><![CDATA[The sequence of the reverse PCR primer]]></comment>
-			</column>
-			<column name="primer_fwd_name" type="varchar" length="100" jt="12" />
-			<column name="preimer_rev_name" type="varchar" length="100" jt="12" />
-			<column name="sequencing_effort_protocol_id" type="integer" jt="4" mandatory="y" />
-			<index name="pk_amplification_protocol_id" unique="PRIMARY_KEY" >
-				<column name="id" />
-			</index>
-			<fk name="fk_amplification_sequencing_protocol_sequencing_effort_protocol" to_schema="knowledgebase" to_table="sequencing_effort_protocol" >
-				<fk_column name="sequencing_effort_protocol_id" pk="id" />
-			</fk>
-		</table>
 		<table name="analysis" prior="tbl" >
-			<comment><![CDATA[This is a place holder table that will have no immediate purpose for the 'bare bones' level of the application. However, once we move onto the next iteration of the application, we will want to start to host nalysed data in the database. For example, a user will do a CBASS expedition and the result will be 1 ) a collection of input tables that will be loaded into the web UI to make the meta data that is hosted in the current bare bones tables and 2) a load of sequencing data that will be submitted to NCBI. However, the scientists will then analyse this sequencing data and produce a derived product. This derived product will (to the best of my understanding) be hosted in this db. This 'analysis' table represents a Superclass for the various different  derived products (analyses) that will be stored. As such, i see it as the 'bolt on' point for when further db development occurs.]]></comment>
+			<comment><![CDATA[This is a place holder table that will have no immediate purpose for the 'bare bones' level of the application. However, once we move onto the next iteration of the application, we will want to start to host analysed data in the database.
+
+For example, a user will do a CBASS expedition and the result will be 1 ) a collection of excel input tables that will be loaded into the web UI to make the meta data that is hosted in the current bare bones db and 2) a load of sequencing data that will be submitted to NCBI. The scientists will then analyse this sequencing data and produce a derived product. This derived product will (to the best of my understanding) be hosted in this db. This 'analysis' table represents a Superclass for the various different  derived products (analyses) that will be stored. As such, I see it as the 'bolt on' point for when further db development occurs.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<index name="pk_analysis_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
 		</table>
 		<table name="analysis_assay" prior="analysis_a" >
-			<comment><![CDATA[Join table. The relationship between analysis and assay is not fully solidified in my head and may need to be adjusted once we get to the development stage after the 'bare bones' applications, but... I imagine that one analysis may be associated to one or more analyses. Equally one assay, will be associated to 0 or more analyses.]]></comment>
+			<comment><![CDATA[Join table. The relationship between analysis and assay is not fully solidified in my head and may need to be adjusted once we get to the development stage after the 'bare bones' applications, but... I imagine that one analysis may be associated to one or more assays. Equally one assay, will be associated to 0 or more analyses.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="assay_id" type="integer" jt="4" mandatory="y" />
 			<column name="analysis_id" type="integer" jt="4" mandatory="y" />
@@ -44,25 +27,27 @@
 			</fk>
 		</table>
 		<table name="analysis_assay_sequencing_effort" prior="tbl" >
-			<comment><![CDATA[Join table. 1 analysis_assay may be associated/ make use of multiple sequencing_effort records. 1 sequencing_effort record may be used in multiple analysis_assay records.]]></comment>
+			<comment><![CDATA[Join table. 1 analysis may be associated/ make use of multiple sequencing_effort records. 1 sequencing_effort record may be used in multiple analysis records.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
-			<column name="analysis_assay_id" type="integer" jt="4" mandatory="y" />
 			<column name="sequencing_effort_id" type="integer" jt="4" mandatory="y" />
+			<column name="analysis_id" prior="analysis_assay_id" type="integer" jt="4" mandatory="y" />
 			<index name="pk_analysis_assay_sequencing_effort_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
-			<fk name="fk_analysis_assay_sequencing_effort_analysis_assay" to_schema="knowledgebase" to_table="analysis_assay" >
-				<fk_column name="analysis_assay_id" pk="id" />
-			</fk>
 			<fk name="fk_analysis_assay_sequencing_effort_sequencing_effort" to_schema="knowledgebase" to_table="sequencing_effort" >
 				<fk_column name="sequencing_effort_id" pk="id" />
 			</fk>
+			<fk name="fk_analysis_assay_sequencing_effort_analysis" to_schema="knowledgebase" to_table="analysis" >
+				<fk_column name="analysis_id" pk="id" />
+			</fk>
 		</table>
 		<table name="assay" prior="tbl" >
-			<comment><![CDATA[Superclass for the various assays that knowledgebase will integrate with e.g. cbass or calcification]]></comment>
+			<comment><![CDATA[Superclass for the various assays that knowledgebase will integrate with. The first assay that we are developing is the cbass assay.
+
+Further down the line there will be additional assay types such as calcificaiton assays. See the calcification_assay table for further details.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
-			<column name="environment_record_id" type="integer" jt="4" mandatory="y" />
 			<column name="site_id" type="integer" jt="4" mandatory="y" />
+			<column name="environment_record_id" type="integer" jt="4" mandatory="y" />
 			<column name="expedition_id" type="integer" jt="4" mandatory="y" />
 			<index name="pk_assay_id" unique="PRIMARY_KEY" >
 				<column name="id" />
@@ -97,7 +82,7 @@ For the time being, this table will have little functionality other than to serv
 			<column name="start_time" type="time" jt="92" mandatory="y" />
 			<column name="stop_time" type="time" jt="92" mandatory="y" />
 			<column name="baseline_temp" type="decimal" length="4" decimal="2" jt="3" mandatory="y" >
-				<comment><![CDATA[The multiple heat stress profies related to this cbass_assy will all be ramped relative to this baseline.]]></comment>
+				<comment><![CDATA[The multiple heat stress profies related to this cbass_assay will all be ramped relative to this baseline.]]></comment>
 			</column>
 			<column name="assay_id" type="integer" jt="4" mandatory="y" />
 			<index name="pk_treatment_id" unique="PRIMARY_KEY" >
@@ -108,7 +93,7 @@ For the time being, this table will have little functionality other than to serv
 			</fk>
 		</table>
 		<table name="cbass_assay_fragment" prior="assay_fragment" >
-			<comment><![CDATA[This is a fragement that is used in a heat stress protocol. It may or may not have nucleic acids sampled from it, as such it may or may not have a TODO: sort out how the sequencing efforts will be made.]]></comment>
+			<comment><![CDATA[This is a fragement that is used in a heat stress protocol. It may or may not have nucleic acids sampled from it, as such it may or may not have a sequencing_effort associated to it.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="fragment_id" type="integer" jt="4" mandatory="y" />
 			<column name="heat_stress_profile_id" prior="heat_stress_profile" type="integer" jt="4" mandatory="y" />
@@ -140,7 +125,7 @@ Optional as some fragments will not have been]]></comment>
 			</fk>
 		</table>
 		<table name="cbass_nucleic_acid_fragment" prior="nucleic_acid_fragment" >
-			<comment><![CDATA[This is a fragment that is collected for the purpose of doing gDNA extractions that can be used for the barcoding and the meta-genomic sequencing.]]></comment>
+			<comment><![CDATA[This is a fragment that is collected for the purpose of doing genomic DNA extractions that can be used for the barcoding and the meta-genomic sequencing. It is NOT used in a heat stress profile.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="fragment_id" type="integer" jt="4" mandatory="y" />
 			<index name="pk_nucleic_acid_fragment_id" unique="PRIMARY_KEY" >
@@ -172,6 +157,7 @@ Optional as some fragments will not have been]]></comment>
 			</fk>
 		</table>
 		<table name="colony_photo" prior="tbl" >
+			<comment><![CDATA[A photo of a coral colony.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="colony_id" type="integer" jt="4" mandatory="y" />
 			<column name="name" type="varchar" length="100" jt="12" mandatory="y" />
@@ -184,26 +170,33 @@ Optional as some fragments will not have been]]></comment>
 			</fk>
 		</table>
 		<table name="coral_species" prior="tbl" >
-			<comment><![CDATA[Record documenting a single coral species.
+			<comment><![CDATA[Record documenting a single coral taxa. If possible this record should be at the taxonomic level of species.
 
-NB. 'class' is a protected name. As such we will append '_tax' to each of the taxonomic levels.]]></comment>
+If a species level identification is not possible then the lowest available taxonomic rank should be used.
+
+It will likely need to be necessary to run some 'server side' checks to make sure that no typos are made and that species are entered correctly.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
-			<column name="phylum_tax" prior="phylum" type="varchar" length="50" jt="12" mandatory="y" />
-			<column name="class_tax" type="varchar" length="50" jt="12" mandatory="y" />
-			<column name="order_tax" type="varchar" length="50" jt="12" />
-			<column name="family_tax" type="varchar" length="50" jt="12" />
-			<column name="genus_tax" type="varchar" length="50" jt="12" />
-			<column name="species_monomial_tax" type="varchar" length="50" jt="12" >
-				<comment><![CDATA[Only the species identifier. E.g. for Acroporal millepora, the value would be 'millepora'.]]></comment>
-			</column>
-			<column name="species_binomial_tax" type="varchar" length="100" jt="12" >
-				<comment><![CDATA[The full binomial. E.g. for Acropora millepora, the value would be 'Acropora millepora'.]]></comment>
-			</column>
 			<column name="ncbi_tax_id" type="integer" jt="4" >
-				<comment><![CDATA[An optional identifier linking to the NCBI taxonomic id.]]></comment>
+				<comment><![CDATA[An  identifier linking to the NCBI taxonomic id of the lowest taxonomic rank available.
+
+For example the coral Pocillopora verrucosa as the taxonomy id: 203993
+https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=203993]]></comment>
 			</column>
-			<column name="abbreviation" type="integer" jt="4" >
+			<column name="abbreviation" type="integer" jt="4" mandatory="y" >
 				<comment><![CDATA[E.g. Pocillopora verrucosa -> Pver]]></comment>
+			</column>
+			<column name="name" prior="species_name" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[The name of the taxa. If the lowest taxonomic level is species, then the binomial should be provided e.g.: Pocillopora verrucosa.
+If a only a higher taxonomic rank is available (e.g. genus), then only that value should be provided e.g. "pocillopora".]]></comment>
+			</column>
+			<column name="taxonomic_rank" type="varchar" length="10" jt="12" mandatory="y" >
+				<comment><![CDATA[The taxonomic rank of the record. Options are:
+species
+genus
+family
+order
+class
+phylum]]></comment>
 			</column>
 			<index name="pk_coral_species_id" unique="PRIMARY_KEY" >
 				<column name="id" />
@@ -337,7 +330,9 @@ Format ##:##]]></comment>
 			</fk>
 		</table>
 		<table name="expedition" prior="tbl" >
-			<comment><![CDATA[This is a collection object to which multiple dives and assays can be associated. It will be very useful when making broad scale conclusions on the use of the Global Search. For example, how may expeditions have there been? Or how many assays were conducted as part of expedition XXX.]]></comment>
+			<comment><![CDATA[This is a collection object to which multiple dives and assays can be associated. It will be very useful when making broad scale conclusions on the use of the Global Search. For example, how may expeditions have there been? Or how many assays were conducted as part of expedition XXX.
+
+It will also the table/record to which the ncbi_bio_project_accession is linked.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="name" type="varchar" length="100" jt="12" mandatory="y" >
 				<comment><![CDATA[A unique name for the expeditions. This should be informative, e.g. 20210720_read_sea_voolstra or something similar.]]></comment>
@@ -382,7 +377,9 @@ We will only hold the accession of the NCBI BioProject. We will not hold any oth
 			</fk>
 		</table>
 		<table name="fragment" prior="tbl" >
-			<comment><![CDATA[Superclass of the nucleic_acid_fragment and the assay_fragment]]></comment>
+			<comment><![CDATA[Superclass of the nucleic_acid_fragment and the assay_fragment.
+
+When further assay types are developed they may have their own subclass of fragment too. e.g. calcification_fragment.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="colony_id" type="integer" jt="4" mandatory="y" />
 			<column name="fragment_photo_id" type="integer" jt="4" mandatory="y" />
@@ -397,6 +394,7 @@ We will only hold the accession of the NCBI BioProject. We will not hold any oth
 			</fk>
 		</table>
 		<table name="fragment_photo" prior="tbl" >
+			<comment><![CDATA[Each record represents a single photo that contains multiple fragments.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="url" prior="name" type="varchar" length="200" jt="12" mandatory="y" />
 			<column name="name" type="varchar" length="100" jt="12" mandatory="y" />
@@ -405,7 +403,7 @@ We will only hold the accession of the NCBI BioProject. We will not hold any oth
 			</index>
 		</table>
 		<table name="heat_stress_profile" prior="heatstress_profile" >
-			<comment><![CDATA[Details of ramping schedules, temperature holds and durations etc.]]></comment>
+			<comment><![CDATA[Each record literally represents an aquarium that contains multiple coral fragments that are all exposed to the same temperature challenge. The temperature to which the corals are exposed be relative (according to the relative_challenge_temperature field) to the baseline_temp of the parent cbass_assay.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="flow_rate_liter_per_hour" type="integer" jt="4" mandatory="y" />
 			<column name="light_level" type="integer" jt="4" mandatory="y" >
@@ -425,7 +423,7 @@ We will only hold the accession of the NCBI BioProject. We will not hold any oth
 			</fk>
 		</table>
 		<table name="ncbi_biosample" prior="ncbi_bio" >
-			<comment><![CDATA[An NCBI biosample is essentially a single nucleic extraction, a given 18S record and a given ITS2 sequencing may be associated to the same ncbi_biosample]]></comment>
+			<comment><![CDATA[An NCBI biosample is essentially a single nucleic extraction, a given 18S record and a given ITS2 sequencing_effort may be associated to the same ncbi_biosample. An ncbi_biosample will need to be provided for the ncbi SRA submission.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="accession" type="varchar" length="10" jt="12" >
 				<comment><![CDATA[This will be the NCBI accession for the biosample. This will need to be populated AFTER the sequencing data has been submitted to the NCBI database.]]></comment>
@@ -473,6 +471,9 @@ For example, a single colony, is split into 13 fragments. 12 of those fragments 
 			<column name="filename_two" type="varchar" length="100" jt="12" >
 				<comment><![CDATA[The filename of the second sequencing file if there is one.]]></comment>
 			</column>
+			<column name="sequencing_effort_sra_accession" type="integer" jt="4" >
+				<comment><![CDATA[This is the Sequence Read Archive (SRA) accession number designated to the given sequencing_effort record by NCBI. This will have to be populated AFTER submission of sequencing data to NCBI.]]></comment>
+			</column>
 			<index name="pk_sequencing_effort_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
@@ -501,6 +502,7 @@ For example, a single colony, is split into 13 fragments. 12 of those fragments 
 			</fk>
 		</table>
 		<table name="sequencing_effort_metagenomic" prior="tbl" >
+			<comment><![CDATA[A subclass of the sequencing effort class. This table will hold records associated with metagenomic sequencing. in metagenomic sequencing, all (or a selection) of the samples DNA is sequenced.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="sequencing_effort_id" type="integer" jt="4" mandatory="y" />
 			<index name="pk_sequencing_effort_metagenomic_id" unique="PRIMARY_KEY" >
@@ -511,8 +513,8 @@ For example, a single colony, is split into 13 fragments. 12 of those fragments 
 			</fk>
 		</table>
 		<table name="sequencing_effort_protocol" prior="tbl" >
-			<comment><![CDATA[A SuperClass where each record hold details of a single protocol used for a given sequencing effort.
-It will likely be best to document the protocols fullon on a dedicated resourecse such as protocols.io.]]></comment>
+			<comment><![CDATA[Each record holds details of a single protocol used for a given sequencing effort.
+It will likely be best to document the protocols fully on on a dedicated resourecse such as protocols.io. The url field will provide access to this.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="name" type="varchar" length="100" jt="12" />
 			<column name="library_type" type="varchar" length="10" jt="12" mandatory="y" >
@@ -642,6 +644,7 @@ OxfordNanopore_native]]></comment>
 			</index>
 		</table>
 		<table name="sequencing_effort_rna_seq" prior="sequencing_effort_" >
+			<comment><![CDATA[A subclass of the sequencing effort class. This table will hold records associated with RNA-seq sequencing. In RNA-seq, all (or a selection) of an  samples RNA is sequenced.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="sequencing_effort_id" type="integer" jt="4" mandatory="y" />
 			<index name="pk_sequencing_effort_rna_seq_id" unique="PRIMARY_KEY" >
@@ -687,9 +690,7 @@ The correct format of this will need to be strictly enforced/currated.]]></comme
 				<comment><![CDATA[A code that represents the time zone of the site. This will be used to convert all local times to UTC. Time zones are easy to find online: https://docs.vmware.com/en/vRealize-Orchestrator/8.4/com.vmware.vrealize.orchestrator-use-plugins.doc/GUID-83EBD74D-B5EC-4A0A-B54E-8E45BE2928C2.html]]></comment>
 			</column>
 			<column name="geo_loc_name" prior="country" type="varchar" length="100" jt="12" mandatory="y" >
-				<comment><![CDATA[This field will need to comply with the geo_loc_name field of the NCBI MIMS.me.host-associated.5.0 input sheet. The guidance for that field reads as:
-
-"Geographical origin of the sample; use the appropriate name from this list http://www.insdc.org/documents/country-qualifier-vocabulary. Use a colon to separate the country or ocean from more detailed information about the location, eg "Canada: Vancouver" or "Germany: halfway down Zugspitze, Alps""]]></comment>
+				<comment><![CDATA[NCBI required field. See table description for guidance.]]></comment>
 			</column>
 			<column name="env_broad_scale" type="varchar" length="100" jt="12" mandatory="y" >
 				<comment><![CDATA[NCBI required field. See table description for guidance.]]></comment>
@@ -732,49 +733,50 @@ The columns of this table will change according to how integration with AWS Cogn
 		</table>
 	</schema>
 	<layout name="Default Layout" id="Layout_1e52" joined_routing="y" show_relation="columns" >
-		<entity schema="knowledgebase" name="amplification_sequencing_protocol" color="C1D8EE" x="1872" y="848" />
-		<entity schema="knowledgebase" name="analysis" color="C1D8EE" x="1344" y="1488" />
-		<entity schema="knowledgebase" name="analysis_assay" color="C1D8EE" x="1488" y="1472" />
-		<entity schema="knowledgebase" name="analysis_assay_sequencing_effort" color="C1D8EE" x="1888" y="1088" />
-		<entity schema="knowledgebase" name="assay" color="C1D8EE" x="816" y="896" />
-		<entity schema="knowledgebase" name="calcification_assay" color="C1D8EE" x="736" y="1232" />
-		<entity schema="knowledgebase" name="cbass_assay" color="C1D8EE" x="1152" y="944" />
-		<entity schema="knowledgebase" name="cbass_assay_fragment" color="C1D8EE" x="1552" y="560" />
-		<entity schema="knowledgebase" name="cbass_nucleic_acid_fragment" color="C1D8EE" x="1552" y="304" />
-		<entity schema="knowledgebase" name="colony" color="C1D8EE" x="992" y="448" />
-		<entity schema="knowledgebase" name="colony_photo" color="C1D8EE" x="992" y="288" />
-		<entity schema="knowledgebase" name="coral_species" color="C1D8EE" x="624" y="240" />
-		<entity schema="knowledgebase" name="dive" color="C1D8EE" x="688" y="640" />
-		<entity schema="knowledgebase" name="dive_table_photo" color="C1D8EE" x="384" y="608" />
-		<entity schema="knowledgebase" name="dive_user" color="C1D8EE" x="432" y="432" />
-		<entity schema="knowledgebase" name="environment_record" color="C1D8EE" x="304" y="1216" />
-		<entity schema="knowledgebase" name="expedition" color="C1D8EE" x="96" y="720" />
-		<entity schema="knowledgebase" name="expedition_user" color="C1D8EE" x="80" y="592" />
-		<entity schema="knowledgebase" name="fragment" color="C1D8EE" x="1280" y="432" />
-		<entity schema="knowledgebase" name="fragment_photo" color="C1D8EE" x="1280" y="592" />
-		<entity schema="knowledgebase" name="heat_stress_profile" color="C1D8EE" x="1360" y="944" />
-		<entity schema="knowledgebase" name="ncbi_biosample" color="C1D8EE" x="2192" y="416" />
-		<entity schema="knowledgebase" name="region" color="C1D8EE" x="240" y="976" />
-		<entity schema="knowledgebase" name="sequencing_effort" color="C1D8EE" x="1856" y="416" />
-		<entity schema="knowledgebase" name="sequencing_effort_barcode" color="C1D8EE" x="1808" y="96" />
-		<entity schema="knowledgebase" name="sequencing_effort_metagenomic" color="C1D8EE" x="1792" y="320" />
-		<entity schema="knowledgebase" name="sequencing_effort_protocol" color="C1D8EE" x="1872" y="608" />
-		<entity schema="knowledgebase" name="sequencing_effort_rna_seq" color="C1D8EE" x="1808" y="224" />
-		<entity schema="knowledgebase" name="site" color="C1D8EE" x="432" y="928" />
-		<entity schema="knowledgebase" name="user" color="C1D8EE" x="256" y="432" />
-		<callout x="1296" y="1392" pointer="Round" >
+		<comment><![CDATA[KnowledgeBase]]></comment>
+		<entity schema="knowledgebase" name="analysis" color="C1D8EE" x="1760" y="1504" />
+		<entity schema="knowledgebase" name="analysis_assay" color="C1D8EE" x="1504" y="1504" />
+		<entity schema="knowledgebase" name="analysis_assay_sequencing_effort" color="C1D8EE" x="1904" y="1120" />
+		<entity schema="knowledgebase" name="assay" color="C1D8EE" x="832" y="928" />
+		<entity schema="knowledgebase" name="calcification_assay" color="C1D8EE" x="752" y="1264" />
+		<entity schema="knowledgebase" name="cbass_assay" color="C1D8EE" x="1168" y="976" />
+		<entity schema="knowledgebase" name="cbass_assay_fragment" color="C1D8EE" x="1568" y="592" />
+		<entity schema="knowledgebase" name="cbass_nucleic_acid_fragment" color="C1D8EE" x="1568" y="336" />
+		<entity schema="knowledgebase" name="colony" color="C1D8EE" x="1008" y="480" />
+		<entity schema="knowledgebase" name="colony_photo" color="C1D8EE" x="1008" y="320" />
+		<entity schema="knowledgebase" name="coral_species" color="C1D8EE" x="640" y="272" />
+		<entity schema="knowledgebase" name="dive" color="C1D8EE" x="704" y="672" />
+		<entity schema="knowledgebase" name="dive_table_photo" color="C1D8EE" x="400" y="640" />
+		<entity schema="knowledgebase" name="dive_user" color="C1D8EE" x="448" y="464" />
+		<entity schema="knowledgebase" name="environment_record" color="C1D8EE" x="320" y="1248" />
+		<entity schema="knowledgebase" name="expedition" color="C1D8EE" x="112" y="752" />
+		<entity schema="knowledgebase" name="expedition_user" color="C1D8EE" x="96" y="624" />
+		<entity schema="knowledgebase" name="fragment" color="C1D8EE" x="1296" y="464" />
+		<entity schema="knowledgebase" name="fragment_photo" color="C1D8EE" x="1296" y="624" />
+		<entity schema="knowledgebase" name="heat_stress_profile" color="C1D8EE" x="1376" y="976" />
+		<entity schema="knowledgebase" name="ncbi_biosample" color="C1D8EE" x="2208" y="448" />
+		<entity schema="knowledgebase" name="region" color="C1D8EE" x="256" y="1008" />
+		<entity schema="knowledgebase" name="sequencing_effort" color="C1D8EE" x="1872" y="448" />
+		<entity schema="knowledgebase" name="sequencing_effort_barcode" color="C1D8EE" x="1824" y="128" />
+		<entity schema="knowledgebase" name="sequencing_effort_metagenomic" color="C1D8EE" x="1808" y="352" />
+		<entity schema="knowledgebase" name="sequencing_effort_protocol" color="C1D8EE" x="1888" y="656" />
+		<entity schema="knowledgebase" name="sequencing_effort_rna_seq" color="C1D8EE" x="1824" y="256" />
+		<entity schema="knowledgebase" name="site" color="C1D8EE" x="448" y="960" />
+		<entity schema="knowledgebase" name="user" color="C1D8EE" x="272" y="464" />
+		<callout x="1312" y="1424" pointer="Round" >
 			<comment><![CDATA[Analsysis objects
 To be developed after the 'bare bones' application.]]></comment>
 		</callout>
 		<callout x="48" y="48" pointer="Round" >
 			<comment><![CDATA[Bare Bones db schema
 TODO:
-1 - I think we should have an expedition table. You OK with that, Chris?
+1 - I think we should have an expedition table.  Please see that I've already added it. You OK with that, Chris?
 2 - We need to work out where to 'attach' the NCBI BioProject.
-It would be best if we have a single rule for CBASS such as, what I would suggest:
-	Every expedition will have its own bioproect.
+I would suggest that every expedition is its own BioProject.
 	That way we also have a single user (the expedition PI) who can be responsible for the
-	submission and later input of the accession data into the KnowledgeBase.]]></comment>
+	submission and later input of the accession data into the KnowledgeBase.
+3 - NB that once a submission to NCBI has been competed, you can ouput a table of the accession numbers that have been designated by NCBI.
+This output can be input to the KB UI and can be used to automatically populate the ncbi_biosample_accession and sequencing_effort_sra_accession values.]]></comment>
 		</callout>
 	</layout>
 </project>
