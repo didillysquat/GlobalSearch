@@ -2,11 +2,68 @@
 <project name="KnowledgeBase" id="Project_257e" database="PostgreSQL" >
 	<comment><![CDATA[The Coral Global Knowledge database]]></comment>
 	<schema name="knowledgebase" >
+		<table name="amplification_sequencing_protocol" prior="amplification_protocol" >
+			<comment><![CDATA[A subclass of the sequencing_protocol that details how a PCR amplifcation is undertaken. There will be very few records for this table as many of the sequencing_effort_barcode records will use the same amplification protocol. Hence why it is good to have this as a separate table rather than associate this information to the sequencing_effort_barcode record.]]></comment>
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="primer_fwd_seq" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[The sequence of the fowward PCR primer.]]></comment>
+			</column>
+			<column name="primer_rev_seq" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[The sequence of the reverse PCR primer]]></comment>
+			</column>
+			<column name="primer_fwd_name" type="varchar" length="100" jt="12" />
+			<column name="preimer_rev_name" type="varchar" length="100" jt="12" />
+			<column name="sequencing_effort_protocol_id" type="integer" jt="4" mandatory="y" />
+			<index name="pk_amplification_protocol_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_amplification_sequencing_protocol_sequencing_effort_protocol" to_schema="knowledgebase" to_table="sequencing_effort_protocol" >
+				<fk_column name="sequencing_effort_protocol_id" pk="id" />
+			</fk>
+		</table>
+		<table name="analysis" prior="tbl" >
+			<comment><![CDATA[This is a place holder table that will have no immediate purpose for the 'bare bones' level of the application. However, once we move onto the next iteration of the application, we will want to start to host nalysed data in the database. For example, a user will do a CBASS expedition and the result will be 1 ) a collection of input tables that will be loaded into the web UI to make the meta data that is hosted in the current bare bones tables and 2) a load of sequencing data that will be submitted to NCBI. However, the scientists will then analyse this sequencing data and produce a derived product. This derived product will (to the best of my understanding) be hosted in this db. This 'analysis' table represents a Superclass for the various different  derived products (analyses) that will be stored. As such, i see it as the 'bolt on' point for when further db development occurs.]]></comment>
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<index name="pk_analysis_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="analysis_assay" prior="analysis_a" >
+			<comment><![CDATA[Join table. The relationship between analysis and assay is not fully solidified in my head and may need to be adjusted once we get to the development stage after the 'bare bones' applications, but... I imagine that one analysis may be associated to one or more analyses. Equally one assay, will be associated to 0 or more analyses.]]></comment>
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="assay_id" type="integer" jt="4" mandatory="y" />
+			<column name="analysis_id" type="integer" jt="4" mandatory="y" />
+			<index name="pk_analysis_assay_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_analysis_assay_assay" to_schema="knowledgebase" to_table="assay" >
+				<fk_column name="assay_id" pk="id" />
+			</fk>
+			<fk name="fk_analysis_assay_analysis" to_schema="knowledgebase" to_table="analysis" >
+				<fk_column name="analysis_id" pk="id" />
+			</fk>
+		</table>
+		<table name="analysis_assay_sequencing_effort" prior="tbl" >
+			<comment><![CDATA[Join table. 1 analysis_assay may be associated/ make use of multiple sequencing_effort records. 1 sequencing_effort record may be used in multiple analysis_assay records.]]></comment>
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="analysis_assay_id" type="integer" jt="4" mandatory="y" />
+			<column name="sequencing_effort_id" type="integer" jt="4" mandatory="y" />
+			<index name="pk_analysis_assay_sequencing_effort_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_analysis_assay_sequencing_effort_analysis_assay" to_schema="knowledgebase" to_table="analysis_assay" >
+				<fk_column name="analysis_assay_id" pk="id" />
+			</fk>
+			<fk name="fk_analysis_assay_sequencing_effort_sequencing_effort" to_schema="knowledgebase" to_table="sequencing_effort" >
+				<fk_column name="sequencing_effort_id" pk="id" />
+			</fk>
+		</table>
 		<table name="assay" prior="tbl" >
 			<comment><![CDATA[Superclass for the various assays that knowledgebase will integrate with e.g. cbass or calcification]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="environment_record_id" type="integer" jt="4" mandatory="y" />
 			<column name="site_id" type="integer" jt="4" mandatory="y" />
+			<column name="expedition_id" type="integer" jt="4" mandatory="y" />
 			<index name="pk_assay_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
@@ -15,6 +72,9 @@
 			</fk>
 			<fk name="fk_assay_site" to_schema="knowledgebase" to_table="site" >
 				<fk_column name="site_id" pk="id" />
+			</fk>
+			<fk name="fk_assay_expedition" to_schema="knowledgebase" to_table="expedition" >
+				<fk_column name="expedition_id" pk="id" />
 			</fk>
 		</table>
 		<table name="calcification_assay" prior="tbl" >
@@ -89,12 +149,16 @@ Optional as some fragments will not have been]]></comment>
 			</fk>
 		</table>
 		<table name="colony" prior="tbl" >
+			<comment><![CDATA[This is a single coral colony. I.e. imagine a big coral under the water. Hit it with a hammer to break off a medium sized chunk, and you get a 'colony'. Each colony will later be fragmented to create a 'fragment'.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="coral_species_id" type="integer" jt="4" mandatory="y" />
 			<column name="dive_id" type="integer" jt="4" mandatory="y" >
 				<comment><![CDATA[The dive on which the colony was collected]]></comment>
 			</column>
 			<column name="time_collected" type="time" jt="92" mandatory="y" />
+			<column name="depth_collected" type="decimal" length="4" decimal="2" jt="3" mandatory="y" >
+				<comment><![CDATA[Depth at which the colony was collected in meters.]]></comment>
+			</column>
 			<index name="pk_colony_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
@@ -144,17 +208,38 @@ NB. 'class' is a protected name. As such we will append '_tax' to each of the ta
 			</index>
 		</table>
 		<table name="dive" prior="tbl" >
+			<comment><![CDATA[Literally representative of a physical SCUBA dive in which corals are collected are a reef survery is conducted or something similar.  Multiple dives may be happening at the same site and on the same day. It may even be that several dives have the same time_in and time_out, but a single dive should be a dive in which the divers are 'buddied up' so that they know where each other are at all times and stick together. I.e. if there are two teams, that are going off indepently, with multiple divers in each team, then this will represented by two separate dives.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
-			<column name="site_id" type="integer" jt="4" mandatory="y" />
-			<column name="name" type="varchar" length="100" jt="12" />
-			<column name="dive_date" type="date" jt="91" mandatory="y" />
-			<column name="time_in" type="time" jt="92" mandatory="y" />
-			<column name="time_out" type="time" jt="92" mandatory="y" />
-			<column name="max_depth" type="time" jt="92" />
-			<column name="duration" type="time" jt="92" mandatory="y" />
-			<column name="purpose" type="varchar" length="1000" jt="12" />
-			<column name="comments" type="varchar" length="1000" jt="12" />
-			<column name="temp_deg_c" type="integer" jt="4" mandatory="y" />
+			<column name="site_id" type="integer" jt="4" mandatory="y" >
+				<comment><![CDATA[Foreign key. Every dive will happen at a given site.]]></comment>
+			</column>
+			<column name="name" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[I don't know if this will be necessary, but it may be that each dive has some sort of label or name which could be made up of the abbreviations of the site, date and time or something similar.]]></comment>
+			</column>
+			<column name="dive_date" type="date" jt="91" mandatory="y" >
+				<comment><![CDATA[Local date of the dive. If the dive spans midnight, the date at the start of the dive should be provided.]]></comment>
+			</column>
+			<column name="time_in" type="time" jt="92" mandatory="y" >
+				<comment><![CDATA[Local time that divers start the dive (physically go underwater).]]></comment>
+			</column>
+			<column name="time_out" type="time" jt="92" mandatory="y" >
+				<comment><![CDATA[Local time that divers end the dive (surface).]]></comment>
+			</column>
+			<column name="max_depth" type="decimal" length="4" decimal="2" jt="3" >
+				<comment><![CDATA[The maximum depth of the dive in meters. This is important to document for safety reasons as allowed bottom time and subsequent dive limits will be based on time  spent on SCUBA at a given depth.]]></comment>
+			</column>
+			<column name="duration" type="integer" jt="4" mandatory="y" >
+				<comment><![CDATA[The length of the dive in minutes.]]></comment>
+			</column>
+			<column name="purpose" type="varchar" length="50" jt="12" >
+				<comment><![CDATA[This will likely be a controlled vocabulary. To start with let's have: "cbass_colony_collection" and "cbass_reef_survey". Each of these should have a documented definition somehwere.]]></comment>
+			</column>
+			<column name="comments" type="varchar" length="1000" jt="12" >
+				<comment><![CDATA[Further comments in free form. This may be important for safety reasons.]]></comment>
+			</column>
+			<column name="temp" prior="temp_deg_c" type="decimal" length="4" decimal="2" jt="3" mandatory="y" >
+				<comment><![CDATA[The water temperature in degrees celcius.]]></comment>
+			</column>
 			<index name="unq_dive_id" unique="UNIQUE_KEY" >
 				<column name="id" />
 			</index>
@@ -166,13 +251,15 @@ NB. 'class' is a protected name. As such we will append '_tax' to each of the ta
 			</fk>
 		</table>
 		<table name="dive_table_photo" prior="tbl" >
-			<comment><![CDATA[In case there are more than one tables per dive, we will have this as a seperate table rather than associate the information directly to the dive.]]></comment>
+			<comment><![CDATA[Each row will represent a physical photo that has been taken of a 'dive table' during a given dive. This dive table will contain information related to the work that was conducted on the dive, e.g. the time and position at which coral colonies were collected. In case there are more than one tables per dive, we will have this as a seperate table rather than associate the information directly to the dive. In this way the dive_id foregin key will represent a many to 1 relationship.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="dive_id" type="integer" jt="4" mandatory="y" />
 			<column name="url" type="varchar" length="200" jt="12" mandatory="y" >
 				<comment><![CDATA[The url to the photo]]></comment>
 			</column>
-			<column name="name" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[I don't know if this will be necessary but it may be an identifyer for the dive table that will be made up of the site, time, date and dive number or something similar.]]></comment>
+			</column>
 			<index name="pk_dive_table_photo_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
@@ -196,35 +283,95 @@ NB. 'class' is a protected name. As such we will append '_tax' to each of the ta
 			</fk>
 		</table>
 		<table name="environment_record" prior="environment_snapshot" >
-			<comment><![CDATA[This is a record that documents the environment at a single site at a single time. As such it will always be associated with a site. It will always have a time and date.]]></comment>
+			<comment><![CDATA[This is a record that documents the environment at a single site at a single time/date. As such it will always be associated with a site. It will always have a time and date that are in local time. These local times can easily be converted to UTC as the time_zone is associated to the 'site'.
+
+We have added the coral cover column as a sort of place holder to demonstrate that other sorts of parameters may be associated to an environment record such as coral cover. We may add many more columns to this table.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
-			<column name="record_date" prior="snapshot_date" type="date" jt="91" mandatory="y" />
-			<column name="record_time" prior="snapshot_time" type="time" jt="92" mandatory="y" />
-			<column name="site_id" type="integer" jt="4" mandatory="y" />
+			<column name="record_date" prior="snapshot_date" type="date" jt="91" mandatory="y" >
+				<comment><![CDATA[Local date.]]></comment>
+			</column>
+			<column name="record_time" prior="snapshot_time" type="time" jt="92" mandatory="y" >
+				<comment><![CDATA[Local time.]]></comment>
+			</column>
+			<column name="site_id" type="integer" jt="4" mandatory="y" >
+				<comment><![CDATA[Must be associated to a site.]]></comment>
+			</column>
 			<column name="turbidity" type="decimal" length="6" decimal="3" jt="3" >
 				<comment><![CDATA[TODO: Check the correct format. Currently decimal ###.###.]]></comment>
 			</column>
 			<column name="sea_surface_temp" prior="sst" type="decimal" length="4" decimal="2" jt="3" >
 				<comment><![CDATA[sea surface temperature. Format: ##.##]]></comment>
 			</column>
-			<column name="sea_surface_temp_stdev" type="decimal" length="4" decimal="2" jt="3" />
-			<column name="chlorophyl_a" type="decimal" length="4" decimal="2" jt="3" >
-				<comment><![CDATA[Format ##:##]]></comment>
+			<column name="sea_surface_temp_stdev" type="decimal" length="4" decimal="2" jt="3" >
+				<comment><![CDATA[Standard deviation of the sea surface temperature. Format: ##.##]]></comment>
 			</column>
-			<column name="salinity" type="decimal" length="4" decimal="2" jt="3" />
-			<column name="ph" type="decimal" length="4" decimal="2" jt="3" />
+			<column name="chlorophyl_a" type="decimal" length="4" decimal="2" jt="3" >
+				<comment><![CDATA[Measurement of chlorophyl a concentration in the water.
+
+Format ##:##]]></comment>
+			</column>
+			<column name="salinity" type="decimal" length="4" decimal="2" jt="3" >
+				<comment><![CDATA[Measurement of the salinity of the water at 1m depth. Format: ##.##]]></comment>
+			</column>
+			<column name="ph" type="decimal" length="4" decimal="2" jt="3" >
+				<comment><![CDATA[Measurement of seawater pH at 1m depth. format ##.##]]></comment>
+			</column>
 			<column name="dissolved_oxygen" type="decimal" length="6" decimal="3" jt="3" >
 				<comment><![CDATA[mg\L]]></comment>
 			</column>
-			<column name="mean_monthly_maximum_deg_c" type="decimal" length="4" decimal="2" jt="3" />
+			<column name="mean_monthly_maximum" prior="mean_monthly_maximum_deg_c" type="decimal" length="4" decimal="2" jt="3" >
+				<comment><![CDATA[Measured in degrees celcius. Format: ##.##]]></comment>
+			</column>
 			<column name="thermal_stress_anomaly_frequency" type="decimal" length="4" decimal="2" jt="3" />
 			<column name="thermal_stress_anomaly_stdev" type="decimal" length="4" decimal="2" jt="3" />
-			<column name="coral_cover" type="integer" jt="4" />
+			<column name="coral_cover" type="decimal" length="4" decimal="2" jt="3" >
+				<comment><![CDATA[This field is here as a sort of place holder to demonstrate that other sorts of parameters may be associated to an environment record such as coral cover. We may add many more columns to this table.]]></comment>
+			</column>
 			<index name="pk_site_snapshot_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
 			<fk name="fk_environment_record_site" to_schema="knowledgebase" to_table="site" >
 				<fk_column name="site_id" pk="id" />
+			</fk>
+		</table>
+		<table name="expedition" prior="tbl" >
+			<comment><![CDATA[This is a collection object to which multiple dives and assays can be associated. It will be very useful when making broad scale conclusions on the use of the Global Search. For example, how may expeditions have there been? Or how many assays were conducted as part of expedition XXX.]]></comment>
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[A unique name for the expeditions. This should be informative, e.g. 20210720_read_sea_voolstra or something similar.]]></comment>
+			</column>
+			<column name="start_date" type="date" jt="91" mandatory="y" >
+				<comment><![CDATA[The first day of the expedition (UTC).]]></comment>
+			</column>
+			<column name="end_date" type="date" jt="91" >
+				<comment><![CDATA[The last day of the expedition (UTC).]]></comment>
+			</column>
+			<column name="pi_user_id" type="integer" jt="4" mandatory="y" >
+				<comment><![CDATA[A single user 'responsible' for the expedition. This is equivalent to a chief scientist or principal investigator.]]></comment>
+			</column>
+			<index name="unq_expedition_id" unique="UNIQUE_KEY" >
+				<column name="id" />
+			</index>
+			<index name="pk_expedition_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_expedition_user" to_schema="knowledgebase" to_table="user" >
+				<fk_column name="pi_user_id" pk="id" />
+			</fk>
+		</table>
+		<table name="expedition_user" prior="tbl" >
+			<comment><![CDATA[Join table. One  user can take part in multiple expeditions. One expeditions contains multiple users.]]></comment>
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="user_id" type="integer" jt="4" mandatory="y" />
+			<column name="expedition_id" type="integer" jt="4" mandatory="y" />
+			<index name="pk_expedition_user_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_expedition_user_user" to_schema="knowledgebase" to_table="user" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+			<fk name="fk_expedition_user_expedition" to_schema="knowledgebase" to_table="expedition" >
+				<fk_column name="expedition_id" pk="id" />
 			</fk>
 		</table>
 		<table name="fragment" prior="tbl" >
@@ -305,15 +452,23 @@ NB. 'class' is a protected name. As such we will append '_tax' to each of the ta
 		<table name="ncbi_biosample" prior="ncbi_bio" >
 			<comment><![CDATA[An NCBI biosample is essentially a single nucleic extraction, a given 18S record and a given ITS2 sequencing may be associated to the same ncbi_biosample]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="accession" type="varchar" length="10" jt="12" >
+				<comment><![CDATA[This will be the NCBI accession for the biosample. This will need to be populated AFTER the sequencing data has been submitted to the NCBI database.]]></comment>
+			</column>
+			<column name="sample_name" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[This is the sample name that will be used to fill in the field "sample_name" on the NCBI BioSample submission sheet.]]></comment>
+			</column>
+			<column name="extraction_label" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[This is a unique label that will be used to identify a given nucleic acid extraction. It may be the same as the sample_name, in which case only one of these fields will be necessary.]]></comment>
+			</column>
 			<index name="pk_ncbi_biosample_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
 		</table>
 		<table name="region" prior="tbl" >
+			<comment><![CDATA[A given geographic region.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
-			<column name="name" type="varchar" length="100" jt="12" mandatory="y" >
-				<comment><![CDATA[May need to be a controlled vocab to agree with NCBI]]></comment>
-			</column>
+			<column name="name" type="varchar" length="100" jt="12" mandatory="y" />
 			<column name="abbreviation" type="varchar" length="3" jt="12" mandatory="y" >
 				<comment><![CDATA[Possibly fixed length to 3 char. May need to link to NCBI controlled vocab if available.]]></comment>
 			</column>
@@ -322,10 +477,15 @@ NB. 'class' is a protected name. As such we will append '_tax' to each of the ta
 			</index>
 		</table>
 		<table name="sequencing_effort" prior="equencing_effort" >
-			<comment><![CDATA[A single sequencing effort. It could be a barcode marker, i.e. 18S, or it oculd be RNA seq, or it could be a metagenomic sequencing effort.]]></comment>
+			<comment><![CDATA[This is quite complicated.
+
+Each row represents a single sequencing effort. A sequencing effort is where a sequencing library is created and sequenced resulting in one or more sequencing file pairs (for illumina short read sequencing). The library could be a barcode marker, i.e. 18S, or it oculd be RNA seq, or it could be a metagenomic sequencing effort. One or more sequencing efforts may be produced from a single fragment.
+
+For example, a single colony, is split into 13 fragments. 12 of those fragments are used in heat_stress_profiles, and 1 is not. The 12 samples will each be RNA-seq sequenced. This represents 12 seperate sequencing_effort rows, each of which will correspond to a different ncbi_biosample. For the remaining 1 samples, this will be used for 18S, 16S and ITS2 barcode sequencing, and Metagenomic sequencing. This will represent 4 rows in the sequencing_effort table, each of these rows will relate to the same ncbi_biosample.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="ncbi_biosample_id" type="integer" jt="4" mandatory="y" />
 			<column name="fragment_id" type="integer" jt="4" mandatory="y" />
+			<column name="sequencing_effort_protocol_id" type="integer" jt="4" mandatory="y" />
 			<index name="pk_sequencing_effort_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
@@ -335,10 +495,17 @@ NB. 'class' is a protected name. As such we will append '_tax' to each of the ta
 			<fk name="fk_cbass_sequencing_effort" to_schema="knowledgebase" to_table="fragment" >
 				<fk_column name="fragment_id" pk="id" />
 			</fk>
+			<fk name="fk_sequencing_effort_sequencing_effort_protocol" to_schema="knowledgebase" to_table="sequencing_effort_protocol" >
+				<fk_column name="sequencing_effort_protocol_id" pk="id" />
+			</fk>
 		</table>
 		<table name="sequencing_effort_barcode" prior="sequencing_effort_18s" >
+			<comment><![CDATA[A subclass of sequencing_effort. Each row represents a different barcode library preperation. In this context, a barcode is a single region of the genome that is sequenced for the fragement in question. This is in contrast to the RNA-seq or metagenomic sequencing effort subclasses in which an almost-full cross section of the organism's RNA/DNA is sequenced.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="sequencing_effort_id" type="integer" jt="4" mandatory="y" />
+			<column name="barcode" type="varchar" length="4" jt="12" mandatory="y" >
+				<comment><![CDATA[either "16S", "18S" or "ITS2". This is the region of the genome that is being sequenced.]]></comment>
+			</column>
 			<index name="pk_sequencing_effort_18s_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
@@ -356,6 +523,21 @@ NB. 'class' is a protected name. As such we will append '_tax' to each of the ta
 				<fk_column name="sequencing_effort_id" pk="id" />
 			</fk>
 		</table>
+		<table name="sequencing_effort_protocol" prior="tbl" >
+			<comment><![CDATA[A SuperClass where each record hold details of a single protocol used for a given sequencing effort.
+It will likely be best to document the protocols fullon on a dedicated resourecse such as protocols.io.]]></comment>
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<column name="library_type" type="varchar" length="10" jt="12" mandatory="y" >
+				<comment><![CDATA[either: "barcode", "rna-seq", "metagenomic".]]></comment>
+			</column>
+			<column name="url" type="varchar" length="200" jt="12" >
+				<comment><![CDATA[URL to an external resource documenting the protocol in full.]]></comment>
+			</column>
+			<index name="pk_sequencing_effort_protocol_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
 		<table name="sequencing_effort_rna_seq" prior="sequencing_effort_" >
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="sequencing_effort_id" type="integer" jt="4" mandatory="y" />
@@ -367,17 +549,54 @@ NB. 'class' is a protected name. As such we will append '_tax' to each of the ta
 			</fk>
 		</table>
 		<table name="site" prior="tbl" >
-			<comment><![CDATA[This is a record for a single site. It does not contain any data related to a particular date or time (e.g. water_temperature). Rather this sort of data should be recorded in a 'environment_snapshot'.]]></comment>
+			<comment><![CDATA[This is a record for a single site i.e. a geographical location that can be represented by a single set of lat lon coordinates. It does not contain any data related to a particular date or time (e.g. water_temperature). Rather this sort of data should be recorded in a 'environment_record'.
+
+The fields geo_loc_name, env_broad_scale, env_local_scale	 and env_medium are all derived from, and required by, the NCBI BioSample input datasheet. They have a controlled vocabulary that we will need to control for. I will put the instructions provided by NCBI relating to each of these fields  below:
+
+geo_loc_name: Geographical origin of the sample; use the appropriate name from this list http://www.insdc.org/documents/country-qualifier-vocabulary. Use a colon to separate the country or ocean from more detailed information about the location, eg "Canada: Vancouver" or "Germany: halfway down Zugspitze, Alps"
+
+env_broad_scale: Add terms that identify the major environment type(s) where your sample was collected. Recommend subclasses of biome [ENVO:00000428]. Multiple terms can be separated by one or more pipes e.g.:  mangrove biome [ENVO:01000181]|estuarine biome [ENVO:01000020]
+
+env_local_scale: Add terms that identify environmental entities having causal influences upon the entity at time of sampling, multiple terms can be separated by pipes, e.g.:  shoreline [ENVO:00000486]|intertidal zone [ENVO:00000316]
+
+env_medium: Add terms that identify the material displaced by the entity at time of sampling. Recommend subclasses of environmental material [ENVO:00010483]. Multiple terms can be separated by pipes e.g.: estuarine water [ENVO:01000301]|estuarine mud [ENVO:00002160]]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="latitude" type="decimal" length="8" decimal="6" jt="3" mandatory="y" >
-				<comment><![CDATA[The latitude in decimal degrees. E.g. ##.######]]></comment>
+				<comment><![CDATA[The latitude in decimal degrees. E.g. ##.######.
+
+The correct format of this will need to be strictly enforced/currated.]]></comment>
 			</column>
 			<column name="longitude" type="decimal" length="9" decimal="6" jt="3" mandatory="y" >
-				<comment><![CDATA[The longitude in decimal degrees e.g. ###.######]]></comment>
+				<comment><![CDATA[The longitude in decimal degrees e.g. ###.######.
+
+The correct format of this will need to be strictly enforced/currated.]]></comment>
 			</column>
-			<column name="name" type="varchar" length="100" jt="12" mandatory="y" />
-			<column name="abbreviation_code" type="varchar" length="4" jt="12" mandatory="y" />
-			<column name="region_id" type="integer" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[The full name of the site.]]></comment>
+			</column>
+			<column name="abbreviation_code" type="varchar" length="4" jt="12" mandatory="y" >
+				<comment><![CDATA[Site will be given unique alphanumeric abbreviations that will be used as part of assigning labels to objects related to the site. For example, a colony label may use this appreviation as part of its label.]]></comment>
+			</column>
+			<column name="region_id" type="integer" jt="4" mandatory="y" >
+				<comment><![CDATA[Every site must be assocated with a region.]]></comment>
+			</column>
+			<column name="time_zone" type="integer" jt="4" mandatory="y" >
+				<comment><![CDATA[A code that represents the time zone of the site. This will be used to convert all local times to UTC. Time zones are easy to find online: https://docs.vmware.com/en/vRealize-Orchestrator/8.4/com.vmware.vrealize.orchestrator-use-plugins.doc/GUID-83EBD74D-B5EC-4A0A-B54E-8E45BE2928C2.html]]></comment>
+			</column>
+			<column name="geo_loc_name" prior="country" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[This field will need to comply with the geo_loc_name field of the NCBI MIMS.me.host-associated.5.0 input sheet. The guidance for that field reads as:
+
+"Geographical origin of the sample; use the appropriate name from this list http://www.insdc.org/documents/country-qualifier-vocabulary. Use a colon to separate the country or ocean from more detailed information about the location, eg "Canada: Vancouver" or "Germany: halfway down Zugspitze, Alps""]]></comment>
+			</column>
+			<column name="env_broad_scale" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[NCBI required field. See table description for guidance.]]></comment>
+			</column>
+			<column name="env_local_scale" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[NCBI required field. See table description for guidance.]]></comment>
+			</column>
+			<column name="env_medium" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[NCBI required field. See table description for guidance.]]></comment>
+			</column>
 			<index name="pk_site_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
@@ -392,13 +611,15 @@ NB. 'class' is a protected name. As such we will append '_tax' to each of the ta
 			</fk>
 		</table>
 		<table name="user" prior="tbl" >
-			<comment><![CDATA[A KB user]]></comment>
+			<comment><![CDATA[This user object will represent users who register on the Global Search web UI and users who partake in expeditions.
+
+The columns of this table will change according to how integration with AWS Cognito works. For example, if a user logs in with their Google credentials, will we have access to an email? Maybe not. The credentials stored for the users will therefore change according to how the integration with cognito works.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="role" prior="is_admin" type="varchar" length="10" jt="12" mandatory="y" >
 				<defo><![CDATA[guest]]></defo>
+				<comment><![CDATA[A field that will be used to control the extent of access to the Global Search web UI. This will lkely be a controlled vocab of possibly 3 different roles. These roles will be further solidified as part of the interviews that FIVE will be conducting.]]></comment>
 			</column>
-			<column name="name" type="varchar" length="100" jt="12" mandatory="y" />
-			<column name="email" type="integer" jt="4" mandatory="y" />
+			<column name="email" type="varchar" length="100" jt="12" mandatory="y" />
 			<column name="first_name" type="varchar" length="100" jt="12" />
 			<column name="last_name" type="varchar" length="100" jt="12" />
 			<column name="username" type="varchar" length="100" jt="12" mandatory="y" />
@@ -408,31 +629,45 @@ NB. 'class' is a protected name. As such we will append '_tax' to each of the ta
 		</table>
 	</schema>
 	<layout name="Default Layout" id="Layout_1e52" joined_routing="y" show_relation="columns" >
-		<entity schema="knowledgebase" name="assay" color="C1D8EE" x="608" y="800" />
-		<entity schema="knowledgebase" name="calcification_assay" color="C1D8EE" x="880" y="1088" />
-		<entity schema="knowledgebase" name="cbass_assay" color="C1D8EE" x="960" y="864" />
-		<entity schema="knowledgebase" name="cbass_assay_fragment" color="C1D8EE" x="1360" y="480" />
-		<entity schema="knowledgebase" name="cbass_nucleic_acid_fragment" color="C1D8EE" x="1360" y="224" />
-		<entity schema="knowledgebase" name="colony" color="C1D8EE" x="800" y="368" />
-		<entity schema="knowledgebase" name="colony_photo" color="C1D8EE" x="800" y="208" />
-		<entity schema="knowledgebase" name="coral_species" color="C1D8EE" x="432" y="160" />
-		<entity schema="knowledgebase" name="dive" color="C1D8EE" x="496" y="560" />
-		<entity schema="knowledgebase" name="dive_table_photo" color="C1D8EE" x="192" y="528" />
-		<entity schema="knowledgebase" name="dive_user" color="C1D8EE" x="240" y="352" />
-		<entity schema="knowledgebase" name="environment_record" color="C1D8EE" x="192" y="1104" />
-		<entity schema="knowledgebase" name="fragment" color="C1D8EE" x="1088" y="352" />
-		<entity schema="knowledgebase" name="fragment_photo" color="C1D8EE" x="1088" y="512" />
-		<entity schema="knowledgebase" name="geome_event" color="C1D8EE" x="128" y="1584" />
-		<entity schema="knowledgebase" name="geome_sample" color="C1D8EE" x="336" y="1584" />
-		<entity schema="knowledgebase" name="geome_tissue" color="C1D8EE" x="784" y="1728" />
-		<entity schema="knowledgebase" name="heat_stress_profile" color="C1D8EE" x="1168" y="864" />
-		<entity schema="knowledgebase" name="ncbi_biosample" color="C1D8EE" x="1936" y="352" />
-		<entity schema="knowledgebase" name="region" color="C1D8EE" x="48" y="896" />
-		<entity schema="knowledgebase" name="sequencing_effort" color="C1D8EE" x="1664" y="336" />
-		<entity schema="knowledgebase" name="sequencing_effort_barcode" color="C1D8EE" x="1616" y="48" />
-		<entity schema="knowledgebase" name="sequencing_effort_metagenomic" color="C1D8EE" x="1600" y="240" />
-		<entity schema="knowledgebase" name="sequencing_effort_rna_seq" color="C1D8EE" x="1616" y="144" />
-		<entity schema="knowledgebase" name="site" color="C1D8EE" x="240" y="880" />
-		<entity schema="knowledgebase" name="user" color="C1D8EE" x="64" y="352" />
+		<entity schema="knowledgebase" name="amplification_sequencing_protocol" color="C1D8EE" x="1840" y="640" />
+		<entity schema="knowledgebase" name="analysis" color="C1D8EE" x="1248" y="1344" />
+		<entity schema="knowledgebase" name="analysis_assay" color="C1D8EE" x="1408" y="1312" />
+		<entity schema="knowledgebase" name="analysis_assay_sequencing_effort" color="C1D8EE" x="1856" y="1040" />
+		<entity schema="knowledgebase" name="assay" color="C1D8EE" x="784" y="848" />
+		<entity schema="knowledgebase" name="calcification_assay" color="C1D8EE" x="704" y="1184" />
+		<entity schema="knowledgebase" name="cbass_assay" color="C1D8EE" x="1120" y="896" />
+		<entity schema="knowledgebase" name="cbass_assay_fragment" color="C1D8EE" x="1520" y="512" />
+		<entity schema="knowledgebase" name="cbass_nucleic_acid_fragment" color="C1D8EE" x="1520" y="256" />
+		<entity schema="knowledgebase" name="colony" color="C1D8EE" x="960" y="400" />
+		<entity schema="knowledgebase" name="colony_photo" color="C1D8EE" x="960" y="240" />
+		<entity schema="knowledgebase" name="coral_species" color="C1D8EE" x="592" y="192" />
+		<entity schema="knowledgebase" name="dive" color="C1D8EE" x="656" y="592" />
+		<entity schema="knowledgebase" name="dive_table_photo" color="C1D8EE" x="352" y="560" />
+		<entity schema="knowledgebase" name="dive_user" color="C1D8EE" x="400" y="384" />
+		<entity schema="knowledgebase" name="environment_record" color="C1D8EE" x="352" y="1136" />
+		<entity schema="knowledgebase" name="expedition" color="C1D8EE" x="64" y="672" />
+		<entity schema="knowledgebase" name="expedition_user" color="C1D8EE" x="48" y="544" />
+		<entity schema="knowledgebase" name="fragment" color="C1D8EE" x="1248" y="384" />
+		<entity schema="knowledgebase" name="fragment_photo" color="C1D8EE" x="1248" y="544" />
+		<entity schema="knowledgebase" name="geome_event" color="C1D8EE" x="288" y="1616" />
+		<entity schema="knowledgebase" name="geome_sample" color="C1D8EE" x="496" y="1616" />
+		<entity schema="knowledgebase" name="geome_tissue" color="C1D8EE" x="944" y="1760" />
+		<entity schema="knowledgebase" name="heat_stress_profile" color="C1D8EE" x="1328" y="896" />
+		<entity schema="knowledgebase" name="ncbi_biosample" color="C1D8EE" x="2160" y="368" />
+		<entity schema="knowledgebase" name="region" color="C1D8EE" x="208" y="928" />
+		<entity schema="knowledgebase" name="sequencing_effort" color="C1D8EE" x="1824" y="368" />
+		<entity schema="knowledgebase" name="sequencing_effort_barcode" color="C1D8EE" x="1776" y="48" />
+		<entity schema="knowledgebase" name="sequencing_effort_metagenomic" color="C1D8EE" x="1760" y="272" />
+		<entity schema="knowledgebase" name="sequencing_effort_protocol" color="C1D8EE" x="1824" y="496" />
+		<entity schema="knowledgebase" name="sequencing_effort_rna_seq" color="C1D8EE" x="1776" y="176" />
+		<entity schema="knowledgebase" name="site" color="C1D8EE" x="400" y="880" />
+		<entity schema="knowledgebase" name="user" color="C1D8EE" x="224" y="384" />
+		<callout x="192" y="160" pointer="Round" >
+			<comment><![CDATA[Bare Bones db schema]]></comment>
+		</callout>
+		<callout x="1408" y="1232" pointer="Round" >
+			<comment><![CDATA[Analsysis objects
+To be developed after the 'bare bones' application.]]></comment>
+		</callout>
 	</layout>
 </project>
