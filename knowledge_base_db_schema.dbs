@@ -78,7 +78,9 @@
 			</fk>
 		</table>
 		<table name="calcification_assay" prior="tbl" >
-			<comment><![CDATA[Multiple different assay types will be held in the KnowledgeBase. The first to be developed will be the cbass_assay. Others such as 'calcification_assay' will be integrated down the line.]]></comment>
+			<comment><![CDATA[Multiple different assay types will be held in the KnowledgeBase. The first to be developed will be the cbass_assay. Others, such as 'calcification_assay' will be integrated down the line. Just as cbass has its own subclasses of 'fragment' so too, most likely, will these other assay types.
+
+For the time being, this table will have little functionality other than to serve as a place holder and reminder that further assay types will be developed later. This will need to be considered when developing the CBASS specific parts of the schema.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="assay_id" type="integer" jt="4" mandatory="y" />
 			<index name="pk_calcification_assay_id" unique="PRIMARY_KEY" >
@@ -459,6 +461,18 @@ For example, a single colony, is split into 13 fragments. 12 of those fragments 
 			<column name="ncbi_biosample_id" type="integer" jt="4" mandatory="y" />
 			<column name="fragment_id" type="integer" jt="4" mandatory="y" />
 			<column name="sequencing_effort_protocol_id" type="integer" jt="4" mandatory="y" />
+			<column name="sample_name" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[This field will be used to populate the sample_name field of the NCBI SRA submission sheet.]]></comment>
+			</column>
+			<column name="library_name" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[This field will be used to populate the NCBI library_ID field of the SRA submission sheet.]]></comment>
+			</column>
+			<column name="filename_one" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[There may be one or two output sequencing files associated with a sequencing effort. This is the file name of the first file.]]></comment>
+			</column>
+			<column name="filename_two" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[The filename of the second sequencing file if there is one.]]></comment>
+			</column>
 			<index name="pk_sequencing_effort_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
@@ -506,6 +520,122 @@ It will likely be best to document the protocols fullon on a dedicated resourecs
 			</column>
 			<column name="url" type="varchar" length="200" jt="12" >
 				<comment><![CDATA[URL to an external resource documenting the protocol in full.]]></comment>
+			</column>
+			<column name="library_source" type="varchar" length="30" jt="12" mandatory="y" >
+				<defo><![CDATA['METAGENOMIC']]></defo>
+				<comment><![CDATA[This field will be used to populate the NCBI SRA submission sheet 'libarary_source' field.
+
+There are a limited set of options to choose from that are:
+GENOMIC
+TRANSCRIPTOMIC
+METAGENOMIC
+METATRANSCRIPTOMIC
+SYNTHETIC
+VIRAL RNA
+GENOMIC SINGLE CELL
+TRANSCRIPTOMIC SINGLE CELL
+OTHER]]></comment>
+			</column>
+			<column name="library_selection" type="varchar" length="40" jt="12" mandatory="y" >
+				<comment><![CDATA[This field will be used to populate the NCBI SRA submission sheet 'libarary_selection' field.
+
+There are a limited set of options to choose from that are:
+RANDOM
+PCR
+RANDOM PCR
+RT-PCR
+HMPR
+MF
+CF-S
+CF-M
+CF-H
+CF-T
+MDA
+MSLL
+cDNA
+ChIP
+MNase
+DNAse
+Hybrid Selection
+Reduced Representation
+Restriction Digest
+5-methylcytidine antibody
+MBD2 protein methyl-CpG binding domain
+CAGE
+RACE
+size fractionation
+Padlock probes capture method
+other
+unspecified
+cDNA_oligo_dT
+cDNA_randomPriming
+Inverse rRNA
+Oligo-dT
+PolyA
+repeat fractionation]]></comment>
+			</column>
+			<column name="library_layout" type="varchar" jt="12" >
+				<defo><![CDATA['paired']]></defo>
+				<comment><![CDATA[This field will be used to populate the NCBI SRA submission sheet 'libarary_layout' field.
+
+There are a limited set of options to choose from that are:
+paired
+single]]></comment>
+			</column>
+			<column name="platform" type="varchar" length="25" jt="12" mandatory="y" >
+				<defo><![CDATA['ILLUMINA']]></defo>
+				<comment><![CDATA[This field will be used to populate the NCBI SRA submission sheet 'platform' field.
+
+There are a limited set of options to choose from and I have only included the most common:
+ILLUMINA
+OXFORD_NANOPORE
+PACBIO_SMRT]]></comment>
+			</column>
+			<column name="instrument_model" type="varchar" length="25" jt="12" mandatory="y" >
+				<comment><![CDATA[This field will be used to populate the NCBI SRA submission sheet 'instrument_model' field.
+
+There are a limited set of options to choose from that are dependent on the value of the 'platform' field. I will only include the most common:
+
+Illumina:
+HiSeq X Five
+HiSeq X Ten
+Illumina Genome Analyzer
+Illumina Genome Analyzer II
+Illumina Genome Analyzer IIx
+Illumina HiScanSQ
+Illumina HiSeq 1000
+Illumina HiSeq 1500
+Illumina HiSeq 2000
+Illumina HiSeq 2500
+Illumina HiSeq 3000
+Illumina HiSeq 4000
+Illumina iSeq 100
+Illumina NovaSeq 6000
+Illumina MiniSeq
+Illumina MiSeq
+NextSeq 500
+NextSeq 550
+
+PACBIO_SMRT:
+PacBio RS
+PacBio RS II
+PacBio Sequel
+PacBio Sequel II
+
+OXFORD_NANOPORE:
+GridION
+MinION
+PromethION]]></comment>
+			</column>
+			<column name="filetype" type="varchar" length="25" jt="12" mandatory="y" >
+				<defo><![CDATA[fastq]]></defo>
+				<comment><![CDATA[This field will be used to populate the 'filetype' field of the NCBI SRA submission sheet.
+
+There are several options, I will only include the most common:
+fastq
+PacBio_HDF5
+CompleteGenomics_native
+OxfordNanopore_native]]></comment>
 			</column>
 			<index name="pk_sequencing_effort_protocol_id" unique="PRIMARY_KEY" >
 				<column name="id" />
@@ -602,7 +732,7 @@ The columns of this table will change according to how integration with AWS Cogn
 		</table>
 	</schema>
 	<layout name="Default Layout" id="Layout_1e52" joined_routing="y" show_relation="columns" >
-		<entity schema="knowledgebase" name="amplification_sequencing_protocol" color="C1D8EE" x="1872" y="688" />
+		<entity schema="knowledgebase" name="amplification_sequencing_protocol" color="C1D8EE" x="1872" y="848" />
 		<entity schema="knowledgebase" name="analysis" color="C1D8EE" x="1344" y="1488" />
 		<entity schema="knowledgebase" name="analysis_assay" color="C1D8EE" x="1488" y="1472" />
 		<entity schema="knowledgebase" name="analysis_assay_sequencing_effort" color="C1D8EE" x="1888" y="1088" />
@@ -617,7 +747,7 @@ The columns of this table will change according to how integration with AWS Cogn
 		<entity schema="knowledgebase" name="dive" color="C1D8EE" x="688" y="640" />
 		<entity schema="knowledgebase" name="dive_table_photo" color="C1D8EE" x="384" y="608" />
 		<entity schema="knowledgebase" name="dive_user" color="C1D8EE" x="432" y="432" />
-		<entity schema="knowledgebase" name="environment_record" color="C1D8EE" x="384" y="1184" />
+		<entity schema="knowledgebase" name="environment_record" color="C1D8EE" x="304" y="1216" />
 		<entity schema="knowledgebase" name="expedition" color="C1D8EE" x="96" y="720" />
 		<entity schema="knowledgebase" name="expedition_user" color="C1D8EE" x="80" y="592" />
 		<entity schema="knowledgebase" name="fragment" color="C1D8EE" x="1280" y="432" />
@@ -628,7 +758,7 @@ The columns of this table will change according to how integration with AWS Cogn
 		<entity schema="knowledgebase" name="sequencing_effort" color="C1D8EE" x="1856" y="416" />
 		<entity schema="knowledgebase" name="sequencing_effort_barcode" color="C1D8EE" x="1808" y="96" />
 		<entity schema="knowledgebase" name="sequencing_effort_metagenomic" color="C1D8EE" x="1792" y="320" />
-		<entity schema="knowledgebase" name="sequencing_effort_protocol" color="C1D8EE" x="1856" y="544" />
+		<entity schema="knowledgebase" name="sequencing_effort_protocol" color="C1D8EE" x="1872" y="608" />
 		<entity schema="knowledgebase" name="sequencing_effort_rna_seq" color="C1D8EE" x="1808" y="224" />
 		<entity schema="knowledgebase" name="site" color="C1D8EE" x="432" y="928" />
 		<entity schema="knowledgebase" name="user" color="C1D8EE" x="256" y="432" />
