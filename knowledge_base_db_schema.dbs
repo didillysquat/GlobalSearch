@@ -92,7 +92,7 @@ For the time being, this table will have little functionality other than to serv
 				<fk_column name="assay_id" pk="id" />
 			</fk>
 		</table>
-		<table name="cbass_assay_fragment" prior="assay_fragment" >
+		<table name="cbass_heat_stress_profile_fragment" prior="cbass_assay_fragment" >
 			<comment><![CDATA[This is a fragement that is used in a heat stress protocol. It may or may not have nucleic acids sampled from it, as such it may or may not have a sequencing_effort associated to it.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="fragment_id" type="integer" jt="4" mandatory="y" />
@@ -740,7 +740,7 @@ The columns of this table will change according to how integration with AWS Cogn
 		<entity schema="knowledgebase" name="assay" color="C1D8EE" x="832" y="928" />
 		<entity schema="knowledgebase" name="calcification_assay" color="C1D8EE" x="752" y="1264" />
 		<entity schema="knowledgebase" name="cbass_assay" color="C1D8EE" x="1168" y="976" />
-		<entity schema="knowledgebase" name="cbass_assay_fragment" color="C1D8EE" x="1568" y="592" />
+		<entity schema="knowledgebase" name="cbass_heat_stress_profile_fragment" color="C1D8EE" x="1568" y="592" />
 		<entity schema="knowledgebase" name="cbass_nucleic_acid_fragment" color="C1D8EE" x="1568" y="336" />
 		<entity schema="knowledgebase" name="colony" color="C1D8EE" x="1008" y="480" />
 		<entity schema="knowledgebase" name="colony_photo" color="C1D8EE" x="1008" y="320" />
