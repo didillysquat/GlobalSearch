@@ -246,14 +246,6 @@ tr:nth-child(even) {
 </g>
 
 <g transform='translate(0,110)'>
-<!-- == Fk 'amplification_sequencing_protocol_fk_amplification_sequencing_protocol_sequencing_effort_protocol' == -->
-<path id='amplification_sequencing_protocol_fk_amplification_sequencing_protocol_sequencing_effort_protocol'  onmouseover="hghl(['amplification_sequencing_protocol_fk_amplification_sequencing_protocol_sequencing_effort_protocol','knowledgebase.amplification_sequencing_protocol.sequencing_effort_protocol_id','knowledgebase.sequencing_effort_protocol.id'])" onmouseout="uhghl(['amplification_sequencing_protocol_fk_amplification_sequencing_protocol_sequencing_effort_protocol','knowledgebase.amplification_sequencing_protocol.sequencing_effort_protocol_id','knowledgebase.sequencing_effort_protocol.id'])" transform='translate(8,0)' class='scene' d='M 1872,992L 1864,992Q 1856,992 1856,984L 1856,680Q 1856,672 1864,672L 1872,672' >
-	<title>Fk fk_amplification_sequencing_protocol_sequencing_effort_protocol
-amplification_sequencing_protocol ref sequencing_effort_protocol ( sequencing_effort_protocol_id -&gt; id )</title>
-</path>
-<path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 1872,992L 1864,992Q 1856,992 1856,984L 1856,680Q 1856,672 1864,672L 1872,672' ><title>Fk fk_amplification_sequencing_protocol_sequencing_effort_protocol
-amplification_sequencing_protocol ref sequencing_effort_protocol ( sequencing_effort_protocol_id -&gt; id )</title></path>
-<text x='1689' y='987' transform='rotate(0 1689,987)' class='relName'>sequencing_effort_protocol_id</text>
 <!-- == Fk 'analysis_assay_fk_analysis_assay_assay' == -->
 <path id='analysis_assay_fk_analysis_assay_assay'  onmouseover="hghl(['analysis_assay_fk_analysis_assay_assay','knowledgebase.analysis_assay.assay_id','knowledgebase.assay.id'])" onmouseout="uhghl(['analysis_assay_fk_analysis_assay_assay','knowledgebase.analysis_assay.assay_id','knowledgebase.assay.id'])" transform='translate(8,0)' class='scene' d='M 1488,1552L 1048,1552Q 1040,1552 1040,1544L 1040,968Q 1040,960 1032,960L 1024,960' >
 	<title>Fk fk_analysis_assay_assay
@@ -326,6 +318,30 @@ cbass_assay ref assay ( assay_id -&gt; id )</title>
 <path transform='translate(8,0)' marker-start='url(#foot1p)'     d='M 1152,1088L 1048,1088Q 1040,1088 1040,1080L 1040,1072' ><title>Fk fk_cbass_assay_assay
 cbass_assay ref assay ( assay_id -&gt; id )</title></path>
 <text x='1110' y='1083' transform='rotate(0 1110,1083)' class='relName'>assay_id</text>
+<!-- == Fk 'cbass_assay_fragment_fk_assay_fragment_fragment' == -->
+<path id='cbass_assay_fragment_fk_assay_fragment_fragment'  onmouseover="hghl(['cbass_assay_fragment_fk_assay_fragment_fragment','knowledgebase.cbass_assay_fragment.fragment_id','knowledgebase.fragment.id'])" onmouseout="uhghl(['cbass_assay_fragment_fk_assay_fragment_fragment','knowledgebase.cbass_assay_fragment.fragment_id','knowledgebase.fragment.id'])" transform='translate(8,0)' class='scene' d='M 1552,640L 1480,640Q 1472,640 1472,632L 1472,504Q 1472,496 1464,496L 1456,496' >
+	<title>Fk fk_assay_fragment_fragment
+cbass_assay_fragment ref fragment ( fragment_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 1552,640L 1480,640Q 1472,640 1472,632L 1472,504Q 1472,496 1464,496L 1456,496' ><title>Fk fk_assay_fragment_fragment
+cbass_assay_fragment ref fragment ( fragment_id -&gt; id )</title></path>
+<text x='1485' y='635' transform='rotate(0 1485,635)' class='relName'>fragment_id</text>
+<!-- == Fk 'cbass_assay_fragment_fk_cbass_assay_fragment' == -->
+<path id='cbass_assay_fragment_fk_cbass_assay_fragment'  onmouseover="hghl(['cbass_assay_fragment_fk_cbass_assay_fragment','knowledgebase.cbass_assay_fragment.heat_stress_profile_id','knowledgebase.heat_stress_profile.id'])" onmouseout="uhghl(['cbass_assay_fragment_fk_cbass_assay_fragment','knowledgebase.cbass_assay_fragment.heat_stress_profile_id','knowledgebase.heat_stress_profile.id'])" transform='translate(8,0)' class='scene' d='M 1776,656L 1784,656Q 1792,656 1792,664L 1792,1000Q 1792,1008 1784,1008L 1632,1008' >
+	<title>Fk fk_cbass_assay_fragment
+cbass_assay_fragment ref heat_stress_profile ( heat_stress_profile_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 1776,656L 1784,656Q 1792,656 1792,664L 1792,1000Q 1792,1008 1784,1008L 1632,1008' ><title>Fk fk_cbass_assay_fragment
+cbass_assay_fragment ref heat_stress_profile ( heat_stress_profile_id -&gt; id )</title></path>
+<text x='1786' y='651' transform='rotate(0 1786,651)' class='relName'>heat_stress_profile_id</text>
+<!-- == Fk 'cbass_nucleic_acid_fragment_fk_nucleic_acid_fragment' == -->
+<path id='cbass_nucleic_acid_fragment_fk_nucleic_acid_fragment'  onmouseover="hghl(['cbass_nucleic_acid_fragment_fk_nucleic_acid_fragment','knowledgebase.cbass_nucleic_acid_fragment.fragment_id','knowledgebase.fragment.id'])" onmouseout="uhghl(['cbass_nucleic_acid_fragment_fk_nucleic_acid_fragment','knowledgebase.cbass_nucleic_acid_fragment.fragment_id','knowledgebase.fragment.id'])" transform='translate(8,0)' class='scene' d='M 1552,384L 1480,384Q 1472,384 1472,392L 1472,488Q 1472,496 1464,496L 1456,496' >
+	<title>Fk fk_nucleic_acid_fragment
+cbass_nucleic_acid_fragment ref fragment ( fragment_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1p)'     d='M 1552,384L 1480,384Q 1472,384 1472,392L 1472,488Q 1472,496 1464,496L 1456,496' ><title>Fk fk_nucleic_acid_fragment
+cbass_nucleic_acid_fragment ref fragment ( fragment_id -&gt; id )</title></path>
+<text x='1485' y='379' transform='rotate(0 1485,379)' class='relName'>fragment_id</text>
 <!-- == Fk 'colony_fk_colony_dive' == -->
 <path id='colony_fk_colony_dive'  onmouseover="hghl(['colony_fk_colony_dive','knowledgebase.colony.dive_id','knowledgebase.dive.id'])" onmouseout="uhghl(['colony_fk_colony_dive','knowledgebase.colony.dive_id','knowledgebase.dive.id'])" transform='translate(8,0)' class='scene' d='M 992,544L 840,544Q 832,544 832,552L 832,696Q 832,704 824,704L 816,704' >
 	<title>Fk fk_colony_dive
@@ -455,11 +471,11 @@ sequencing_effort ref fragment ( fragment_id -&gt; id )</title>
 sequencing_effort ref fragment ( fragment_id -&gt; id )</title></path>
 <text x='1789' y='507' transform='rotate(0 1789,507)' class='relName'>fragment_id</text>
 <!-- == Fk 'sequencing_effort_fk_sequencing_effort_sequencing_effort_protocol' == -->
-<path id='sequencing_effort_fk_sequencing_effort_sequencing_effort_protocol'  onmouseover="hghl(['sequencing_effort_fk_sequencing_effort_sequencing_effort_protocol','knowledgebase.sequencing_effort.sequencing_effort_protocol_id','knowledgebase.sequencing_effort_protocol.id'])" onmouseout="uhghl(['sequencing_effort_fk_sequencing_effort_sequencing_effort_protocol','knowledgebase.sequencing_effort.sequencing_effort_protocol_id','knowledgebase.sequencing_effort_protocol.id'])" transform='translate(8,0)' class='scene' d='M 2128,528L 2136,528Q 2144,528 2144,536L 2144,664Q 2144,672 2136,672L 2080,672' >
+<path id='sequencing_effort_fk_sequencing_effort_sequencing_effort_protocol'  onmouseover="hghl(['sequencing_effort_fk_sequencing_effort_sequencing_effort_protocol','knowledgebase.sequencing_effort.sequencing_effort_protocol_id','knowledgebase.sequencing_effort_protocol.id'])" onmouseout="uhghl(['sequencing_effort_fk_sequencing_effort_sequencing_effort_protocol','knowledgebase.sequencing_effort.sequencing_effort_protocol_id','knowledgebase.sequencing_effort_protocol.id'])" transform='translate(8,0)' class='scene' d='M 2128,528L 2136,528Q 2144,528 2144,536L 2144,680Q 2144,688 2136,688L 2080,688' >
 	<title>Fk fk_sequencing_effort_sequencing_effort_protocol
 sequencing_effort ref sequencing_effort_protocol ( sequencing_effort_protocol_id -&gt; id )</title>
 </path>
-<path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 2128,528L 2136,528Q 2144,528 2144,536L 2144,664Q 2144,672 2136,672L 2080,672' ><title>Fk fk_sequencing_effort_sequencing_effort_protocol
+<path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 2128,528L 2136,528Q 2144,528 2144,536L 2144,680Q 2144,688 2136,688L 2080,688' ><title>Fk fk_sequencing_effort_sequencing_effort_protocol
 sequencing_effort ref sequencing_effort_protocol ( sequencing_effort_protocol_id -&gt; id )</title></path>
 <text x='2138' y='523' transform='rotate(0 2138,523)' class='relName'>sequencing_effort_protocol_id</text>
 <!-- == Fk 'sequencing_effort_barcode_fk_sequencing_effort_barcode' == -->
@@ -494,52 +510,6 @@ site ref region ( region_id -&gt; id )</title>
 <path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 432,1072L 408,1072Q 400,1072 400,1064L 400,1048Q 400,1040 392,1040L 384,1040' ><title>Fk fk_site_region
 site ref region ( region_id -&gt; id )</title></path>
 <text x='384' y='1067' transform='rotate(0 384,1067)' class='relName'>region_id</text>
-<!-- == Fk 'cbass_nucleic_acid_fragment_fk_nucleic_acid_fragment' == -->
-<path id='cbass_nucleic_acid_fragment_fk_nucleic_acid_fragment'  onmouseover="hghl(['cbass_nucleic_acid_fragment_fk_nucleic_acid_fragment','knowledgebase.cbass_nucleic_acid_fragment.fragment_id','knowledgebase.fragment.id'])" onmouseout="uhghl(['cbass_nucleic_acid_fragment_fk_nucleic_acid_fragment','knowledgebase.cbass_nucleic_acid_fragment.fragment_id','knowledgebase.fragment.id'])" transform='translate(8,0)' class='scene' d='M 1552,384L 1480,384Q 1472,384 1472,392L 1472,488Q 1472,496 1464,496L 1456,496' >
-	<title>Fk fk_nucleic_acid_fragment
-cbass_nucleic_acid_fragment ref fragment ( fragment_id -&gt; id )</title>
-</path>
-<path transform='translate(8,0)' marker-start='url(#foot1p)'     d='M 1552,384L 1480,384Q 1472,384 1472,392L 1472,488Q 1472,496 1464,496L 1456,496' ><title>Fk fk_nucleic_acid_fragment
-cbass_nucleic_acid_fragment ref fragment ( fragment_id -&gt; id )</title></path>
-<text x='1485' y='379' transform='rotate(0 1485,379)' class='relName'>fragment_id</text>
-<!-- == Fk 'cbass_assay_fragment_fk_assay_fragment_fragment' == -->
-<path id='cbass_assay_fragment_fk_assay_fragment_fragment'  onmouseover="hghl(['cbass_assay_fragment_fk_assay_fragment_fragment','knowledgebase.cbass_assay_fragment.fragment_id','knowledgebase.fragment.id'])" onmouseout="uhghl(['cbass_assay_fragment_fk_assay_fragment_fragment','knowledgebase.cbass_assay_fragment.fragment_id','knowledgebase.fragment.id'])" transform='translate(8,0)' class='scene' d='M 1552,640L 1480,640Q 1472,640 1472,632L 1472,504Q 1472,496 1464,496L 1456,496' >
-	<title>Fk fk_assay_fragment_fragment
-cbass_assay_fragment ref fragment ( fragment_id -&gt; id )</title>
-</path>
-<path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 1552,640L 1480,640Q 1472,640 1472,632L 1472,504Q 1472,496 1464,496L 1456,496' ><title>Fk fk_assay_fragment_fragment
-cbass_assay_fragment ref fragment ( fragment_id -&gt; id )</title></path>
-<text x='1485' y='635' transform='rotate(0 1485,635)' class='relName'>fragment_id</text>
-<!-- == Fk 'cbass_assay_fragment_fk_cbass_assay_fragment' == -->
-<path id='cbass_assay_fragment_fk_cbass_assay_fragment'  onmouseover="hghl(['cbass_assay_fragment_fk_cbass_assay_fragment','knowledgebase.cbass_assay_fragment.heat_stress_profile_id','knowledgebase.heat_stress_profile.id'])" onmouseout="uhghl(['cbass_assay_fragment_fk_cbass_assay_fragment','knowledgebase.cbass_assay_fragment.heat_stress_profile_id','knowledgebase.heat_stress_profile.id'])" transform='translate(8,0)' class='scene' d='M 1776,656L 1784,656Q 1792,656 1792,664L 1792,1000Q 1792,1008 1784,1008L 1632,1008' >
-	<title>Fk fk_cbass_assay_fragment
-cbass_assay_fragment ref heat_stress_profile ( heat_stress_profile_id -&gt; id )</title>
-</path>
-<path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 1776,656L 1784,656Q 1792,656 1792,664L 1792,1000Q 1792,1008 1784,1008L 1632,1008' ><title>Fk fk_cbass_assay_fragment
-cbass_assay_fragment ref heat_stress_profile ( heat_stress_profile_id -&gt; id )</title></path>
-<text x='1786' y='651' transform='rotate(0 1786,651)' class='relName'>heat_stress_profile_id</text>
-<!-- == Table 'amplification_sequencing_protocol' == -->
-<rect class='entity' style='stroke:none;' x='1888' y='872' width='240' height='144' rx='8' ry='8' />
-<path d='M 1888 900 L 1888 880 Q 1888 872 1896 872 L 2120 872 Q 2128 872 2128 880 L 2128 900 L1888 900 ' style='fill:url(#tbg_C1D8EE);stroke:1;stroke-opacity:0.1;' />
-<rect class='entity' x='1888' y='872' width='240' height='144' rx='8' ry='8' style='fill:none;stroke:#CBD9E8'/>
-<a xlink:href='#knowledgebase.amplification_sequencing_protocol'><text x='1893' y='891' >amplification_sequencing_protocol</text><title>Table knowledgebase.amplification_sequencing_protocol
-A subclass of the sequencing_protocol that details how a PCR amplifcation is undertaken. There will be very few records for this table as many of the sequencing_effort_barcode records will use the same amplification protocol. Hence why it is good to have this as a separate table rather than associate this information to the sequencing_effort_barcode record.</title></a>
-  <use id='nn' x='1890' y='909' xlink:href='#nn'/><use id='pk' x='1890' y='908' xlink:href='#pk'><title>Pk pk_amplification_protocol_id ( id ) </title></use><a xlink:href='#knowledgebase.amplification_sequencing_protocol_id'><text id='knowledgebase.amplification_sequencing_protocol.id' x='1907' y='919'>id</text><title>id
-* integer</title></a>
-<text x='2125' y='916' text-anchor='end' class='colType'>#</text>  <use id='nn' x='1890' y='925' xlink:href='#nn'/><a xlink:href='#knowledgebase.amplification_sequencing_protocol_primer_fwd_seq'><text id='knowledgebase.amplification_sequencing_protocol.primer_fwd_seq' x='1907' y='935'>primer_fwd_seq</text><title>primer_fwd_seq
-* varchar(100)
-The sequence of the fowward PCR primer.</title></a>
-<text x='2125' y='932' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1890' y='941' xlink:href='#nn'/><a xlink:href='#knowledgebase.amplification_sequencing_protocol_primer_rev_seq'><text id='knowledgebase.amplification_sequencing_protocol.primer_rev_seq' x='1907' y='951'>primer_rev_seq</text><title>primer_rev_seq
-* varchar(100)
-The sequence of the reverse PCR primer</title></a>
-<text x='2125' y='948' text-anchor='end' class='colType'>t</text>  <a xlink:href='#knowledgebase.amplification_sequencing_protocol_primer_fwd_name'><text id='knowledgebase.amplification_sequencing_protocol.primer_fwd_name' x='1907' y='967'>primer_fwd_name</text><title>primer_fwd_name
-varchar(100)</title></a>
-<text x='2125' y='964' text-anchor='end' class='colType'>t</text>  <a xlink:href='#knowledgebase.amplification_sequencing_protocol_preimer_rev_name'><text id='knowledgebase.amplification_sequencing_protocol.preimer_rev_name' x='1907' y='983'>preimer_rev_name</text><title>preimer_rev_name
-varchar(100)</title></a>
-<text x='2125' y='980' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1890' y='989' xlink:href='#nn'/><a xlink:href='#knowledgebase.amplification_sequencing_protocol_sequencing_effort_protocol_id'><text id='knowledgebase.amplification_sequencing_protocol.sequencing_effort_protocol_id' x='1907' y='999' onmouseover="hghl(['amplification_sequencing_protocol_fk_amplification_sequencing_protocol_sequencing_effort_protocol','knowledgebase.sequencing_effort_protocol.id'])" onmouseout="uhghl(['amplification_sequencing_protocol_fk_amplification_sequencing_protocol_sequencing_effort_protocol','knowledgebase.sequencing_effort_protocol.id'])">sequencing_effort_protocol_id</text><title>sequencing_effort_protocol_id
-* integer</title></a>
-<a xlink:href='#knowledgebase.amplification_sequencing_protocol.sequencing_effort_protocol_id'><use id='fk' x='2116' y='988' xlink:href='#fk'/><title>References sequencing_effort_protocol ( sequencing_effort_protocol_id -&gt; id ) </title></a>
-
 <!-- == Table 'analysis' == -->
 <rect class='entity' style='stroke:none;' x='1760' y='1496' width='64' height='64' rx='8' ry='8' />
 <path d='M 1760 1524 L 1760 1504 Q 1760 1496 1768 1496 L 1816 1496 Q 1824 1496 1824 1504 L 1824 1524 L1760 1524 ' style='fill:url(#tbg_C1D8EE);stroke:1;stroke-opacity:0.1;' />
@@ -642,6 +612,57 @@ The multiple heat stress profies related to this cbass_assay will all be ramped 
 <text x='1309' y='1076' text-anchor='end' class='colType'>#</text>  <use id='nn' x='1170' y='1085' xlink:href='#nn'/><a xlink:href='#knowledgebase.cbass_assay_assay_id'><text id='knowledgebase.cbass_assay.assay_id' x='1187' y='1095' onmouseover="hghl(['cbass_assay_fk_cbass_assay_assay','knowledgebase.assay.id'])" onmouseout="uhghl(['cbass_assay_fk_cbass_assay_assay','knowledgebase.assay.id'])">assay_id</text><title>assay_id
 * integer</title></a>
 <a xlink:href='#knowledgebase.cbass_assay.assay_id'><use id='fk' x='1300' y='1084' xlink:href='#fk'/><title>References assay ( assay_id -&gt; id ) </title></a>
+
+<!-- == Table 'cbass_assay_fragment' == -->
+<rect class='entity' style='stroke:none;' x='1568' y='584' width='208' height='256' rx='8' ry='8' />
+<path d='M 1568 612 L 1568 592 Q 1568 584 1576 584 L 1768 584 Q 1776 584 1776 592 L 1776 612 L1568 612 ' style='fill:url(#tbg_C1D8EE);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='1568' y='584' width='208' height='256' rx='8' ry='8' style='fill:none;stroke:#CBD9E8'/>
+<a xlink:href='#knowledgebase.cbass_assay_fragment'><text x='1598' y='603' >cbass_assay_fragment</text><title>Table knowledgebase.cbass_assay_fragment
+This is a fragement that is used in a heat stress protocol. It may or may not have nucleic acids sampled from it, as such it may or may not have a sequencing_effort associated to it.</title></a>
+  <use id='nn' x='1570' y='621' xlink:href='#nn'/><use id='pk' x='1570' y='620' xlink:href='#pk'><title>Pk pk_cbass_sample_id ( id ) </title></use><a xlink:href='#knowledgebase.cbass_assay_fragment_id'><text id='knowledgebase.cbass_assay_fragment.id' x='1587' y='631'>id</text><title>id
+* integer</title></a>
+<text x='1773' y='628' text-anchor='end' class='colType'>#</text>  <use id='nn' x='1570' y='637' xlink:href='#nn'/><a xlink:href='#knowledgebase.cbass_assay_fragment_fragment_id'><text id='knowledgebase.cbass_assay_fragment.fragment_id' x='1587' y='647' onmouseover="hghl(['cbass_assay_fragment_fk_assay_fragment_fragment','knowledgebase.fragment.id'])" onmouseout="uhghl(['cbass_assay_fragment_fk_assay_fragment_fragment','knowledgebase.fragment.id'])">fragment_id</text><title>fragment_id
+* integer</title></a>
+<a xlink:href='#knowledgebase.cbass_assay_fragment.fragment_id'><use id='fk' x='1764' y='636' xlink:href='#fk'/><title>References fragment ( fragment_id -&gt; id ) </title></a>
+  <use id='nn' x='1570' y='653' xlink:href='#nn'/><a xlink:href='#knowledgebase.cbass_assay_fragment_heat_stress_profile_id'><text id='knowledgebase.cbass_assay_fragment.heat_stress_profile_id' x='1587' y='663' onmouseover="hghl(['cbass_assay_fragment_fk_cbass_assay_fragment','knowledgebase.heat_stress_profile.id'])" onmouseout="uhghl(['cbass_assay_fragment_fk_cbass_assay_fragment','knowledgebase.heat_stress_profile.id'])">heat_stress_profile_id</text><title>heat_stress_profile_id
+* integer</title></a>
+<a xlink:href='#knowledgebase.cbass_assay_fragment.heat_stress_profile_id'><use id='fk' x='1764' y='652' xlink:href='#fk'/><title>References heat_stress_profile ( heat_stress_profile_id -&gt; id ) </title></a>
+  <use id='nn' x='1570' y='669' xlink:href='#nn'/><a xlink:href='#knowledgebase.cbass_assay_fragment_fragment_number'><text id='knowledgebase.cbass_assay_fragment.fragment_number' x='1587' y='679'>fragment_number</text><title>fragment_number
+* integer
+there will be multiple fragments per colony</title></a>
+<text x='1773' y='676' text-anchor='end' class='colType'>#</text>  <a xlink:href='#knowledgebase.cbass_assay_fragment_fragment_label'><text id='knowledgebase.cbass_assay_fragment.fragment_label' x='1587' y='695'>fragment_label</text><title>fragment_label
+varchar</title></a>
+<text x='1773' y='692' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1570' y='701' xlink:href='#nn'/><a xlink:href='#knowledgebase.cbass_assay_fragment_experiment_id'><text id='knowledgebase.cbass_assay_fragment.experiment_id' x='1587' y='711'>experiment_id</text><title>experiment_id
+* integer</title></a>
+<text x='1773' y='708' text-anchor='end' class='colType'>#</text>  <use id='nn' x='1570' y='717' xlink:href='#nn'/><a xlink:href='#knowledgebase.cbass_assay_fragment_sampling_protocol_id'><text id='knowledgebase.cbass_assay_fragment.sampling_protocol_id' x='1587' y='727'>sampling_protocol_id</text><title>sampling_protocol_id
+* integer</title></a>
+<text x='1773' y='724' text-anchor='end' class='colType'>#</text>  <use id='nn' x='1570' y='733' xlink:href='#nn'/><a xlink:href='#knowledgebase.cbass_assay_fragment_storage_protocol_id'><text id='knowledgebase.cbass_assay_fragment.storage_protocol_id' x='1587' y='743'>storage_protocol_id</text><title>storage_protocol_id
+* integer</title></a>
+<text x='1773' y='740' text-anchor='end' class='colType'>#</text>  <a xlink:href='#knowledgebase.cbass_assay_fragment_fv_fm_measurement_one'><text id='knowledgebase.cbass_assay_fragment.fv_fm_measurement_one' x='1587' y='759'>fv_fm_measurement_one</text><title>fv_fm_measurement_one
+decimal(3,3)</title></a>
+<text x='1773' y='756' text-anchor='end' class='colType'>#</text>  <a xlink:href='#knowledgebase.cbass_assay_fragment_fv_fm_measurement_two'><text id='knowledgebase.cbass_assay_fragment.fv_fm_measurement_two' x='1587' y='775'>fv_fm_measurement_two</text><title>fv_fm_measurement_two
+decimal(3,3)</title></a>
+<text x='1773' y='772' text-anchor='end' class='colType'>#</text>  <use id='nn' x='1570' y='781' xlink:href='#nn'/><a xlink:href='#knowledgebase.cbass_assay_fragment_fragment_photo_id'><text id='knowledgebase.cbass_assay_fragment.fragment_photo_id' x='1587' y='791'>fragment_photo_id</text><title>fragment_photo_id
+* integer
+The id of the fragement photo that contains this photo.</title></a>
+<text x='1773' y='788' text-anchor='end' class='colType'>#</text>  <a xlink:href='#knowledgebase.cbass_assay_fragment_additional_info'><text id='knowledgebase.cbass_assay_fragment.additional_info' x='1587' y='807'>additional_info</text><title>additional_info
+varchar(1000)</title></a>
+<text x='1773' y='804' text-anchor='end' class='colType'>t</text>  <a xlink:href='#knowledgebase.cbass_assay_fragment_relative_sampling_time'><text id='knowledgebase.cbass_assay_fragment.relative_sampling_time' x='1587' y='823'>relative_sampling_time</text><title>relative_sampling_time
+integer
+This is the time after the heat stress profile begain that the sample was collected, for example the time representing t1, t2 etc. TBD the units in which this will be measured.
+Optional as some fragments will not have been</title></a>
+<text x='1773' y='820' text-anchor='end' class='colType'>#</text>
+<!-- == Table 'cbass_nucleic_acid_fragment' == -->
+<rect class='entity' style='stroke:none;' x='1568' y='328' width='208' height='80' rx='8' ry='8' />
+<path d='M 1568 356 L 1568 336 Q 1568 328 1576 328 L 1768 328 Q 1776 328 1776 336 L 1776 356 L1568 356 ' style='fill:url(#tbg_C1D8EE);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='1568' y='328' width='208' height='80' rx='8' ry='8' style='fill:none;stroke:#CBD9E8'/>
+<a xlink:href='#knowledgebase.cbass_nucleic_acid_fragment'><text x='1576' y='347' >cbass_nucleic_acid_fragment</text><title>Table knowledgebase.cbass_nucleic_acid_fragment
+This is a fragment that is collected for the purpose of doing genomic DNA extractions that can be used for the barcoding and the meta-genomic sequencing. It is NOT used in a heat stress profile.</title></a>
+  <use id='nn' x='1570' y='365' xlink:href='#nn'/><use id='pk' x='1570' y='364' xlink:href='#pk'><title>Pk pk_nucleic_acid_fragment_id ( id ) </title></use><a xlink:href='#knowledgebase.cbass_nucleic_acid_fragment_id'><text id='knowledgebase.cbass_nucleic_acid_fragment.id' x='1587' y='375'>id</text><title>id
+* integer</title></a>
+<text x='1773' y='372' text-anchor='end' class='colType'>#</text>  <use id='nn' x='1570' y='381' xlink:href='#nn'/><a xlink:href='#knowledgebase.cbass_nucleic_acid_fragment_fragment_id'><text id='knowledgebase.cbass_nucleic_acid_fragment.fragment_id' x='1587' y='391' onmouseover="hghl(['cbass_nucleic_acid_fragment_fk_nucleic_acid_fragment','knowledgebase.fragment.id'])" onmouseout="uhghl(['cbass_nucleic_acid_fragment_fk_nucleic_acid_fragment','knowledgebase.fragment.id'])">fragment_id</text><title>fragment_id
+* integer</title></a>
+<a xlink:href='#knowledgebase.cbass_nucleic_acid_fragment.fragment_id'><use id='fk' x='1764' y='380' xlink:href='#fk'/><title>References fragment ( fragment_id -&gt; id ) </title></a>
 
 <!-- == Table 'colony' == -->
 <rect class='entity' style='stroke:none;' x='1008' y='472' width='144' height='128' rx='8' ry='8' />
@@ -1056,138 +1077,6 @@ A subclass of the sequencing effort class. This table will hold records associat
 * integer</title></a>
 <a xlink:href='#knowledgebase.sequencing_effort_metagenomic.sequencing_effort_id'><use id='fk' x='2020' y='396' xlink:href='#fk'/><title>References sequencing_effort ( sequencing_effort_id -&gt; id ) </title></a>
 
-<!-- == Table 'sequencing_effort_protocol' == -->
-<rect class='entity' style='stroke:none;' x='1888' y='632' width='192' height='208' rx='8' ry='8' />
-<path d='M 1888 660 L 1888 640 Q 1888 632 1896 632 L 2072 632 Q 2080 632 2080 640 L 2080 660 L1888 660 ' style='fill:url(#tbg_C1D8EE);stroke:1;stroke-opacity:0.1;' />
-<rect class='entity' x='1888' y='632' width='192' height='208' rx='8' ry='8' style='fill:none;stroke:#CBD9E8'/>
-<a xlink:href='#knowledgebase.sequencing_effort_protocol'><text x='1893' y='651' >sequencing_effort_protocol</text><title>Table knowledgebase.sequencing_effort_protocol
-A SuperClass where each record holds details of a single protocol used for a given sequencing effort.
-It will likely be best to document the protocols fully on on a dedicated resourecse such as protocols.io.</title></a>
-  <use id='nn' x='1890' y='669' xlink:href='#nn'/><use id='pk' x='1890' y='668' xlink:href='#pk'><title>Pk pk_sequencing_effort_protocol_id ( id ) </title></use><a xlink:href='#knowledgebase.sequencing_effort_protocol_id'><text id='knowledgebase.sequencing_effort_protocol.id' x='1907' y='679' onmouseover="hghl(['amplification_sequencing_protocol_fk_amplification_sequencing_protocol_sequencing_effort_protocol','knowledgebase.amplification_sequencing_protocol.sequencing_effort_protocol_id','sequencing_effort_fk_sequencing_effort_sequencing_effort_protocol','knowledgebase.sequencing_effort.sequencing_effort_protocol_id'])" onmouseout="uhghl(['amplification_sequencing_protocol_fk_amplification_sequencing_protocol_sequencing_effort_protocol','knowledgebase.amplification_sequencing_protocol.sequencing_effort_protocol_id','sequencing_effort_fk_sequencing_effort_sequencing_effort_protocol','knowledgebase.sequencing_effort.sequencing_effort_protocol_id'])">id</text><title>id
-* integer</title></a>
-<a xlink:href='#knowledgebase.sequencing_effort_protocol.id'><use id='ref' x='2068' y='668' xlink:href='#ref'/><title>Referred by amplification_sequencing_protocol ( sequencing_effort_protocol_id -&gt; id ) 
-Referred by sequencing_effort ( sequencing_effort_protocol_id -&gt; id ) </title></a>
-  <a xlink:href='#knowledgebase.sequencing_effort_protocol_name'><text id='knowledgebase.sequencing_effort_protocol.name' x='1907' y='695'>name</text><title>name
-varchar(100)</title></a>
-<text x='2077' y='692' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1890' y='701' xlink:href='#nn'/><a xlink:href='#knowledgebase.sequencing_effort_protocol_library_type'><text id='knowledgebase.sequencing_effort_protocol.library_type' x='1907' y='711'>library_type</text><title>library_type
-* varchar(10)
-either: &quot;barcode&quot;, &quot;rna-seq&quot;, &quot;metagenomic&quot;.</title></a>
-<text x='2077' y='708' text-anchor='end' class='colType'>t</text>  <a xlink:href='#knowledgebase.sequencing_effort_protocol_url'><text id='knowledgebase.sequencing_effort_protocol.url' x='1907' y='727'>url</text><title>url
-varchar(200)
-URL to an external resource documenting the protocol in full.</title></a>
-<text x='2077' y='724' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1890' y='733' xlink:href='#nn'/><a xlink:href='#knowledgebase.sequencing_effort_protocol_library_source'><text id='knowledgebase.sequencing_effort_protocol.library_source' x='1907' y='743'>library_source</text><title>library_source
-* varchar(30) default &apos;METAGENOMIC&apos;
-This field will be used to populate the NCBI SRA submission sheet &apos;libarary_source&apos; field.
-
-There are a limited set of options to choose from that are:
-GENOMIC
-TRANSCRIPTOMIC
-METAGENOMIC
-METATRANSCRIPTOMIC
-SYNTHETIC
-VIRAL RNA
-GENOMIC SINGLE CELL
-TRANSCRIPTOMIC SINGLE CELL
-OTHER</title></a>
-<text x='2077' y='740' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1890' y='749' xlink:href='#nn'/><a xlink:href='#knowledgebase.sequencing_effort_protocol_library_selection'><text id='knowledgebase.sequencing_effort_protocol.library_selection' x='1907' y='759'>library_selection</text><title>library_selection
-* varchar(40)
-This field will be used to populate the NCBI SRA submission sheet &apos;libarary_selection&apos; field.
-
-There are a limited set of options to choose from that are:
-RANDOM
-PCR
-RANDOM PCR
-RT-PCR
-HMPR
-MF
-CF-S
-CF-M
-CF-H
-CF-T
-MDA
-MSLL
-cDNA
-ChIP
-MNase
-DNAse
-Hybrid Selection
-Reduced Representation
-Restriction Digest
-5-methylcytidine antibody
-MBD2 protein methyl-CpG binding domain
-CAGE
-RACE
-size fractionation
-Padlock probes capture method
-other
-unspecified
-cDNA_oligo_dT
-cDNA_randomPriming
-Inverse rRNA
-Oligo-dT
-PolyA
-repeat fractionation</title></a>
-<text x='2077' y='756' text-anchor='end' class='colType'>t</text>  <a xlink:href='#knowledgebase.sequencing_effort_protocol_library_layout'><text id='knowledgebase.sequencing_effort_protocol.library_layout' x='1907' y='775'>library_layout</text><title>library_layout
-varchar default &apos;paired&apos;
-This field will be used to populate the NCBI SRA submission sheet &apos;libarary_layout&apos; field.
-
-There are a limited set of options to choose from that are:
-paired
-single</title></a>
-<text x='2077' y='772' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1890' y='781' xlink:href='#nn'/><a xlink:href='#knowledgebase.sequencing_effort_protocol_platform'><text id='knowledgebase.sequencing_effort_protocol.platform' x='1907' y='791'>platform</text><title>platform
-* varchar(25) default &apos;ILLUMINA&apos;
-This field will be used to populate the NCBI SRA submission sheet &apos;platform&apos; field.
-
-There are a limited set of options to choose from and I have only included the most common:
-ILLUMINA
-OXFORD_NANOPORE
-PACBIO_SMRT</title></a>
-<text x='2077' y='788' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1890' y='797' xlink:href='#nn'/><a xlink:href='#knowledgebase.sequencing_effort_protocol_instrument_model'><text id='knowledgebase.sequencing_effort_protocol.instrument_model' x='1907' y='807'>instrument_model</text><title>instrument_model
-* varchar(25)
-This field will be used to populate the NCBI SRA submission sheet &apos;instrument_model&apos; field.
-
-There are a limited set of options to choose from that are dependent on the value of the &apos;platform&apos; field. I will only include the most common:
-
-Illumina:
-HiSeq X Five
-HiSeq X Ten
-Illumina Genome Analyzer
-Illumina Genome Analyzer II
-Illumina Genome Analyzer IIx
-Illumina HiScanSQ
-Illumina HiSeq 1000
-Illumina HiSeq 1500
-Illumina HiSeq 2000
-Illumina HiSeq 2500
-Illumina HiSeq 3000
-Illumina HiSeq 4000
-Illumina iSeq 100
-Illumina NovaSeq 6000
-Illumina MiniSeq
-Illumina MiSeq
-NextSeq 500
-NextSeq 550
-
-PACBIO_SMRT:
-PacBio RS
-PacBio RS II
-PacBio Sequel
-PacBio Sequel II
-
-OXFORD_NANOPORE:
-GridION
-MinION
-PromethION</title></a>
-<text x='2077' y='804' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1890' y='813' xlink:href='#nn'/><a xlink:href='#knowledgebase.sequencing_effort_protocol_filetype'><text id='knowledgebase.sequencing_effort_protocol.filetype' x='1907' y='823'>filetype</text><title>filetype
-* varchar(25) default fastq
-This field will be used to populate the &apos;filetype&apos; field of the NCBI SRA submission sheet.
-
-There are several options, I will only include the most common:
-fastq
-PacBio_HDF5
-CompleteGenomics_native
-OxfordNanopore_native</title></a>
-<text x='2077' y='820' text-anchor='end' class='colType'>t</text>
 <!-- == Table 'sequencing_effort_rna_seq' == -->
 <rect class='entity' style='stroke:none;' x='1824' y='248' width='192' height='80' rx='8' ry='8' />
 <path d='M 1824 276 L 1824 256 Q 1824 248 1832 248 L 2008 248 Q 2016 248 2016 256 L 2016 276 L1824 276 ' style='fill:url(#tbg_C1D8EE);stroke:1;stroke-opacity:0.1;' />
@@ -1246,9 +1135,7 @@ Every site must be assocated with a region.</title></a>
 A code that represents the time zone of the site. This will be used to convert all local times to UTC. Time zones are easy to find online: https://docs.vmware.com/en/vRealize-Orchestrator/8.4/com.vmware.vrealize.orchestrator-use-plugins.doc/GUID-83EBD74D-B5EC-4A0A-B54E-8E45BE2928C2.html</title></a>
 <text x='605' y='1092' text-anchor='end' class='colType'>#</text>  <use id='nn' x='450' y='1101' xlink:href='#nn'/><a xlink:href='#knowledgebase.site_geo_loc_name'><text id='knowledgebase.site.geo_loc_name' x='467' y='1111'>geo_loc_name</text><title>geo_loc_name
 * varchar(100)
-This field will need to comply with the geo_loc_name field of the NCBI MIMS.me.host-associated.5.0 input sheet. The guidance for that field reads as:
-
-&quot;Geographical origin of the sample; use the appropriate name from this list http://www.insdc.org/documents/country-qualifier-vocabulary. Use a colon to separate the country or ocean from more detailed information about the location, eg &quot;Canada: Vancouver&quot; or &quot;Germany: halfway down Zugspitze, Alps&quot;&quot;</title></a>
+NCBI required field. See table description for guidance.</title></a>
 <text x='605' y='1108' text-anchor='end' class='colType'>t</text>  <use id='nn' x='450' y='1117' xlink:href='#nn'/><a xlink:href='#knowledgebase.site_env_broad_scale'><text id='knowledgebase.site.env_broad_scale' x='467' y='1127'>env_broad_scale</text><title>env_broad_scale
 * varchar(100)
 NCBI required field. See table description for guidance.</title></a>
@@ -1284,57 +1171,137 @@ varchar(100)</title></a>
 <text x='381' y='564' text-anchor='end' class='colType'>t</text>  <use id='nn' x='274' y='573' xlink:href='#nn'/><a xlink:href='#knowledgebase.user_username'><text id='knowledgebase.user.username' x='291' y='583'>username</text><title>username
 * varchar(100)</title></a>
 <text x='381' y='580' text-anchor='end' class='colType'>t</text>
-<!-- == Table 'cbass_nucleic_acid_fragment' == -->
-<rect class='entity' style='stroke:none;' x='1568' y='328' width='208' height='80' rx='8' ry='8' />
-<path d='M 1568 356 L 1568 336 Q 1568 328 1576 328 L 1768 328 Q 1776 328 1776 336 L 1776 356 L1568 356 ' style='fill:url(#tbg_C1D8EE);stroke:1;stroke-opacity:0.1;' />
-<rect class='entity' x='1568' y='328' width='208' height='80' rx='8' ry='8' style='fill:none;stroke:#CBD9E8'/>
-<a xlink:href='#knowledgebase.cbass_nucleic_acid_fragment'><text x='1576' y='347' >cbass_nucleic_acid_fragment</text><title>Table knowledgebase.cbass_nucleic_acid_fragment
-This is a fragment that is collected for the purpose of doing genomic DNA extractions that can be used for the barcoding and the meta-genomic sequencing. It is NOT used in a heat stress profile.</title></a>
-  <use id='nn' x='1570' y='365' xlink:href='#nn'/><use id='pk' x='1570' y='364' xlink:href='#pk'><title>Pk pk_nucleic_acid_fragment_id ( id ) </title></use><a xlink:href='#knowledgebase.cbass_nucleic_acid_fragment_id'><text id='knowledgebase.cbass_nucleic_acid_fragment.id' x='1587' y='375'>id</text><title>id
+<!-- == Table 'sequencing_effort_protocol' == -->
+<rect class='entity' style='stroke:none;' x='1888' y='648' width='192' height='208' rx='8' ry='8' />
+<path d='M 1888 676 L 1888 656 Q 1888 648 1896 648 L 2072 648 Q 2080 648 2080 656 L 2080 676 L1888 676 ' style='fill:url(#tbg_C1D8EE);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='1888' y='648' width='192' height='208' rx='8' ry='8' style='fill:none;stroke:#CBD9E8'/>
+<a xlink:href='#knowledgebase.sequencing_effort_protocol'><text x='1893' y='667' >sequencing_effort_protocol</text><title>Table knowledgebase.sequencing_effort_protocol
+Each record holds details of a single protocol used for a given sequencing effort.
+It will likely be best to document the protocols fully on on a dedicated resourecse such as protocols.io. The url field will provide access to this.</title></a>
+  <use id='nn' x='1890' y='685' xlink:href='#nn'/><use id='pk' x='1890' y='684' xlink:href='#pk'><title>Pk pk_sequencing_effort_protocol_id ( id ) </title></use><a xlink:href='#knowledgebase.sequencing_effort_protocol_id'><text id='knowledgebase.sequencing_effort_protocol.id' x='1907' y='695' onmouseover="hghl(['sequencing_effort_fk_sequencing_effort_sequencing_effort_protocol','knowledgebase.sequencing_effort.sequencing_effort_protocol_id'])" onmouseout="uhghl(['sequencing_effort_fk_sequencing_effort_sequencing_effort_protocol','knowledgebase.sequencing_effort.sequencing_effort_protocol_id'])">id</text><title>id
 * integer</title></a>
-<text x='1773' y='372' text-anchor='end' class='colType'>#</text>  <use id='nn' x='1570' y='381' xlink:href='#nn'/><a xlink:href='#knowledgebase.cbass_nucleic_acid_fragment_fragment_id'><text id='knowledgebase.cbass_nucleic_acid_fragment.fragment_id' x='1587' y='391' onmouseover="hghl(['cbass_nucleic_acid_fragment_fk_nucleic_acid_fragment','knowledgebase.fragment.id'])" onmouseout="uhghl(['cbass_nucleic_acid_fragment_fk_nucleic_acid_fragment','knowledgebase.fragment.id'])">fragment_id</text><title>fragment_id
-* integer</title></a>
-<a xlink:href='#knowledgebase.cbass_nucleic_acid_fragment.fragment_id'><use id='fk' x='1764' y='380' xlink:href='#fk'/><title>References fragment ( fragment_id -&gt; id ) </title></a>
+<a xlink:href='#knowledgebase.sequencing_effort_protocol.id'><use id='ref' x='2068' y='684' xlink:href='#ref'/><title>Referred by sequencing_effort ( sequencing_effort_protocol_id -&gt; id ) </title></a>
+  <a xlink:href='#knowledgebase.sequencing_effort_protocol_name'><text id='knowledgebase.sequencing_effort_protocol.name' x='1907' y='711'>name</text><title>name
+varchar(100)</title></a>
+<text x='2077' y='708' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1890' y='717' xlink:href='#nn'/><a xlink:href='#knowledgebase.sequencing_effort_protocol_library_type'><text id='knowledgebase.sequencing_effort_protocol.library_type' x='1907' y='727'>library_type</text><title>library_type
+* varchar(10)
+either: &quot;barcode&quot;, &quot;rna-seq&quot;, &quot;metagenomic&quot;.</title></a>
+<text x='2077' y='724' text-anchor='end' class='colType'>t</text>  <a xlink:href='#knowledgebase.sequencing_effort_protocol_url'><text id='knowledgebase.sequencing_effort_protocol.url' x='1907' y='743'>url</text><title>url
+varchar(200)
+URL to an external resource documenting the protocol in full.</title></a>
+<text x='2077' y='740' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1890' y='749' xlink:href='#nn'/><a xlink:href='#knowledgebase.sequencing_effort_protocol_library_source'><text id='knowledgebase.sequencing_effort_protocol.library_source' x='1907' y='759'>library_source</text><title>library_source
+* varchar(30) default &apos;METAGENOMIC&apos;
+This field will be used to populate the NCBI SRA submission sheet &apos;libarary_source&apos; field.
 
-<!-- == Table 'cbass_assay_fragment' == -->
-<rect class='entity' style='stroke:none;' x='1568' y='584' width='208' height='256' rx='8' ry='8' />
-<path d='M 1568 612 L 1568 592 Q 1568 584 1576 584 L 1768 584 Q 1776 584 1776 592 L 1776 612 L1568 612 ' style='fill:url(#tbg_C1D8EE);stroke:1;stroke-opacity:0.1;' />
-<rect class='entity' x='1568' y='584' width='208' height='256' rx='8' ry='8' style='fill:none;stroke:#CBD9E8'/>
-<a xlink:href='#knowledgebase.cbass_assay_fragment'><text x='1598' y='603' >cbass_assay_fragment</text><title>Table knowledgebase.cbass_assay_fragment
-This is a fragement that is used in a heat stress protocol. It may or may not have nucleic acids sampled from it, as such it may or may not have a sequencing_effort associated to it.</title></a>
-  <use id='nn' x='1570' y='621' xlink:href='#nn'/><use id='pk' x='1570' y='620' xlink:href='#pk'><title>Pk pk_cbass_sample_id ( id ) </title></use><a xlink:href='#knowledgebase.cbass_assay_fragment_id'><text id='knowledgebase.cbass_assay_fragment.id' x='1587' y='631'>id</text><title>id
-* integer</title></a>
-<text x='1773' y='628' text-anchor='end' class='colType'>#</text>  <use id='nn' x='1570' y='637' xlink:href='#nn'/><a xlink:href='#knowledgebase.cbass_assay_fragment_fragment_id'><text id='knowledgebase.cbass_assay_fragment.fragment_id' x='1587' y='647' onmouseover="hghl(['cbass_assay_fragment_fk_assay_fragment_fragment','knowledgebase.fragment.id'])" onmouseout="uhghl(['cbass_assay_fragment_fk_assay_fragment_fragment','knowledgebase.fragment.id'])">fragment_id</text><title>fragment_id
-* integer</title></a>
-<a xlink:href='#knowledgebase.cbass_assay_fragment.fragment_id'><use id='fk' x='1764' y='636' xlink:href='#fk'/><title>References fragment ( fragment_id -&gt; id ) </title></a>
-  <use id='nn' x='1570' y='653' xlink:href='#nn'/><a xlink:href='#knowledgebase.cbass_assay_fragment_heat_stress_profile_id'><text id='knowledgebase.cbass_assay_fragment.heat_stress_profile_id' x='1587' y='663' onmouseover="hghl(['cbass_assay_fragment_fk_cbass_assay_fragment','knowledgebase.heat_stress_profile.id'])" onmouseout="uhghl(['cbass_assay_fragment_fk_cbass_assay_fragment','knowledgebase.heat_stress_profile.id'])">heat_stress_profile_id</text><title>heat_stress_profile_id
-* integer</title></a>
-<a xlink:href='#knowledgebase.cbass_assay_fragment.heat_stress_profile_id'><use id='fk' x='1764' y='652' xlink:href='#fk'/><title>References heat_stress_profile ( heat_stress_profile_id -&gt; id ) </title></a>
-  <use id='nn' x='1570' y='669' xlink:href='#nn'/><a xlink:href='#knowledgebase.cbass_assay_fragment_fragment_number'><text id='knowledgebase.cbass_assay_fragment.fragment_number' x='1587' y='679'>fragment_number</text><title>fragment_number
-* integer
-there will be multiple fragments per colony</title></a>
-<text x='1773' y='676' text-anchor='end' class='colType'>#</text>  <a xlink:href='#knowledgebase.cbass_assay_fragment_fragment_label'><text id='knowledgebase.cbass_assay_fragment.fragment_label' x='1587' y='695'>fragment_label</text><title>fragment_label
-varchar</title></a>
-<text x='1773' y='692' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1570' y='701' xlink:href='#nn'/><a xlink:href='#knowledgebase.cbass_assay_fragment_experiment_id'><text id='knowledgebase.cbass_assay_fragment.experiment_id' x='1587' y='711'>experiment_id</text><title>experiment_id
-* integer</title></a>
-<text x='1773' y='708' text-anchor='end' class='colType'>#</text>  <use id='nn' x='1570' y='717' xlink:href='#nn'/><a xlink:href='#knowledgebase.cbass_assay_fragment_sampling_protocol_id'><text id='knowledgebase.cbass_assay_fragment.sampling_protocol_id' x='1587' y='727'>sampling_protocol_id</text><title>sampling_protocol_id
-* integer</title></a>
-<text x='1773' y='724' text-anchor='end' class='colType'>#</text>  <use id='nn' x='1570' y='733' xlink:href='#nn'/><a xlink:href='#knowledgebase.cbass_assay_fragment_storage_protocol_id'><text id='knowledgebase.cbass_assay_fragment.storage_protocol_id' x='1587' y='743'>storage_protocol_id</text><title>storage_protocol_id
-* integer</title></a>
-<text x='1773' y='740' text-anchor='end' class='colType'>#</text>  <a xlink:href='#knowledgebase.cbass_assay_fragment_fv_fm_measurement_one'><text id='knowledgebase.cbass_assay_fragment.fv_fm_measurement_one' x='1587' y='759'>fv_fm_measurement_one</text><title>fv_fm_measurement_one
-decimal(3,3)</title></a>
-<text x='1773' y='756' text-anchor='end' class='colType'>#</text>  <a xlink:href='#knowledgebase.cbass_assay_fragment_fv_fm_measurement_two'><text id='knowledgebase.cbass_assay_fragment.fv_fm_measurement_two' x='1587' y='775'>fv_fm_measurement_two</text><title>fv_fm_measurement_two
-decimal(3,3)</title></a>
-<text x='1773' y='772' text-anchor='end' class='colType'>#</text>  <use id='nn' x='1570' y='781' xlink:href='#nn'/><a xlink:href='#knowledgebase.cbass_assay_fragment_fragment_photo_id'><text id='knowledgebase.cbass_assay_fragment.fragment_photo_id' x='1587' y='791'>fragment_photo_id</text><title>fragment_photo_id
-* integer
-The id of the fragement photo that contains this photo.</title></a>
-<text x='1773' y='788' text-anchor='end' class='colType'>#</text>  <a xlink:href='#knowledgebase.cbass_assay_fragment_additional_info'><text id='knowledgebase.cbass_assay_fragment.additional_info' x='1587' y='807'>additional_info</text><title>additional_info
-varchar(1000)</title></a>
-<text x='1773' y='804' text-anchor='end' class='colType'>t</text>  <a xlink:href='#knowledgebase.cbass_assay_fragment_relative_sampling_time'><text id='knowledgebase.cbass_assay_fragment.relative_sampling_time' x='1587' y='823'>relative_sampling_time</text><title>relative_sampling_time
-integer
-This is the time after the heat stress profile begain that the sample was collected, for example the time representing t1, t2 etc. TBD the units in which this will be measured.
-Optional as some fragments will not have been</title></a>
-<text x='1773' y='820' text-anchor='end' class='colType'>#</text>
+There are a limited set of options to choose from that are:
+GENOMIC
+TRANSCRIPTOMIC
+METAGENOMIC
+METATRANSCRIPTOMIC
+SYNTHETIC
+VIRAL RNA
+GENOMIC SINGLE CELL
+TRANSCRIPTOMIC SINGLE CELL
+OTHER</title></a>
+<text x='2077' y='756' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1890' y='765' xlink:href='#nn'/><a xlink:href='#knowledgebase.sequencing_effort_protocol_library_selection'><text id='knowledgebase.sequencing_effort_protocol.library_selection' x='1907' y='775'>library_selection</text><title>library_selection
+* varchar(40)
+This field will be used to populate the NCBI SRA submission sheet &apos;libarary_selection&apos; field.
+
+There are a limited set of options to choose from that are:
+RANDOM
+PCR
+RANDOM PCR
+RT-PCR
+HMPR
+MF
+CF-S
+CF-M
+CF-H
+CF-T
+MDA
+MSLL
+cDNA
+ChIP
+MNase
+DNAse
+Hybrid Selection
+Reduced Representation
+Restriction Digest
+5-methylcytidine antibody
+MBD2 protein methyl-CpG binding domain
+CAGE
+RACE
+size fractionation
+Padlock probes capture method
+other
+unspecified
+cDNA_oligo_dT
+cDNA_randomPriming
+Inverse rRNA
+Oligo-dT
+PolyA
+repeat fractionation</title></a>
+<text x='2077' y='772' text-anchor='end' class='colType'>t</text>  <a xlink:href='#knowledgebase.sequencing_effort_protocol_library_layout'><text id='knowledgebase.sequencing_effort_protocol.library_layout' x='1907' y='791'>library_layout</text><title>library_layout
+varchar default &apos;paired&apos;
+This field will be used to populate the NCBI SRA submission sheet &apos;libarary_layout&apos; field.
+
+There are a limited set of options to choose from that are:
+paired
+single</title></a>
+<text x='2077' y='788' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1890' y='797' xlink:href='#nn'/><a xlink:href='#knowledgebase.sequencing_effort_protocol_platform'><text id='knowledgebase.sequencing_effort_protocol.platform' x='1907' y='807'>platform</text><title>platform
+* varchar(25) default &apos;ILLUMINA&apos;
+This field will be used to populate the NCBI SRA submission sheet &apos;platform&apos; field.
+
+There are a limited set of options to choose from and I have only included the most common:
+ILLUMINA
+OXFORD_NANOPORE
+PACBIO_SMRT</title></a>
+<text x='2077' y='804' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1890' y='813' xlink:href='#nn'/><a xlink:href='#knowledgebase.sequencing_effort_protocol_instrument_model'><text id='knowledgebase.sequencing_effort_protocol.instrument_model' x='1907' y='823'>instrument_model</text><title>instrument_model
+* varchar(25)
+This field will be used to populate the NCBI SRA submission sheet &apos;instrument_model&apos; field.
+
+There are a limited set of options to choose from that are dependent on the value of the &apos;platform&apos; field. I will only include the most common:
+
+Illumina:
+HiSeq X Five
+HiSeq X Ten
+Illumina Genome Analyzer
+Illumina Genome Analyzer II
+Illumina Genome Analyzer IIx
+Illumina HiScanSQ
+Illumina HiSeq 1000
+Illumina HiSeq 1500
+Illumina HiSeq 2000
+Illumina HiSeq 2500
+Illumina HiSeq 3000
+Illumina HiSeq 4000
+Illumina iSeq 100
+Illumina NovaSeq 6000
+Illumina MiniSeq
+Illumina MiSeq
+NextSeq 500
+NextSeq 550
+
+PACBIO_SMRT:
+PacBio RS
+PacBio RS II
+PacBio Sequel
+PacBio Sequel II
+
+OXFORD_NANOPORE:
+GridION
+MinION
+PromethION</title></a>
+<text x='2077' y='820' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1890' y='829' xlink:href='#nn'/><a xlink:href='#knowledgebase.sequencing_effort_protocol_filetype'><text id='knowledgebase.sequencing_effort_protocol.filetype' x='1907' y='839'>filetype</text><title>filetype
+* varchar(25) default fastq
+This field will be used to populate the &apos;filetype&apos; field of the NCBI SRA submission sheet.
+
+There are several options, I will only include the most common:
+fastq
+PacBio_HDF5
+CompleteGenomics_native
+OxfordNanopore_native</title></a>
+<text x='2077' y='836' text-anchor='end' class='colType'>t</text>
 <!-- == Callout == -->
 <rect class='callout' x='1312' y='1408' width='368' height='58' rx='16' ry='16'  />
 <text x='1336' y='1408' class='callout'>
@@ -1342,78 +1309,20 @@ Optional as some fragments will not have been</title></a>
     <tspan x='1316' dx='8' dy='21'>To be developed after the &#39;bare bones&#39; application&#46;</tspan>
 </text>
 <!-- == Callout == -->
-<rect class='callout' x='48' y='32' width='1040' height='205' rx='16' ry='16'  />
+<rect class='callout' x='48' y='32' width='1088' height='205' rx='16' ry='16'  />
 <text x='72' y='32' class='callout'>
     <tspan x='52' dx='8' dy='21'>Bare Bones db schema</tspan>
     <tspan x='52' dx='8' dy='21'>TODO&#58;</tspan>
-    <tspan x='52' dx='8' dy='21'>1 &#45; I think we should have an expedition table&#46; You OK with that&#44; Chris&#63;</tspan>
+    <tspan x='52' dx='8' dy='21'>1 &#45; I think we should have an expedition table&#46;  Please see that I&#39;ve already added it&#46; You OK with that&#44; Chris&#63;</tspan>
     <tspan x='52' dx='8' dy='21'>2 &#45; We need to work out where to &#39;attach&#39; the NCBI BioProject&#46;</tspan>
-    <tspan x='52' dx='8' dy='21'>I would suggest that every expedition has its own bioproect&#46;</tspan>
+    <tspan x='52' dx='8' dy='21'>I would suggest that every expedition is its own BioProject&#46;</tspan>
     <tspan x='52' dx='8' dy='21'>&#09;That way we also have a single user &#40;the expedition PI&#41; who can be responsible for the</tspan>
     <tspan x='52' dx='8' dy='21'>&#09;submission and later input of the accession data into the KnowledgeBase&#46;</tspan>
     <tspan x='52' dx='8' dy='21'>3 &#45; NB that once a submission to NCBI has been competed&#44; you can ouput a table of the accession numbers that have been designated by NCBI&#46;</tspan>
-    <tspan x='52' dx='8' dy='21'>This output can be input to the KB UI and can be used to automatically populate the ncbi&#95;biosample&#95;accession and sequencing&#95;effort&#95;sra&#95;accession&#46;</tspan>
+    <tspan x='52' dx='8' dy='21'>This output can be input to the KB UI and can be used to automatically populate the ncbi&#95;biosample&#95;accession and sequencing&#95;effort&#95;sra&#95;accession values&#46;</tspan>
 </text>
 </g></svg></div>
 <div class='container pt-2'>
-
-<br><br>
-<div class='card'><div class='card-body'><a name='knowledgebase.amplification_sequencing_protocol' onclick='window.scrollTo(1688, 880);return false;' style='cursor:pointer;'><h5 class='card-title'>Table amplification_sequencing_protocol</h5></a>
-<p class="text-muted">A subclass of the sequencing&#95;protocol that details how a PCR amplifcation is undertaken&#46; There will be very few records for this table as many of the sequencing&#95;effort&#95;barcode records will use the same amplification protocol&#46; Hence why it is good to have this as a separate table rather than associate this information to the sequencing&#95;effort&#95;barcode record&#46;</p>
-<table class='table table-sm table-bordered small' style='table-layout: fixed; word-wrap: break-word;'>
-<thead>
-<tr><th style='width:5%'>Idx</th><th style='width:20%'>Field Name</th><th style='width:23%'>Data Type</th><th style='width:52%'>Description</th></tr>
-</thead>
-<tbody>
-	<tr>
-		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg></td>
-		<td><a name='knowledgebase.amplification_sequencing_protocol_id'>id</a></td>
-		<td> integer  </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>*</td>
-		<td><a name='knowledgebase.amplification_sequencing_protocol_primer_fwd_seq'>primer&#95;fwd&#95;seq</a></td>
-		<td> varchar&#40;100&#41;  </td>
-		<td> The sequence of the fowward PCR primer&#46; </td>
-	</tr>
-	<tr>
-		<td>*</td>
-		<td><a name='knowledgebase.amplification_sequencing_protocol_primer_rev_seq'>primer&#95;rev&#95;seq</a></td>
-		<td> varchar&#40;100&#41;  </td>
-		<td> The sequence of the reverse PCR primer </td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><a name='knowledgebase.amplification_sequencing_protocol_primer_fwd_name'>primer&#95;fwd&#95;name</a></td>
-		<td> varchar&#40;100&#41;  </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><a name='knowledgebase.amplification_sequencing_protocol_preimer_rev_name'>preimer&#95;rev&#95;name</a></td>
-		<td> varchar&#40;100&#41;  </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>*<svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
-		<td><a name='knowledgebase.amplification_sequencing_protocol_sequencing_effort_protocol_id'>sequencing&#95;effort&#95;protocol&#95;id</a></td>
-		<td> integer  </td>
-		<td>  </td>
-	</tr>
-<tr><th colspan='4'>Indexes</th></tr>
-	<tr>		<td><svg width='14' height='14'><use xlink:href='#pk'/></svg></td><td>pk&#95;amplification&#95;protocol&#95;id</td>
-		<td> ON id</td>
-		<td>  </td>
-	</tr>
-<tr><th colspan='4'>Foreign Keys</th></tr>
-	<tr>
-		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>fk_amplification_sequencing_protocol_sequencing_effort_protocol</td>
-		<td > ( sequencing&#95;effort&#95;protocol&#95;id ) ref <a href='#knowledgebase&#46;sequencing&#95;effort&#95;protocol'>sequencing&#95;effort&#95;protocol</a> (id) </td>
-		<td>  </td>
-	</tr>
-</tbody>
-</table></div></div>
 
 <br><br>
 <div class='card'><div class='card-body'><a name='knowledgebase.analysis' onclick='window.scrollTo(1560, 1504);return false;' style='cursor:pointer;'><h5 class='card-title'>Table analysis</h5></a>
@@ -2743,8 +2652,8 @@ Optional as some fragments will not have been</title></a>
 </table></div></div>
 
 <br><br>
-<div class='card'><div class='card-body'><a name='knowledgebase.sequencing_effort_protocol' onclick='window.scrollTo(1688, 640);return false;' style='cursor:pointer;'><h5 class='card-title'>Table sequencing_effort_protocol</h5></a>
-<p class="text-muted">A SuperClass where each record holds details of a single protocol used for a given sequencing effort&#46;<br>It will likely be best to document the protocols fully on on a dedicated resourecse such as protocols&#46;io&#46;</p>
+<div class='card'><div class='card-body'><a name='knowledgebase.sequencing_effort_protocol' onclick='window.scrollTo(1688, 656);return false;' style='cursor:pointer;'><h5 class='card-title'>Table sequencing_effort_protocol</h5></a>
+<p class="text-muted">Each record holds details of a single protocol used for a given sequencing effort&#46;<br>It will likely be best to document the protocols fully on on a dedicated resourecse such as protocols&#46;io&#46; The url field will provide access to this&#46;</p>
 <table class='table table-sm table-bordered small' style='table-layout: fixed; word-wrap: break-word;'>
 <thead>
 <tr><th style='width:5%'>Idx</th><th style='width:20%'>Field Name</th><th style='width:23%'>Data Type</th><th style='width:52%'>Description</th></tr>
@@ -2906,7 +2815,7 @@ Optional as some fragments will not have been</title></a>
 		<td>*</td>
 		<td><a name='knowledgebase.site_geo_loc_name'>geo&#95;loc&#95;name</a></td>
 		<td> varchar&#40;100&#41;  </td>
-		<td> This field will need to comply with the geo&#95;loc&#95;name field of the NCBI MIMS&#46;me&#46;host&#45;associated&#46;5&#46;0 input sheet&#46; The guidance for that field reads as&#58;<br><br>&quot;Geographical origin of the sample&#59; use the appropriate name from this list http&#58;&#47;&#47;www&#46;insdc&#46;org&#47;documents&#47;country&#45;qualifier&#45;vocabulary&#46; Use a colon to separate the country or ocean from more detailed information about the location&#44; eg &quot;Canada&#58; Vancouver&quot; or &quot;Germany&#58; halfway down Zugspitze&#44; Alps&quot;&quot; </td>
+		<td> NCBI required field&#46; See table description for guidance&#46; </td>
 	</tr>
 	<tr>
 		<td>*</td>
