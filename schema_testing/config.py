@@ -1,0 +1,1 @@
+DATABASE_URI = 'postgresql+psycopg2://humebc:Kaust.4567@localhost:5432/globalsearchtest'
