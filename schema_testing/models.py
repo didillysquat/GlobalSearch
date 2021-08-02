@@ -7,6 +7,11 @@ from sqlalchemy.sql.sqltypes import Time
 
 Base = declarative_base()
 
+# many_to_many association table Campaign_User
+campaign_user = Table('campaign_user', Base.metadata,
+    Column('campaign_id', ForeignKey('campaign.id'), primary_key=True),
+    Column('user_id', ForeignKey('user.id'), primary_key=True)
+)
 
 # DONE
 class User(Base):
@@ -20,11 +25,12 @@ class User(Base):
     user_name = Column(String, nullable=False)
     registration_date = Column(TIMESTAMP(timezone=True), nullable=False)
     led_campaigns = relationship("Campaign", back_populates="lead_user", cascade="all, delete", passive_deletes=True)
-    
+    campaigns = relationship("Campaign", secondary=campaign_user, back_populates="users")
     def __repr__(self):
         return f"<User(id='{self.id}', role='{self.role}', email={self.email}, user_name={self.user_name})>"
 
 
+# DONE
 class Campaign(Base):
     __tablename__ = "campaign"
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -33,6 +39,11 @@ class Campaign(Base):
     end_date = Column(TIMESTAMP(timezone=True), nullable=False)
     lead_user_id = Column(Integer, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
     lead_user = relationship("User", back_populates="led_campaigns")
+    # Having this as nullable=False will enforce that the lead_user
+    # creates an NCBI BioProject object (https://www.ncbi.nlm.nih.gov/bioproject?cmd=Retrieve)
+    ncbi_bio_project_accession = Column(String(10), nullable=False)
+    users = relationship("User", secondary=campaign_user, back_populates="campaigns")
+
 
 # DONE
 class Site(Base):
