@@ -27,6 +27,8 @@ def recreate_database():
     Base.metadata.create_all(engine)
 
 with session_scope() as s:
+    # TODO this is where we need to read in the input excel workbooks and coerse them into
+    # proper database objects.
     user = s.query(User).all()
     foo = "bar"
     
