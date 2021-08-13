@@ -50,7 +50,6 @@
 			<fk name="fk_assay_environment_record" to_schema="knowledgebase" to_table="environment_record" >
 				<fk_column name="environment_record_id" pk="id" />
 			</fk>
-			<fk name="fk_assay_site" to_schema="knowledgebase" to_table="site" />
 			<fk name="fk_assay_expedition" to_schema="knowledgebase" to_table="campaign" >
 				<fk_column name="campaign_id" pk="id" />
 			</fk>
@@ -175,6 +174,9 @@ Optional as some fragments will not have been]]></comment>
 			<column name="depth_collected" type="decimal" length="4" decimal="2" jt="3" mandatory="y" >
 				<comment><![CDATA[Depth at which the colony was collected in meters.]]></comment>
 			</column>
+			<column name="site_id" type="integer" jt="4" mandatory="y" >
+				<comment><![CDATA[Foregin key to site in case the dive information is not available.]]></comment>
+			</column>
 			<index name="pk_colony_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
@@ -183,6 +185,9 @@ Optional as some fragments will not have been]]></comment>
 			</fk>
 			<fk name="fk_colony_coral_species" to_schema="knowledgebase" to_table="coral_species" >
 				<fk_column name="coral_species_id" pk="id" />
+			</fk>
+			<fk name="fk_colony_site" to_schema="knowledgebase" to_table="site" >
+				<fk_column name="site_id" pk="id" />
 			</fk>
 		</table>
 		<table name="colony_photo" prior="tbl" >
@@ -337,6 +342,15 @@ Format ##:##]]></comment>
 			<column name="coral_cover" type="decimal" length="4" decimal="2" jt="3" >
 				<comment><![CDATA[This field is here as a sort of place holder to demonstrate that other sorts of parameters may be associated to an environment record such as coral cover. We may add many more columns to this table.]]></comment>
 			</column>
+			<column name="env_broad_scale" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[NCBI required field. See table description for guidance.]]></comment>
+			</column>
+			<column name="env_local_scale" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[NCBI required field. See table description for guidance.]]></comment>
+			</column>
+			<column name="env_medium" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[NCBI required field. See table description for guidance.]]></comment>
+			</column>
 			<index name="pk_site_snapshot_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
@@ -404,7 +418,7 @@ Format ##:##]]></comment>
 			</index>
 		</table>
 		<table name="region" prior="tbl" >
-			<comment><![CDATA[A given geographic region.]]></comment>
+			<comment><![CDATA[A given geographic region. This information is currently not collected in the submission work book, but it may be added later on. As such I have made the region_id field of site, nullable.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="name" type="varchar" length="100" jt="12" mandatory="y" />
 			<column name="abbreviation" type="varchar" length="3" jt="12" mandatory="y" >
@@ -512,12 +526,10 @@ The correct format of this will need to be strictly enforced/currated.]]></comme
 			<column name="name" type="varchar" length="100" jt="12" mandatory="y" >
 				<comment><![CDATA[The full name of the site.]]></comment>
 			</column>
-			<column name="abbreviation_code" type="varchar" length="4" jt="12" mandatory="y" >
+			<column name="name_abbreviation" prior="abbreviation" type="varchar" length="10" jt="12" mandatory="y" >
 				<comment><![CDATA[Site will be given unique alphanumeric abbreviations that will be used as part of assigning labels to objects related to the site. For example, a colony label may use this appreviation as part of its label.]]></comment>
 			</column>
-			<column name="region_id" type="integer" jt="4" mandatory="y" >
-				<comment><![CDATA[Every site must be assocated with a region.]]></comment>
-			</column>
+			<column name="region_id" type="integer" jt="4" />
 			<column name="time_zone" type="integer" jt="4" mandatory="y" >
 				<comment><![CDATA[A code that represents the time zone of the site. This will be used to convert all local times to UTC. Time zones are easy to find online: https://docs.vmware.com/en/vRealize-Orchestrator/8.4/com.vmware.vrealize.orchestrator-use-plugins.doc/GUID-83EBD74D-B5EC-4A0A-B54E-8E45BE2928C2.html]]></comment>
 			</column>
@@ -525,15 +537,6 @@ The correct format of this will need to be strictly enforced/currated.]]></comme
 				<comment><![CDATA[This field will need to comply with the geo_loc_name field of the NCBI MIMS.me.host-associated.5.0 input sheet. The guidance for that field reads as:
 
 "Geographical origin of the sample; use the appropriate name from this list http://www.insdc.org/documents/country-qualifier-vocabulary. Use a colon to separate the country or ocean from more detailed information about the location, eg "Canada: Vancouver" or "Germany: halfway down Zugspitze, Alps""]]></comment>
-			</column>
-			<column name="env_broad_scale" type="varchar" length="100" jt="12" mandatory="y" >
-				<comment><![CDATA[NCBI required field. See table description for guidance.]]></comment>
-			</column>
-			<column name="env_local_scale" type="varchar" length="100" jt="12" mandatory="y" >
-				<comment><![CDATA[NCBI required field. See table description for guidance.]]></comment>
-			</column>
-			<column name="env_medium" type="varchar" length="100" jt="12" mandatory="y" >
-				<comment><![CDATA[NCBI required field. See table description for guidance.]]></comment>
 			</column>
 			<index name="pk_site_id" unique="PRIMARY_KEY" >
 				<column name="id" />
@@ -592,7 +595,7 @@ The columns of this table will change according to how integration with AWS Cogn
 		<entity schema="knowledgebase" name="fragment_photo" color="E8EEC1" x="1248" y="544" />
 		<entity schema="knowledgebase" name="heat_stress_profile" color="E8EEC1" x="1328" y="896" />
 		<entity schema="knowledgebase" name="ncbi_biosample" color="E8EEC1" x="2160" y="368" />
-		<entity schema="knowledgebase" name="region" color="E8EEC1" x="208" y="928" />
+		<entity schema="knowledgebase" name="region" color="E8EEC1" x="176" y="928" />
 		<entity schema="knowledgebase" name="sequencing_effort" color="E8EEC1" x="1824" y="368" />
 		<entity schema="knowledgebase" name="sequencing_effort_barcode" color="E8EEC1" x="1776" y="48" />
 		<entity schema="knowledgebase" name="sequencing_effort_metagenomic" color="E8EEC1" x="1760" y="272" />

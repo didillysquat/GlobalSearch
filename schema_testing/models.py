@@ -64,21 +64,23 @@ class Site(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     dives = relationship("Dive", back_populates="site", cascade="all, delete", passive_deletes=True)
     environment_records = relationship("EnvironmentRecord", back_populates="site", cascade="all, delete", passive_deletes=True)
-    latitude = Column(Numeric(precision=8, scale=6), nullable=False)
-    longitude = Column(Numeric(precision=8, scale=6), nullable=False)
+    latitude = Column(Numeric(precision=7, scale=5), nullable=False)
+    longitude = Column(Numeric(precision=8, scale=5), nullable=False)
     name = Column(String(100), unique=True, nullable=False)
-    abbreviation_code = Column(String(100), unique=True, nullable=False)
-    region_id = Column(Integer, ForeignKey("region.id", ondelete="CASCADE"), nullable=False)
+    name_abbreviation = Column(String(10), unique=True, nullable=False)
+    region_id = Column(Integer, ForeignKey("region.id", ondelete="CASCADE"), nullable=True)
     region = relationship("Region", back_populates="sites")
     # TODO constraint: Should be valid timezone ID
     # (https://docs.vmware.com/en/vRealize-Orchestrator/
     # 8.4/com.vmware.vrealize.orchestrator-use-plugins.doc/
     # GUID-83EBD74D-B5EC-4A0A-B54E-8E45BE2928C2.html)
-    time_zone = Column(Integer, nullable=False)
-    geo_loc_name = Column(String(100), nullable=False)
-    env_broad_scale = Column(String(100), nullable=False)
-    env_local_scale = Column(String(100), nullable=False)
-    env_medium = Column(String(100), nullable=False)
+    time_zone = Column(String(6), nullable=False)
+    country = Column(String(100), nullable=False)
+    country_abbreviation = Column(String(2), unique=True, nullable=True)
+    # This is free form text that will be combined with the above country
+    # value in order to create the entry for the file geo_loc_name
+    # in the NCBI submission sheet.
+    sub_region = Column(String(200), nullable=True)
     colonies = relationship("Colony", back_populates="site", cascade="all, delete", passive_deletes=True)
 
 class EnvironmentRecord(Base):
@@ -88,6 +90,9 @@ class EnvironmentRecord(Base):
     site = relationship("Site", back_populates="environment_records")
     assays = relationship("Assay", back_populates="environment_record", cascade="all, delete", passive_deletes=True)
     record_timestamp = Column(TIMESTAMP(timezone=True), nullable=False)
+    env_broad_scale = Column(String(100), nullable=False)
+    env_local_scale = Column(String(100), nullable=False)
+    env_medium = Column(String(100), nullable=False)
     # TODO determine format for turbidity
     turbidity = Column(Numeric(precision=6, scale=3), nullable=True)
     sea_surface_temperature = Column(Numeric(precision=4, scale=2), nullable=True)
