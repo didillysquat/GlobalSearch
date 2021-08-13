@@ -79,6 +79,7 @@ class Site(Base):
     env_broad_scale = Column(String(100), nullable=False)
     env_local_scale = Column(String(100), nullable=False)
     env_medium = Column(String(100), nullable=False)
+    colonies = relationship("Colony", back_populates="site", cascade="all, delete", passive_deletes=True)
 
 class EnvironmentRecord(Base):
     __tablename__ = "environment_record"
@@ -172,6 +173,9 @@ class Colony(Base):
     # Many to one relationship to dive
     dive_id = Column(Integer, ForeignKey('dive.id', ondelete="CASCADE"), nullable=False)
     dive = relationship("Dive", back_populates="colonies")
+    # Many to one relationship to site
+    site_id = Column(Integer, ForeignKey("site.id", ondelete="CASCADE"), nullable=False)
+    site = relationship("Site", back_populates="colonies")
     time_collected = Column(TIMESTAMP(timezone=True), nullable=False)
     # TODO assert: This should be <= to dive.max_depth
     depth_collected = Column(Numeric(precision=5, scale=2), nullable=False)
@@ -223,7 +227,7 @@ class FragmentPhoto(Base):
 
 class CBASSNucleicAcidFragment(Fragment):
     __tablename__ = "cbass_nucleic_acid_fragment"
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    cbass_nucleic_acid_fragment_id = Column(Integer, primary_key=True, autoincrement=True)
     fragment_id = Column(Integer, ForeignKey("fragment.id", ondelete="CASCADE"), nullable=False)
     
     __mapper_args__ = {
@@ -233,7 +237,7 @@ class CBASSNucleicAcidFragment(Fragment):
 
 class CBASSAssayFragment(Fragment):
     __tablename__ = "cbass_assay_fragment"
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    cbass_assay_fragment_id = Column(Integer, primary_key=True, autoincrement=True)
     fragment_id = Column(Integer, ForeignKey("fragment.id", ondelete="CASCADE"), nullable=False)
     heat_stress_profile_id = Column(Integer, ForeignKey("heat_stress_profile.id", ondelete="CASCADE"), nullable=False)
     heat_stress_profile = relationship("HeatStressProfile", back_populates="cbass_assay_fragments")
@@ -254,7 +258,7 @@ class HeatStressProfile(Base):
     __tablename__ = "heat_stress_profile"
     id = Column(Integer, primary_key=True, autoincrement=True)
     cbass_assay_fragments = relationship("CBASSAssayFragment", back_populates="heat_stress_profile", cascade="all, delete", passive_deletes=True)
-    cbass_assay_id = Column(Integer, ForeignKey("cbass_assay.id", ondelete="CASCADE"))
+    cbass_assay_id = Column(Integer, ForeignKey("cbass_assay.cbass_assay_id", ondelete="CASCADE"))
     cbass_assay = relationship("CBASSAssay", back_populates="heat_stress_profiles")
     flow_rate_liters_per_hour = Column(Numeric(precision=6, scale=2), nullable=False)
     # TODO confirm units
@@ -281,7 +285,7 @@ class Assay(Base):
 
 class CBASSAssay(Assay):
     __tablename__ = "cbass_assay"
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    cbass_assay_id = Column(Integer, primary_key=True, autoincrement=True)
     assay_id = Column(Integer, ForeignKey("assay.id", ondelete="CASCADE"), nullable=False)
     heat_stress_profiles = relationship("HeatStressProfile", back_populates="cbass_assay", cascade="all, delete", passive_deletes=True)
     start_time = Column(TIMESTAMP(timezone=True), nullable=False)
@@ -297,7 +301,7 @@ class CBASSAssay(Assay):
 # there will be different subclasses of Assay.
 class CalcificationAssay(Assay):
     __tablename__ = "calcification_assay"
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    calcification_assay_id = Column(Integer, primary_key=True, autoincrement=True)
     assay_id = Column(Integer, ForeignKey("assay.id", ondelete="CASCADE"), nullable=False)
 
     __mapper_args__ = {
@@ -330,7 +334,7 @@ class SequencingEffort(Base):
 
 class SequencingEffortMetagnomic(SequencingEffort):
     __tablename__ = "sequencing_effort_metagenomic"
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    sequencing_effort_metagenomic_id = Column(Integer, primary_key=True, autoincrement=True)
     sequencing_effort_id = Column(Integer, ForeignKey("sequencing_effort.id", ondelete="CASCADE"), nullable=True)
     
     __mapper_args__ = {
@@ -339,7 +343,7 @@ class SequencingEffortMetagnomic(SequencingEffort):
 
 class SequencingEffortRNASeq(SequencingEffort):
     __tablename__ = "sequencing_effort_rna_seq"
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    sequencing_effort_rna_seq_id = Column(Integer, primary_key=True, autoincrement=True)
     sequencing_effort_id = Column(Integer, ForeignKey("sequencing_effort.id", ondelete="CASCADE"), nullable=True)
     
     __mapper_args__ = {
@@ -348,7 +352,7 @@ class SequencingEffortRNASeq(SequencingEffort):
 
 class SequencingEffortBarcode(SequencingEffort):
     __tablename__ = "sequencing_effort_barcode"
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    sequencing_effort_barcode_id = Column(Integer, primary_key=True, autoincrement=True)
     sequencing_effort_id = Column(Integer, ForeignKey("sequencing_effort.id", ondelete="CASCADE"), nullable=True)
     barcode = Column(String(50), nullable=False)
 
