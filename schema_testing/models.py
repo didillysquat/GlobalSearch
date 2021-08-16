@@ -22,20 +22,26 @@ dive_user = Table('dive_user', Base.metadata,
     Column('user_id', ForeignKey('user.id'), primary_key=True)
 )
 
+assay_user = Table('assay_user', Base.metadata,
+    Column('assay_id', ForeignKey('assay.id'), primary_key=True),
+    Column('user_id', ForeignKey('user.id'), primary_key=True)
+)
+
 # DONE
 class User(Base):
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True, autoincrement=True)
     # TODO will come from a controlled vocab.
     role = Column(String, nullable=False)
-    email = Column(String, nullable=False)
+    email = Column(String, nullable=False, unique=True)
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
-    user_name = Column(String, nullable=False)
+    username = Column(String, nullable=False, unique=True)
     registration_date = Column(TIMESTAMP(timezone=True), nullable=False)
     led_campaigns = relationship("Campaign", back_populates="lead_user", cascade="all, delete", passive_deletes=True)
     campaigns = relationship("Campaign", secondary=campaign_user, back_populates="users")
     dives = relationship("Dive", secondary=dive_user, back_populates="divers")
+    assays = relationship("Assay", secondary=assay_user, back_populates="users")
     def __repr__(self):
         return f"<User(id='{self.id}', role='{self.role}', email={self.email}, user_name={self.user_name})>"
 
@@ -70,18 +76,15 @@ class Site(Base):
     name_abbreviation = Column(String(10), unique=True, nullable=False)
     region_id = Column(Integer, ForeignKey("region.id", ondelete="CASCADE"), nullable=True)
     region = relationship("Region", back_populates="sites")
-    # TODO constraint: Should be valid timezone ID
-    # (https://docs.vmware.com/en/vRealize-Orchestrator/
-    # 8.4/com.vmware.vrealize.orchestrator-use-plugins.doc/
-    # GUID-83EBD74D-B5EC-4A0A-B54E-8E45BE2928C2.html)
     time_zone = Column(String(6), nullable=False)
     country = Column(String(100), nullable=False)
-    country_abbreviation = Column(String(2), unique=True, nullable=True)
+    country_abbreviation = Column(String(2), nullable=True)
     # This is free form text that will be combined with the above country
     # value in order to create the entry for the file geo_loc_name
     # in the NCBI submission sheet.
     sub_region = Column(String(200), nullable=True)
     colonies = relationship("Colony", back_populates="site", cascade="all, delete", passive_deletes=True)
+    assays = relationship("Assay", back_populates="site", cascade="all, delete", passive_deletes=True)
 
 class EnvironmentRecord(Base):
     __tablename__ = "environment_record"
@@ -103,11 +106,11 @@ class EnvironmentRecord(Base):
     salinity = Column(Numeric(precision=4, scale=2), nullable=True)
     ph = Column(Numeric(precision=4, scale=2), nullable=True)
     dissolved_oxygen = Column(Numeric(precision=5, scale=2), nullable=True)
-    mean_monthly_maximum = Column(Numeric(precision=4, scale=2), nullable=True)
-    thermall_stress_anomaly_frequency = Column(Numeric(precision=4, scale=2), nullable=True)
-    thermal_stress_anomaly_stdev = Column(Numeric(precision=4, scale=2), nullable=True)
+    maximum_monthy_mean = Column(Numeric(precision=4, scale=2), nullable=True)
+    thermall_stress_anomaly_frequency_stdev = Column(Numeric(precision=4, scale=2), nullable=True)
     # TODO determine the units and format of coral_cover
     coral_cover = Column(Numeric(precision=4, scale=2), nullable=True)
+    label = Column(String(200), nullable=False, unique=True)
 
 # DONE
 class Region(Base):
@@ -188,7 +191,7 @@ class Colony(Base):
     fragments = relationship("Fragment", back_populates="colony", cascade="all, delete", passive_deletes=True)
 
 # DONE
-class ColonyPhoto(Base):
+class ColonyPhoto(Base):    
     __tablename__ = "colony_photo"
     id = Column(Integer, primary_key=True, autoincrement=True)
     colony_id = Column(Integer, ForeignKey(column="colony.id", ondelete="CASCADE"), nullable=False)
@@ -201,7 +204,7 @@ class DiveTablePhoto(Base):
     __tablename__ = "diver_table_photo"
     id = Column(Integer, primary_key=True, autoincrement=True)
     dive_id = Column(Integer, ForeignKey("dive.id", ondelete="CASCADE"), nullable=False)
-    dive = relationship("Dive", back_populates="dive_table_phtotos")
+    dive = relationship("Dive", back_populates="dive_table_photos")
     url = Column(String(100), nullable=True)
     name = Column(String(100), nullable=False)
 
@@ -211,7 +214,7 @@ class Fragment(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     colony_id = Column(Integer, ForeignKey("colony.id", ondelete="CASCADE"), nullable=False)
     colony = relationship("Colony", back_populates="fragments")
-    fragment_photo_id = Column(Integer, ForeignKey("fragment.id", ondelete="CASCADE"), nullable=False)
+    fragment_photo_id = Column(Integer, ForeignKey("fragment_photo.id", ondelete="CASCADE"), nullable=False)
     fragment_photo = relationship("FragmentPhoto", back_populates="fragments")
     sequencing_efforts = relationship("SequencingEffort", back_populates="fragment", cascade="all, delete", passive_deletes=True)
     type = Column(String(50))
@@ -227,7 +230,7 @@ class FragmentPhoto(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     url = Column(String(100), nullable=True)
     name = Column(String(100), nullable=False)
-    fragments = relationship("Fragment", back_populates="fragment_photos", cascade="all, delete", passive_deletes=True)
+    fragments = relationship("Fragment", back_populates="fragment_photo", cascade="all, delete", passive_deletes=True)
 
 
 class CBASSNucleicAcidFragment(Fragment):
@@ -263,13 +266,8 @@ class HeatStressProfile(Base):
     __tablename__ = "heat_stress_profile"
     id = Column(Integer, primary_key=True, autoincrement=True)
     cbass_assay_fragments = relationship("CBASSAssayFragment", back_populates="heat_stress_profile", cascade="all, delete", passive_deletes=True)
-    cbass_assay_id = Column(Integer, ForeignKey("cbass_assay.cbass_assay_id", ondelete="CASCADE"))
+    cbass_assay_id = Column(Integer, ForeignKey("cbass_assay.id"))
     cbass_assay = relationship("CBASSAssay", back_populates="heat_stress_profiles")
-    flow_rate_liters_per_hour = Column(Numeric(precision=6, scale=2), nullable=False)
-    # TODO confirm units
-    light_level = Column(Numeric(precision=6, scale=3), nullable=True)
-    tank_volumne_liter = Column(Integer, nullable=True)
-    sea_water_source = Column(String(50), nullable=True)
     relative_challenge_temperature = Column(Numeric(precision=2, scale=1), nullable=False)
 
 
@@ -281,6 +279,10 @@ class Assay(Base):
     environment_record = relationship("EnvironmentRecord", back_populates="assays")
     campaign_id = Column(Integer, ForeignKey("campaign.id", ondelete="CASCADE"), nullable=False)
     campaign = relationship("Campaign", back_populates="assays")
+    label = Column(String(200), nullable=False)
+    users = relationship("User", secondary=assay_user, back_populates="assays")
+    site_id = Column(Integer, ForeignKey("site.id", ondelete="CASCADE"), nullable=False)
+    site = relationship("Site", back_populates="assays")
 
     __mapper_args__ = {
         'polymorphic_identity':'assay',
@@ -290,12 +292,16 @@ class Assay(Base):
 
 class CBASSAssay(Assay):
     __tablename__ = "cbass_assay"
-    cbass_assay_id = Column(Integer, primary_key=True, autoincrement=True)
-    assay_id = Column(Integer, ForeignKey("assay.id", ondelete="CASCADE"), nullable=False)
-    heat_stress_profiles = relationship("HeatStressProfile", back_populates="cbass_assay", cascade="all, delete", passive_deletes=True)
+    id = Column(ForeignKey("assay.id"), primary_key=True)
+    heat_stress_profiles = relationship("HeatStressProfile", back_populates="cbass_assay")
     start_time = Column(TIMESTAMP(timezone=True), nullable=False)
     stop_time = Column(TIMESTAMP(timezone=True), nullable=False)
-    base_line_temp = Column(Numeric(precision=4, scale=2), nullable=False)
+    baseline_temp = Column(Numeric(precision=4, scale=2), nullable=False)
+    flow_rate_liters_per_hour = Column(Numeric(precision=6, scale=2), nullable=False)
+    # TODO confirm units
+    light_level = Column(Numeric(precision=6, scale=3), nullable=True)
+    tank_volumne_liter = Column(Integer, nullable=True)
+    seawater_source = Column(String(50), nullable=True)
 
     __mapper_args__ = {
         'polymorphic_identity':'cbass_assay',
@@ -306,8 +312,7 @@ class CBASSAssay(Assay):
 # there will be different subclasses of Assay.
 class CalcificationAssay(Assay):
     __tablename__ = "calcification_assay"
-    calcification_assay_id = Column(Integer, primary_key=True, autoincrement=True)
-    assay_id = Column(Integer, ForeignKey("assay.id", ondelete="CASCADE"), nullable=False)
+    id = Column(ForeignKey("assay.id"), primary_key=True)
 
     __mapper_args__ = {
         'polymorphic_identity':'calcification_assay',

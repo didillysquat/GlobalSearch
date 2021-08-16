@@ -1,8 +1,8 @@
 """init
 
-Revision ID: 9c5cfbf15b44
+Revision ID: 8f98bf9dd766
 Revises: 
-Create Date: 2021-08-13 10:18:20.008810
+Create Date: 2021-08-16 15:17:10.109235
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '9c5cfbf15b44'
+revision = '8f98bf9dd766'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -63,9 +63,11 @@ def upgrade():
     sa.Column('email', sa.String(), nullable=False),
     sa.Column('first_name', sa.String(), nullable=False),
     sa.Column('last_name', sa.String(), nullable=False),
-    sa.Column('user_name', sa.String(), nullable=False),
+    sa.Column('username', sa.String(), nullable=False),
     sa.Column('registration_date', sa.TIMESTAMP(timezone=True), nullable=False),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('email'),
+    sa.UniqueConstraint('username')
     )
     op.create_table('campaign',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -79,20 +81,19 @@ def upgrade():
     )
     op.create_table('site',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('latitude', sa.Numeric(precision=8, scale=6), nullable=False),
-    sa.Column('longitude', sa.Numeric(precision=8, scale=6), nullable=False),
+    sa.Column('latitude', sa.Numeric(precision=7, scale=5), nullable=False),
+    sa.Column('longitude', sa.Numeric(precision=8, scale=5), nullable=False),
     sa.Column('name', sa.String(length=100), nullable=False),
-    sa.Column('abbreviation_code', sa.String(length=100), nullable=False),
-    sa.Column('region_id', sa.Integer(), nullable=False),
-    sa.Column('time_zone', sa.Integer(), nullable=False),
-    sa.Column('geo_loc_name', sa.String(length=100), nullable=False),
-    sa.Column('env_broad_scale', sa.String(length=100), nullable=False),
-    sa.Column('env_local_scale', sa.String(length=100), nullable=False),
-    sa.Column('env_medium', sa.String(length=100), nullable=False),
+    sa.Column('name_abbreviation', sa.String(length=10), nullable=False),
+    sa.Column('region_id', sa.Integer(), nullable=True),
+    sa.Column('time_zone', sa.String(length=6), nullable=False),
+    sa.Column('country', sa.String(length=100), nullable=False),
+    sa.Column('country_abbreviation', sa.String(length=2), nullable=True),
+    sa.Column('sub_region', sa.String(length=200), nullable=True),
     sa.ForeignKeyConstraint(['region_id'], ['region.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('abbreviation_code'),
-    sa.UniqueConstraint('name')
+    sa.UniqueConstraint('name'),
+    sa.UniqueConstraint('name_abbreviation')
     )
     op.create_table('campaign_user',
     sa.Column('campaign_id', sa.Integer(), nullable=False),
@@ -119,6 +120,9 @@ def upgrade():
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('site_id', sa.Integer(), nullable=False),
     sa.Column('record_timestamp', sa.TIMESTAMP(timezone=True), nullable=False),
+    sa.Column('env_broad_scale', sa.String(length=100), nullable=False),
+    sa.Column('env_local_scale', sa.String(length=100), nullable=False),
+    sa.Column('env_medium', sa.String(length=100), nullable=False),
     sa.Column('turbidity', sa.Numeric(precision=6, scale=3), nullable=True),
     sa.Column('sea_surface_temperature', sa.Numeric(precision=4, scale=2), nullable=True),
     sa.Column('sea_surface_temperature_stdev', sa.Numeric(precision=4, scale=2), nullable=True),
@@ -126,20 +130,24 @@ def upgrade():
     sa.Column('salinity', sa.Numeric(precision=4, scale=2), nullable=True),
     sa.Column('ph', sa.Numeric(precision=4, scale=2), nullable=True),
     sa.Column('dissolved_oxygen', sa.Numeric(precision=5, scale=2), nullable=True),
-    sa.Column('mean_monthly_maximum', sa.Numeric(precision=4, scale=2), nullable=True),
-    sa.Column('thermall_stress_anomaly_frequency', sa.Numeric(precision=4, scale=2), nullable=True),
-    sa.Column('thermal_stress_anomaly_stdev', sa.Numeric(precision=4, scale=2), nullable=True),
+    sa.Column('maximum_monthy_mean', sa.Numeric(precision=4, scale=2), nullable=True),
+    sa.Column('thermall_stress_anomaly_frequency_stdev', sa.Numeric(precision=4, scale=2), nullable=True),
     sa.Column('coral_cover', sa.Numeric(precision=4, scale=2), nullable=True),
+    sa.Column('label', sa.String(length=200), nullable=False),
     sa.ForeignKeyConstraint(['site_id'], ['site.id'], ondelete='CASCADE'),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('label')
     )
     op.create_table('assay',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('type', sa.String(length=50), nullable=True),
     sa.Column('environment_record_id', sa.Integer(), nullable=False),
     sa.Column('campaign_id', sa.Integer(), nullable=False),
+    sa.Column('label', sa.String(length=200), nullable=False),
+    sa.Column('site_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['campaign_id'], ['campaign.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['environment_record_id'], ['environment_record.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['site_id'], ['site.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('colony',
@@ -169,20 +177,25 @@ def upgrade():
     sa.ForeignKeyConstraint(['dive_id'], ['dive.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('calcification_assay',
-    sa.Column('calcification_assay_id', sa.Integer(), autoincrement=True, nullable=False),
+    op.create_table('assay_user',
     sa.Column('assay_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['assay_id'], ['assay.id'], ondelete='CASCADE'),
-    sa.PrimaryKeyConstraint('calcification_assay_id')
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['assay_id'], ['assay.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('assay_id', 'user_id')
+    )
+    op.create_table('calcification_assay',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['id'], ['assay.id'], ),
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('cbass_assay',
-    sa.Column('cbass_assay_id', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('assay_id', sa.Integer(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('start_time', sa.TIMESTAMP(timezone=True), nullable=False),
     sa.Column('stop_time', sa.TIMESTAMP(timezone=True), nullable=False),
-    sa.Column('base_line_temp', sa.Numeric(precision=4, scale=2), nullable=False),
-    sa.ForeignKeyConstraint(['assay_id'], ['assay.id'], ondelete='CASCADE'),
-    sa.PrimaryKeyConstraint('cbass_assay_id')
+    sa.Column('baseline_temp', sa.Numeric(precision=4, scale=2), nullable=False),
+    sa.ForeignKeyConstraint(['id'], ['assay.id'], ),
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('colony_photo',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -198,7 +211,7 @@ def upgrade():
     sa.Column('fragment_photo_id', sa.Integer(), nullable=False),
     sa.Column('type', sa.String(length=50), nullable=True),
     sa.ForeignKeyConstraint(['colony_id'], ['colony.id'], ondelete='CASCADE'),
-    sa.ForeignKeyConstraint(['fragment_photo_id'], ['fragment.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['fragment_photo_id'], ['fragment_photo.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('cbass_nucleic_acid_fragment',
@@ -215,7 +228,7 @@ def upgrade():
     sa.Column('tank_volumne_liter', sa.Integer(), nullable=True),
     sa.Column('sea_water_source', sa.String(length=50), nullable=True),
     sa.Column('relative_challenge_temperature', sa.Numeric(precision=2, scale=1), nullable=False),
-    sa.ForeignKeyConstraint(['cbass_assay_id'], ['cbass_assay.cbass_assay_id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['cbass_assay_id'], ['cbass_assay.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('sequencing_effort',
@@ -277,6 +290,7 @@ def downgrade():
     op.drop_table('colony_photo')
     op.drop_table('cbass_assay')
     op.drop_table('calcification_assay')
+    op.drop_table('assay_user')
     op.drop_table('diver_table_photo')
     op.drop_table('dive_user')
     op.drop_table('colony')
