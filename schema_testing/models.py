@@ -54,13 +54,13 @@ class Campaign(Base):
     lead_user = relationship("User", back_populates="led_campaigns")
     assays = relationship("Assay", back_populates="campaign", cascade="all, delete", passive_deletes=True)
     users = relationship("User", secondary=campaign_user, back_populates="campaigns")
-    name = Column(String(100), nullable=False)
+    name = Column(String(100), nullable=False, unique=True)
     start_date = Column(TIMESTAMP(timezone=True), nullable=False)
     end_date = Column(TIMESTAMP(timezone=True), nullable=False)
     
     # Having this as nullable=False will enforce that the lead_user
     # creates an NCBI BioProject object (https://www.ncbi.nlm.nih.gov/bioproject?cmd=Retrieve)
-    ncbi_bio_project_accession = Column(String(10), nullable=False)
+    ncbi_bio_project_accession = Column(String(10), nullable=False, unique=True)
     
 
 
@@ -130,29 +130,18 @@ class Dive(Base):
     site_id = Column(Integer, ForeignKey("site.id", ondelete="CASCADE"))
     site = relationship("Site", back_populates="dives")
     divers = relationship("User", secondary=dive_user, back_populates="dives")
-    # TODO this may become label and be a combination of other labels
-    name = Column(String(100), nullable=False)
-    # The in and out times should be provided as local time
-    # on the input sheets i.e. not correcting for the the time zone of the dive site.
-    # However, these times should be corrected using the time zone associated with site
-    # for entry into the database so that the times are in UTC
     time_in = Column(TIMESTAMP(timezone=True), nullable=False)
     time_out = Column(TIMESTAMP(timezone=True), nullable=False)
     # Depth in meters with 2 decimal places.
-    max_depth = Column(Numeric(precision=5, scale=2), nullable=False)
-    # This will be calculated as time_out - time_in (above)
-    # TODO question for Prasantha: is it a good/bad idea to store
-    # 'derived' data like this,
-    # or is it best to calculate it as part of the query.
-    # i.e. have a query where time_out - time_in > XXX
-    duration = Column(Integer, nullable=False)
+    max_depth = Column(Numeric(precision=5, scale=2), nullable=True)
     # Probably best if this is a controlled vocabulary
     # TODO constraint: specifiy the vocab; Have an 'other' category.
-    purpose = Column(String(100), nullable=False)
+    purpose = Column(String(100), nullable=True)
     # Freehand value for additional information
     comments = Column(String(1000), nullable=True)
     # deg C of the water logged by the users dive computer
-    temperature = Column(Numeric(precision=2, scale=2))
+    water_temperature = Column(Numeric(precision=4, scale=2))
+    label = Column(String(200), nullable=False, unique=True)
 
 # DONE
 class CoralSpecies(Base):
@@ -164,11 +153,11 @@ class CoralSpecies(Base):
     family_tax = Column(String(50))
     genus_tax = Column(String(50))
     species_monomial_tax = Column(String(50))
-    species_binomial_tax = Column(String(100))
+    species_binomial_tax = Column(String(100), unique=True, nullable=False)
     # TODO Build in a check to make sure that this is a valid ID
     # in the NCBI taxonomy database (https://www.ncbi.nlm.nih.gov/taxonomy)
-    ncbi_tax_id = Column(Integer)
-    abbreviation = Column(String(10))
+    ncbi_tax_id = Column(Integer, nullable=False, unique=True)
+    abbreviation = Column(String(10), nullable=False, unique=True)
     colonies = relationship("Colony", back_populates="coral_species", cascade="all, delete", passive_deletes=True)
 
 # DONE
@@ -185,19 +174,23 @@ class Colony(Base):
     site_id = Column(Integer, ForeignKey("site.id", ondelete="CASCADE"), nullable=False)
     site = relationship("Site", back_populates="colonies")
     time_collected = Column(TIMESTAMP(timezone=True), nullable=False)
-    # TODO assert: This should be <= to dive.max_depth
+    
     depth_collected = Column(Numeric(precision=5, scale=2), nullable=False)
-    colony_photos = relationship("ColonyPhoto", back_populates="colony", cascade="all, delete", passive_deletes=True)
+    colony_photo = relationship("ColonyPhoto", back_populates="colony", cascade="all, delete", passive_deletes=True)
     fragments = relationship("Fragment", back_populates="colony", cascade="all, delete", passive_deletes=True)
+    # Relate Colony to Assay
+    assay_id = Column(Integer, ForeignKey("assay.id", ondelete="CASCADE"), nullable=False)
+    assay = relationship("Assay", back_populates="colonies")
+    label = Column(String(200), nullable=False)
 
 # DONE
 class ColonyPhoto(Base):    
     __tablename__ = "colony_photo"
     id = Column(Integer, primary_key=True, autoincrement=True)
     colony_id = Column(Integer, ForeignKey(column="colony.id", ondelete="CASCADE"), nullable=False)
-    colony = relationship("Colony", back_populates="colony_photos")
-    name = Column(String(100), nullable=False)
-    url = Column(String(100), nullable=True)
+    colony = relationship("Colony", back_populates="colony_photo")
+    name = Column(String(100), nullable=False, unique=True)
+    url = Column(String(1000), nullable=True, unique=True)
 
 # DONE
 class DiveTablePhoto(Base):
@@ -205,8 +198,8 @@ class DiveTablePhoto(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     dive_id = Column(Integer, ForeignKey("dive.id", ondelete="CASCADE"), nullable=False)
     dive = relationship("Dive", back_populates="dive_table_photos")
-    url = Column(String(100), nullable=True)
-    name = Column(String(100), nullable=False)
+    url = Column(String(1000), nullable=True, unique=True)
+    name = Column(String(100), nullable=False, unique=True)
 
 
 class Fragment(Base):
@@ -214,8 +207,6 @@ class Fragment(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     colony_id = Column(Integer, ForeignKey("colony.id", ondelete="CASCADE"), nullable=False)
     colony = relationship("Colony", back_populates="fragments")
-    fragment_photo_id = Column(Integer, ForeignKey("fragment_photo.id", ondelete="CASCADE"), nullable=False)
-    fragment_photo = relationship("FragmentPhoto", back_populates="fragments")
     sequencing_efforts = relationship("SequencingEffort", back_populates="fragment", cascade="all, delete", passive_deletes=True)
     type = Column(String(50))
 
@@ -225,18 +216,23 @@ class Fragment(Base):
     }
 
 
-class FragmentPhoto(Base):
-    __tablename__ = "fragment_photo"
+class CBASSFragmentPhoto(Base):
+    __tablename__ = "cbass_fragment_photo"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    url = Column(String(100), nullable=True)
-    name = Column(String(100), nullable=False)
-    fragments = relationship("Fragment", back_populates="fragment_photo", cascade="all, delete", passive_deletes=True)
+    url = Column(String(1000), nullable=True, unique=True)
+    name = Column(String(100), nullable=False, unique=True)
+    fragments = relationship("CBASSAssayFragment", back_populates="cbass_fragment_photo", cascade="all, delete", passive_deletes=True)
 
 
 class CBASSNucleicAcidFragment(Fragment):
     __tablename__ = "cbass_nucleic_acid_fragment"
-    cbass_nucleic_acid_fragment_id = Column(Integer, primary_key=True, autoincrement=True)
-    fragment_id = Column(Integer, ForeignKey("fragment.id", ondelete="CASCADE"), nullable=False)
+    id = Column(ForeignKey("fragment.id"), primary_key=True)
+    label = Column(String(200), nullable=False, unique=True)
+    token_label = Column(String(200), nullable=False, unique=False)
+    storage_chemical = Column(String(100), nullable=True)
+    storage_temperature = Column(String(20), nullable=True)
+    storage_container = Column(String(100), nullable=True)
+    comments = Column(String(1000), nullable=True)
     
     __mapper_args__ = {
         'polymorphic_identity':'cbass_nucleic_acid_fragment',
@@ -245,18 +241,28 @@ class CBASSNucleicAcidFragment(Fragment):
 
 class CBASSAssayFragment(Fragment):
     __tablename__ = "cbass_assay_fragment"
-    cbass_assay_fragment_id = Column(Integer, primary_key=True, autoincrement=True)
-    fragment_id = Column(Integer, ForeignKey("fragment.id", ondelete="CASCADE"), nullable=False)
-    heat_stress_profile_id = Column(Integer, ForeignKey("heat_stress_profile.id", ondelete="CASCADE"), nullable=False)
+    id = Column(ForeignKey("fragment.id"), primary_key=True)
+    heat_stress_profile_id = Column(Integer, ForeignKey("heat_stress_profile.id", ondelete="CASCADE"))
     heat_stress_profile = relationship("HeatStressProfile", back_populates="cbass_assay_fragments")
-    fragment_number = Column(Integer, nullable=False)
-    fragment_label = Column(String(100), nullable=False)
-    fv_fm_measurement_one = Column(Numeric(precision=5, scale=3), nullable=True)
-    fv_fm_measurement_two = Column(Numeric(precision=5, scale=3), nullable=True)
+    fv_fm_measurement_one_value = Column(Numeric(precision=6, scale=3), nullable=True)
+    # time in minutes
+    fv_fm_measurement_one_time_point = Column(Integer, nullable=True)
+    fv_fm_measurement_two_value = Column(Numeric(precision=6, scale=3), nullable=True)
+    # time in minutes
+    fv_fm_measurement_two_time_point = Column(Integer, nullable=True)
     # Time in minutes
     relative_sampling_time = Column(Integer, nullable=False)
+    cbass_fragment_photo_id = Column(Integer, ForeignKey("cbass_fragment_photo.id", ondelete="CASCADE"))
+    cbass_fragment_photo = relationship("CBASSFragmentPhoto", back_populates="fragments")
+    label = Column(String(200), nullable=False, unique=True)
+    token_label = Column(String(200), nullable=False, unique=False)
+    relative_zoox_loss = Column(Numeric(precision=4, scale=4), nullable=True)
+    zoox_loss_method = Column(String(30), nullable=True)
+    storage_chemical = Column(String(100), nullable=True)
+    storage_temperature = Column(String(20), nullable=True)
+    storage_container = Column(String(100), nullable=True)
+    comments = Column(String(1000), nullable=True)
     
-
     __mapper_args__ = {
         'polymorphic_identity':'cbass_assay_fragment',
     }
@@ -283,6 +289,7 @@ class Assay(Base):
     users = relationship("User", secondary=assay_user, back_populates="assays")
     site_id = Column(Integer, ForeignKey("site.id", ondelete="CASCADE"), nullable=False)
     site = relationship("Site", back_populates="assays")
+    colonies = relationship("Colony", back_populates="assay", cascade="all, delete", passive_deletes=True)
 
     __mapper_args__ = {
         'polymorphic_identity':'assay',
@@ -292,15 +299,16 @@ class Assay(Base):
 
 class CBASSAssay(Assay):
     __tablename__ = "cbass_assay"
-    id = Column(ForeignKey("assay.id"), primary_key=True)
+    id = Column(Integer, ForeignKey("assay.id"), primary_key=True)
     heat_stress_profiles = relationship("HeatStressProfile", back_populates="cbass_assay")
     start_time = Column(TIMESTAMP(timezone=True), nullable=False)
     stop_time = Column(TIMESTAMP(timezone=True), nullable=False)
     baseline_temp = Column(Numeric(precision=4, scale=2), nullable=False)
-    flow_rate_liters_per_hour = Column(Numeric(precision=6, scale=2), nullable=False)
+    # in liters per hour
+    flow_rate = Column(Numeric(precision=6, scale=2), nullable=True)
     # TODO confirm units
     light_level = Column(Numeric(precision=6, scale=3), nullable=True)
-    tank_volumne_liter = Column(Integer, nullable=True)
+    tank_volume = Column(Integer, nullable=True)
     seawater_source = Column(String(50), nullable=True)
 
     __mapper_args__ = {
@@ -312,7 +320,7 @@ class CBASSAssay(Assay):
 # there will be different subclasses of Assay.
 class CalcificationAssay(Assay):
     __tablename__ = "calcification_assay"
-    id = Column(ForeignKey("assay.id"), primary_key=True)
+    id = Column(Integer, ForeignKey("assay.id"), primary_key=True)
 
     __mapper_args__ = {
         'polymorphic_identity':'calcification_assay',
@@ -322,8 +330,6 @@ class NCBIBioSample(Base):
     __tablename__ = "ncbi_biosample"
     id = Column(Integer, primary_key=True, autoincrement=True)
     accession = Column(String(50), nullable=True)
-    sample_name = Column(String(100), nullable=False)
-    extraction_label = Column(String(100), nullable=False)
     sequencing_efforts = relationship("SequencingEffort", back_populates="ncbi_biosample", cascade="all, delete", passive_deletes=True)
 
 class SequencingEffort(Base):
@@ -331,8 +337,6 @@ class SequencingEffort(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     fragment_id = Column(Integer, ForeignKey("fragment.id", ondelete="CASCADE"), nullable=False)
     fragment = relationship("Fragment", back_populates="sequencing_efforts")
-    sequencing_effort_protocol_id = Column(Integer, ForeignKey("sequencing_effort_protocol.id", ondelete="CASCADE"), nullable=True)
-    sequencing_effort_protocol = relationship("SequencingEffortProtocol", back_populates="sequencing_efforts", cascade="all, delete", passive_deletes=True)
     ncbi_biosample_id = Column(Integer, ForeignKey("ncbi_biosample.id", ondelete="CASCADE"), nullable=True)
     ncbi_biosample = relationship("NCBIBioSample", back_populates="sequencing_efforts")
     type = Column(String(50))
@@ -344,8 +348,7 @@ class SequencingEffort(Base):
 
 class SequencingEffortMetagnomic(SequencingEffort):
     __tablename__ = "sequencing_effort_metagenomic"
-    sequencing_effort_metagenomic_id = Column(Integer, primary_key=True, autoincrement=True)
-    sequencing_effort_id = Column(Integer, ForeignKey("sequencing_effort.id", ondelete="CASCADE"), nullable=True)
+    id = Column(ForeignKey("sequencing_effort.id"), primary_key=True)
     
     __mapper_args__ = {
         'polymorphic_identity':'sequencing_effort_metagenomic',
@@ -353,8 +356,7 @@ class SequencingEffortMetagnomic(SequencingEffort):
 
 class SequencingEffortRNASeq(SequencingEffort):
     __tablename__ = "sequencing_effort_rna_seq"
-    sequencing_effort_rna_seq_id = Column(Integer, primary_key=True, autoincrement=True)
-    sequencing_effort_id = Column(Integer, ForeignKey("sequencing_effort.id", ondelete="CASCADE"), nullable=True)
+    id = Column(ForeignKey("sequencing_effort.id"), primary_key=True)
     
     __mapper_args__ = {
         'polymorphic_identity':'sequencing_effort_rna_seq',
@@ -362,18 +364,9 @@ class SequencingEffortRNASeq(SequencingEffort):
 
 class SequencingEffortBarcode(SequencingEffort):
     __tablename__ = "sequencing_effort_barcode"
-    sequencing_effort_barcode_id = Column(Integer, primary_key=True, autoincrement=True)
-    sequencing_effort_id = Column(Integer, ForeignKey("sequencing_effort.id", ondelete="CASCADE"), nullable=True)
+    id = Column(ForeignKey("sequencing_effort.id"), primary_key=True)
     barcode = Column(String(50), nullable=False)
 
     __mapper_args__ = {
         'polymorphic_identity':'sequencing_effort_barcode',
     }
-
-class SequencingEffortProtocol(Base):
-    __tablename__ = "sequencing_effort_protocol"
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    sequencing_efforts = relationship("SequencingEffort", back_populates="sequencing_effort_protocol", cascade="all, delete", passive_deletes=True)
-    name = Column(String(100), nullable=False)
-    library_type = Column(String(50), nullable=False)
-    url = Column(String(100), nullable=True)

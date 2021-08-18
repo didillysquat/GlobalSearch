@@ -44,6 +44,10 @@
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="environment_record_id" type="integer" jt="4" mandatory="y" />
 			<column name="campaign_id" prior="expedition_id" type="integer" jt="4" mandatory="y" />
+			<column name="site_id" type="integer" jt="4" mandatory="y" />
+			<column name="label" type="varchar" jt="12" mandatory="y" >
+				<comment><![CDATA[a unique identifier that is human readable]]></comment>
+			</column>
 			<index name="pk_assay_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
@@ -53,16 +57,35 @@
 			<fk name="fk_assay_expedition" to_schema="knowledgebase" to_table="campaign" >
 				<fk_column name="campaign_id" pk="id" />
 			</fk>
+			<fk name="fk_assay_site" to_schema="knowledgebase" to_table="site" >
+				<fk_column name="site_id" pk="id" />
+			</fk>
+		</table>
+		<table name="assay_user" prior="tbl" >
+			<comment><![CDATA[Join table for many to many relationship between Assay and User. An Assay will have multiple Users associated with it. A User can be take part in multiple Assays.
+
+If a User is associated with an Assay, it means that the User was helping to run the Assay.]]></comment>
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="user_id" type="integer" jt="4" mandatory="y" />
+			<column name="assay_id" type="integer" jt="4" mandatory="y" />
+			<index name="pk_assay_user_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_assay_user_assay" to_schema="knowledgebase" to_table="assay" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+			<fk name="fk_assay_user_user" to_schema="knowledgebase" to_table="user" >
+				<fk_column name="assay_id" pk="id" />
+			</fk>
 		</table>
 		<table name="calcification_assay" prior="tbl" >
 			<comment><![CDATA[Multiple different assay types will be held in the KnowledgeBase. The first to be developed will be the cbass_assay. Others such as 'calcification_assay' will be integrated down the line.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
-			<column name="assay_id" type="integer" jt="4" mandatory="y" />
 			<index name="pk_calcification_assay_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
-			<fk name="fk_calcification_assay_assay" to_schema="knowledgebase" to_table="assay" >
-				<fk_column name="assay_id" pk="id" />
+			<fk name="fk_calcification_assay_assay_0" to_schema="knowledgebase" to_table="assay" >
+				<fk_column name="id" pk="id" />
 			</fk>
 		</table>
 		<table name="campaign" prior="expedition" >
@@ -118,49 +141,107 @@ We will only hold the accession of the NCBI BioProject. We will not hold any oth
 			<column name="baseline_temp" type="decimal" length="4" decimal="2" jt="3" mandatory="y" >
 				<comment><![CDATA[The multiple heat stress profies related to this cbass_assy will all be ramped relative to this baseline.]]></comment>
 			</column>
-			<column name="assay_id" type="integer" jt="4" mandatory="y" />
+			<column name="flow_rate" prior="flow_rate_liters_per_hour" type="integer" jt="4" >
+				<comment><![CDATA[in liters per hour]]></comment>
+			</column>
+			<column name="light_level" type="integer" jt="4" >
+				<comment><![CDATA[TODO: what is the unit.]]></comment>
+			</column>
+			<column name="tank_volume" prior="tank_volume_liter" type="integer" jt="4" >
+				<comment><![CDATA[in liters]]></comment>
+			</column>
+			<column name="sea_water_source" type="varchar" length="100" jt="12" />
 			<index name="pk_treatment_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
-			<fk name="fk_cbass_assay_assay" to_schema="knowledgebase" to_table="assay" >
-				<fk_column name="assay_id" pk="id" />
+			<fk name="fk_cbass_assay_assay_0" to_schema="knowledgebase" to_table="assay" >
+				<fk_column name="id" pk="id" />
 			</fk>
 		</table>
 		<table name="cbass_assay_fragment" prior="assay_fragment" >
 			<comment><![CDATA[This is a fragement that is used in a heat stress protocol. It may or may not have nucleic acids sampled from it, as such it may or may not have a TODO: sort out how the sequencing efforts will be made.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
-			<column name="fragment_id" type="integer" jt="4" mandatory="y" />
 			<column name="heat_stress_profile_id" prior="heat_stress_profile" type="integer" jt="4" mandatory="y" />
-			<column name="fragment_number" prior="sample_number" type="integer" jt="4" mandatory="y" >
-				<comment><![CDATA[there will be multiple fragments per colony]]></comment>
+			<column name="label" prior="fragment_label" type="varchar" jt="12" mandatory="y" />
+			<column name="fv_fm_measurement_one_value" prior="fv_fm_measurement_one" type="decimal" length="3" decimal="3" jt="3" />
+			<column name="fv_fm_measurement_two_value" prior="fv_fm_measurement_two" type="decimal" length="3" decimal="3" jt="3" />
+			<column name="comments" prior="additional_info" type="varchar" length="1000" jt="12" >
+				<comment><![CDATA[free form text limited to 1000 characters. Provides any additional information.]]></comment>
 			</column>
-			<column name="fragment_label" prior="sample_label" type="varchar" jt="12" />
-			<column name="fv_fm_measurement_one" type="decimal" length="3" decimal="3" jt="3" />
-			<column name="fv_fm_measurement_two" type="decimal" length="3" decimal="3" jt="3" />
-			<column name="additional_info" type="varchar" length="1000" jt="12" />
 			<column name="relative_sampling_time" type="integer" jt="4" >
-				<comment><![CDATA[This is the time after the heat stress profile begain that the sample was collected, for example the time representing t1, t2 etc. TBD the units in which this will be measured.
-Optional as some fragments will not have been]]></comment>
+				<comment><![CDATA[This is the time after the heat stress profile begain that the sample was collected, for example the time representing t1, t2 etc. minutes.]]></comment>
 			</column>
+			<column name="fv_fm_measurement_one_time_point" type="integer" length="4" decimal="2" jt="4" >
+				<comment><![CDATA[The time in minutes at which the first Fv/Fm measurement was taken.]]></comment>
+			</column>
+			<column name="fv_fm_measurement_two_time_point" type="integer" length="4" decimal="2" jt="4" >
+				<comment><![CDATA[The time at which the second Fv/Fm value was measured in minutes]]></comment>
+			</column>
+			<column name="token_label" type="varchar" jt="12" mandatory="y" >
+				<comment><![CDATA[label value for the piece of paper that gets put in with the sample when stored.]]></comment>
+			</column>
+			<column name="relative_zoox_loss" prior="relative_zooxs_loss" type="decimal" length="4" decimal="4" jt="3" >
+				<comment><![CDATA[The percentage loss from original amount in decimal format i.e. 50% = 0.5000]]></comment>
+			</column>
+			<column name="zoox_loss_method" prior="zooxs_loss_method" type="varchar" length="30" jt="12" >
+				<comment><![CDATA[The method used to quantify the zooxs loss.]]></comment>
+			</column>
+			<column name="storage_temperature" type="varchar" length="20" jt="12" >
+				<comment><![CDATA[The temperature at which the sample is stored. i.e. -80 or 4 or room temperature. It is provided as a drop down in the excel input.]]></comment>
+			</column>
+			<column name="storage_chemical" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[The chemical that the sample is stored in.]]></comment>
+			</column>
+			<column name="storage_container" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[The container type that the sample is stored in.]]></comment>
+			</column>
+			<column name="fragment_photo_id" type="integer" jt="4" mandatory="y" />
 			<index name="pk_cbass_sample_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
-			<fk name="fk_assay_fragment_fragment" to_schema="knowledgebase" to_table="fragment" >
-				<fk_column name="fragment_id" pk="id" />
-			</fk>
+			<fk name="fk_assay_fragment_fragment" to_schema="knowledgebase" to_table="fragment" />
 			<fk name="fk_cbass_assay_fragment" to_schema="knowledgebase" to_table="heat_stress_profile" >
 				<fk_column name="heat_stress_profile_id" pk="id" />
 			</fk>
+			<fk name="fk_cbass_assay_fragment_fragment" to_schema="knowledgebase" to_table="fragment" >
+				<fk_column name="id" pk="id" />
+			</fk>
+			<fk name="fk_cbass_assay_fragment_cbass_fragment_photo" to_schema="knowledgebase" to_table="cbass_fragment_photo" >
+				<fk_column name="fragment_photo_id" pk="id" />
+			</fk>
+		</table>
+		<table name="cbass_fragment_photo" prior="fragment_photo" >
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="url" prior="name" type="varchar" length="200" jt="12" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" mandatory="y" />
+			<index name="pk_fragment_photo_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
 		</table>
 		<table name="cbass_nucleic_acid_fragment" prior="nucleic_acid_fragment" >
 			<comment><![CDATA[This is a fragment that is collected for the purpose of doing gDNA extractions that can be used for the barcoding and the meta-genomic sequencing.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="fragment_id" type="integer" jt="4" mandatory="y" />
+			<column name="label" type="varchar" jt="12" mandatory="y" />
+			<column name="token_label" type="varchar" jt="12" mandatory="y" />
+			<column name="storage_temperature" type="varchar" length="20" jt="12" >
+				<comment><![CDATA[The temperature at which the sample is stored. i.e. -80 or 4 or room temperature. It is provided as a drop down in the excel input.]]></comment>
+			</column>
+			<column name="storage_chemical" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[The chemical that the sample is stored in.]]></comment>
+			</column>
+			<column name="storage_container" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[The container type that the sample is stored in.]]></comment>
+			</column>
+			<column name="comments" type="varchar" length="1000" jt="12" />
 			<index name="pk_nucleic_acid_fragment_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
 			<fk name="fk_nucleic_acid_fragment" to_schema="knowledgebase" to_table="fragment" >
 				<fk_column name="fragment_id" pk="id" />
+			</fk>
+			<fk name="fk_cbass_nucleic_acid_fragment_fragment" to_schema="knowledgebase" to_table="fragment" >
+				<fk_column name="id" pk="id" />
 			</fk>
 		</table>
 		<table name="colony" prior="tbl" >
@@ -177,6 +258,8 @@ Optional as some fragments will not have been]]></comment>
 			<column name="site_id" type="integer" jt="4" mandatory="y" >
 				<comment><![CDATA[Foregin key to site in case the dive information is not available.]]></comment>
 			</column>
+			<column name="label" type="varchar" length="200" jt="12" mandatory="y" />
+			<column name="assay_id" type="integer" jt="4" mandatory="y" />
 			<index name="pk_colony_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
@@ -188,6 +271,9 @@ Optional as some fragments will not have been]]></comment>
 			</fk>
 			<fk name="fk_colony_site" to_schema="knowledgebase" to_table="site" >
 				<fk_column name="site_id" pk="id" />
+			</fk>
+			<fk name="fk_colony_assay" to_schema="knowledgebase" to_table="assay" >
+				<fk_column name="assay_id" pk="id" />
 			</fk>
 		</table>
 		<table name="colony_photo" prior="tbl" >
@@ -248,17 +334,17 @@ This is the time that the divers hit the surface after a dive.]]></comment>
 			<column name="max_depth" type="decimal" length="4" decimal="2" jt="3" >
 				<comment><![CDATA[The maximum depth of the dive in meters. This is important to document for safety reasons as allowed bottom time and subsequent dive limits will be based on time  spent on SCUBA at a given depth.]]></comment>
 			</column>
-			<column name="duration" type="integer" jt="4" mandatory="y" >
-				<comment><![CDATA[The length of the dive in minutes.]]></comment>
-			</column>
 			<column name="purpose" type="varchar" length="50" jt="12" >
 				<comment><![CDATA[This will likely be a controlled vocabulary. To start with let's have: "cbass_colony_collection" and "cbass_reef_survey". Each of these should have a documented definition somehwere.]]></comment>
 			</column>
 			<column name="comments" type="varchar" length="1000" jt="12" >
 				<comment><![CDATA[Further comments in free form. This may be important for safety reasons.]]></comment>
 			</column>
-			<column name="temp" prior="temp_deg_c" type="decimal" length="4" decimal="2" jt="3" mandatory="y" >
+			<column name="water_temperature" prior="temp" type="decimal" length="4" decimal="2" jt="3" mandatory="y" >
 				<comment><![CDATA[The water temperature in degrees celcius.]]></comment>
+			</column>
+			<column name="label" type="varchar" length="200" jt="12" mandatory="y" >
+				<comment><![CDATA[Should be unique.]]></comment>
 			</column>
 			<index name="unq_dive_id" unique="UNIQUE_KEY" >
 				<column name="id" />
@@ -314,10 +400,10 @@ We have added the coral cover column as a sort of place holder to demonstrate th
 			<column name="turbidity" type="decimal" length="6" decimal="3" jt="3" >
 				<comment><![CDATA[TODO: Check the correct format. Currently decimal ###.###.]]></comment>
 			</column>
-			<column name="sea_surface_temp" prior="sst" type="decimal" length="4" decimal="2" jt="3" >
+			<column name="sea_surface_temperature" prior="sea_surface_temp" type="decimal" length="4" decimal="2" jt="3" >
 				<comment><![CDATA[sea surface temperature. Format: ##.##]]></comment>
 			</column>
-			<column name="sea_surface_temp_stdev" type="decimal" length="4" decimal="2" jt="3" >
+			<column name="sea_surface_temperature_stdev" prior="sea_surface_temp_stdev" type="decimal" length="4" decimal="2" jt="3" >
 				<comment><![CDATA[Standard deviation of the sea surface temperature. Format: ##.##]]></comment>
 			</column>
 			<column name="chlorophyll_a" prior="chlorophyl_a" type="decimal" length="4" decimal="2" jt="3" >
@@ -334,11 +420,10 @@ Format ##:##]]></comment>
 			<column name="dissolved_oxygen" type="decimal" length="6" decimal="3" jt="3" >
 				<comment><![CDATA[mg\L]]></comment>
 			</column>
-			<column name="mean_monthly_maximum" prior="mean_monthly_maximum_deg_c" type="decimal" length="4" decimal="2" jt="3" >
+			<column name="maximum_monthly_mean" prior="mean_monthly_maximum" type="decimal" length="4" decimal="2" jt="3" >
 				<comment><![CDATA[Measured in degrees celcius. Format: ##.##]]></comment>
 			</column>
-			<column name="thermal_stress_anomaly_frequency" type="decimal" length="4" decimal="2" jt="3" />
-			<column name="thermal_stress_anomaly_stdev" type="decimal" length="4" decimal="2" jt="3" />
+			<column name="thermal_stress_anomaly_frequency_stdev" prior="thermal_stress_anomaly_frequency" type="decimal" length="4" decimal="2" jt="3" />
 			<column name="coral_cover" type="decimal" length="4" decimal="2" jt="3" >
 				<comment><![CDATA[This field is here as a sort of place holder to demonstrate that other sorts of parameters may be associated to an environment record such as coral cover. We may add many more columns to this table.]]></comment>
 			</column>
@@ -351,6 +436,7 @@ Format ##:##]]></comment>
 			<column name="env_medium" type="varchar" length="100" jt="12" mandatory="y" >
 				<comment><![CDATA[NCBI required field. See table description for guidance.]]></comment>
 			</column>
+			<column name="label" type="decimal" jt="3" mandatory="y" />
 			<index name="pk_site_snapshot_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
@@ -362,34 +448,16 @@ Format ##:##]]></comment>
 			<comment><![CDATA[Superclass of the nucleic_acid_fragment and the assay_fragment]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="colony_id" type="integer" jt="4" mandatory="y" />
-			<column name="fragment_photo_id" type="integer" jt="4" mandatory="y" />
 			<index name="pk_fragment_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
 			<fk name="fk_fragment_colony" to_schema="knowledgebase" to_table="colony" >
 				<fk_column name="colony_id" pk="id" />
 			</fk>
-			<fk name="fk_fragment_fragment_photo" to_schema="knowledgebase" to_table="fragment_photo" >
-				<fk_column name="fragment_photo_id" pk="id" />
-			</fk>
-		</table>
-		<table name="fragment_photo" prior="tbl" >
-			<column name="id" type="integer" jt="4" mandatory="y" />
-			<column name="url" prior="name" type="varchar" length="200" jt="12" mandatory="y" />
-			<column name="name" type="varchar" length="100" jt="12" mandatory="y" />
-			<index name="pk_fragment_photo_id" unique="PRIMARY_KEY" >
-				<column name="id" />
-			</index>
 		</table>
 		<table name="heat_stress_profile" prior="heatstress_profile" >
 			<comment><![CDATA[Details of ramping schedules, temperature holds and durations etc.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
-			<column name="flow_rate_liter_per_hour" type="integer" jt="4" mandatory="y" />
-			<column name="light_level" type="integer" jt="4" mandatory="y" >
-				<comment><![CDATA[TODO: what is the unit.]]></comment>
-			</column>
-			<column name="tank_volume_liter" type="integer" jt="4" mandatory="y" />
-			<column name="sea_water_source" type="varchar" length="100" jt="12" />
 			<column name="relative_challenge_temperature" prior="temperature" type="decimal" length="4" decimal="2" jt="3" mandatory="y" >
 				<comment><![CDATA[This is the temperature in celcius above the baseline to which the corals are challenged.]]></comment>
 			</column>
@@ -406,12 +474,6 @@ Format ##:##]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="accession" type="varchar" length="10" jt="12" >
 				<comment><![CDATA[This will be the NCBI accession for the biosample. This will need to be populated AFTER the sequencing data has been submitted to the NCBI database.]]></comment>
-			</column>
-			<column name="sample_name" type="varchar" length="100" jt="12" mandatory="y" >
-				<comment><![CDATA[This is the sample name that will be used to fill in the field "sample_name" on the NCBI BioSample submission sheet.]]></comment>
-			</column>
-			<column name="extraction_label" type="varchar" length="100" jt="12" mandatory="y" >
-				<comment><![CDATA[This is a unique label that will be used to identify a given nucleic acid extraction. It may be the same as the sample_name, in which case only one of these fields will be necessary.]]></comment>
 			</column>
 			<index name="pk_ncbi_biosample_id" unique="PRIMARY_KEY" >
 				<column name="id" />
@@ -437,7 +499,6 @@ For example, a single colony, is split into 13 fragments. 12 of those fragments 
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="ncbi_biosample_id" type="integer" jt="4" mandatory="y" />
 			<column name="fragment_id" type="integer" jt="4" mandatory="y" />
-			<column name="sequencing_effort_protocol_id" type="integer" jt="4" mandatory="y" />
 			<index name="pk_sequencing_effort_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
@@ -447,57 +508,36 @@ For example, a single colony, is split into 13 fragments. 12 of those fragments 
 			<fk name="fk_cbass_sequencing_effort" to_schema="knowledgebase" to_table="fragment" >
 				<fk_column name="fragment_id" pk="id" />
 			</fk>
-			<fk name="fk_sequencing_effort_sequencing_effort_protocol" to_schema="knowledgebase" to_table="sequencing_effort_protocol" >
-				<fk_column name="sequencing_effort_protocol_id" pk="id" />
-			</fk>
 		</table>
 		<table name="sequencing_effort_barcode" prior="sequencing_effort_18s" >
 			<comment><![CDATA[A subclass of sequencing_effort. Each row represents a different barcode library preperation. In this context, a barcode is a single region of the genome that is sequenced for the fragement in question. This is in contrast to the RNA-seq or metagenomic sequencing effort subclasses in which an almost-full cross section of the organism's RNA/DNA is sequenced.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
-			<column name="sequencing_effort_id" type="integer" jt="4" mandatory="y" />
 			<column name="barcode" type="varchar" length="4" jt="12" mandatory="y" >
 				<comment><![CDATA[either "16S", "18S" or "ITS2". This is the region of the genome that is being sequenced.]]></comment>
 			</column>
 			<index name="pk_sequencing_effort_18s_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
-			<fk name="fk_sequencing_effort_barcode" to_schema="knowledgebase" to_table="sequencing_effort" >
-				<fk_column name="sequencing_effort_id" pk="id" />
+			<fk name="fk_sequencing_effort_barcode_sequencing_effort" to_schema="knowledgebase" to_table="sequencing_effort" >
+				<fk_column name="id" pk="id" />
 			</fk>
 		</table>
 		<table name="sequencing_effort_metagenomic" prior="tbl" >
 			<column name="id" type="integer" jt="4" mandatory="y" />
-			<column name="sequencing_effort_id" type="integer" jt="4" mandatory="y" />
 			<index name="pk_sequencing_effort_metagenomic_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
-			<fk name="fk_sequencing_effort_metagenomic" to_schema="knowledgebase" to_table="sequencing_effort" >
-				<fk_column name="sequencing_effort_id" pk="id" />
+			<fk name="fk_sequencing_effort_metagenomic_sequencing_effort" to_schema="knowledgebase" to_table="sequencing_effort" >
+				<fk_column name="id" pk="id" />
 			</fk>
-		</table>
-		<table name="sequencing_effort_protocol" prior="tbl" >
-			<comment><![CDATA[A SuperClass where each record hold details of a single protocol used for a given sequencing effort.
-It will likely be best to document the protocols fullon on a dedicated resourecse such as protocols.io.]]></comment>
-			<column name="id" type="integer" jt="4" mandatory="y" />
-			<column name="name" type="varchar" length="100" jt="12" />
-			<column name="library_type" type="varchar" length="10" jt="12" mandatory="y" >
-				<comment><![CDATA[either: "barcode", "rna-seq", "metagenomic".]]></comment>
-			</column>
-			<column name="url" type="varchar" length="200" jt="12" >
-				<comment><![CDATA[URL to an external resource documenting the protocol in full.]]></comment>
-			</column>
-			<index name="pk_sequencing_effort_protocol_id" unique="PRIMARY_KEY" >
-				<column name="id" />
-			</index>
 		</table>
 		<table name="sequencing_effort_rna_seq" prior="sequencing_effort_" >
 			<column name="id" type="integer" jt="4" mandatory="y" />
-			<column name="sequencing_effort_id" type="integer" jt="4" mandatory="y" />
 			<index name="pk_sequencing_effort_rna_seq_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
-			<fk name="fk_sequencing_effort_rna_seq" to_schema="knowledgebase" to_table="sequencing_effort" >
-				<fk_column name="sequencing_effort_id" pk="id" />
+			<fk name="fk_sequencing_effort_rna_seq_sequencing_effort" to_schema="knowledgebase" to_table="sequencing_effort" >
+				<fk_column name="id" pk="id" />
 			</fk>
 		</table>
 		<table name="site" prior="tbl" >
@@ -533,10 +573,16 @@ The correct format of this will need to be strictly enforced/currated.]]></comme
 			<column name="time_zone" type="integer" jt="4" mandatory="y" >
 				<comment><![CDATA[A code that represents the time zone of the site. This will be used to convert all local times to UTC. Time zones are easy to find online: https://docs.vmware.com/en/vRealize-Orchestrator/8.4/com.vmware.vrealize.orchestrator-use-plugins.doc/GUID-83EBD74D-B5EC-4A0A-B54E-8E45BE2928C2.html]]></comment>
 			</column>
-			<column name="geo_loc_name" prior="country" type="varchar" length="100" jt="12" mandatory="y" >
-				<comment><![CDATA[This field will need to comply with the geo_loc_name field of the NCBI MIMS.me.host-associated.5.0 input sheet. The guidance for that field reads as:
+			<column name="sub_region" prior="geo_loc_name" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[This field is used to complete the NCBI submission sheet. It is free form text and represents the part after the colon in the guide text from the NCBI below:
 
 "Geographical origin of the sample; use the appropriate name from this list http://www.insdc.org/documents/country-qualifier-vocabulary. Use a colon to separate the country or ocean from more detailed information about the location, eg "Canada: Vancouver" or "Germany: halfway down Zugspitze, Alps""]]></comment>
+			</column>
+			<column name="country" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[I have put a controlled vocabulary in place in the input excel workbook for this term.]]></comment>
+			</column>
+			<column name="country_abbreviation" type="char" length="2" jt="1" >
+				<comment><![CDATA[I have put a controlled vocab inplace for this on the input excel workbook.]]></comment>
 			</column>
 			<index name="pk_site_id" unique="PRIMARY_KEY" >
 				<column name="id" />
@@ -576,15 +622,17 @@ The columns of this table will change according to how integration with AWS Cogn
 	<layout name="Default Layout" id="Layout_1e52" joined_routing="y" show_relation="columns" >
 		<entity schema="knowledgebase" name="analysis" color="C1D8EE" x="1312" y="1440" />
 		<entity schema="knowledgebase" name="analysis_assay" color="C1D8EE" x="1456" y="1424" />
-		<entity schema="knowledgebase" name="analysis_assay_sequencing_effort" color="C1D8EE" x="1856" y="1040" />
-		<entity schema="knowledgebase" name="assay" color="E8EEC1" x="784" y="848" />
+		<entity schema="knowledgebase" name="analysis_assay_sequencing_effort" color="C1D8EE" x="1632" y="1424" />
+		<entity schema="knowledgebase" name="assay" color="E8EEC1" x="784" y="816" />
+		<entity schema="knowledgebase" name="assay_user" color="C1D8EE" x="912" y="608" />
 		<entity schema="knowledgebase" name="calcification_assay" color="E8EEC1" x="704" y="1184" />
 		<entity schema="knowledgebase" name="campaign" color="E8EEC1" x="64" y="672" />
 		<entity schema="knowledgebase" name="campaign_user" color="E8EEC1" x="48" y="544" />
-		<entity schema="knowledgebase" name="cbass_assay" color="E8EEC1" x="1120" y="896" />
-		<entity schema="knowledgebase" name="cbass_assay_fragment" color="E8EEC1" x="1520" y="512" />
+		<entity schema="knowledgebase" name="cbass_assay" color="E8EEC1" x="1072" y="960" />
+		<entity schema="knowledgebase" name="cbass_assay_fragment" color="E8EEC1" x="1488" y="560" />
+		<entity schema="knowledgebase" name="cbass_fragment_photo" color="E8EEC1" x="1872" y="704" />
 		<entity schema="knowledgebase" name="cbass_nucleic_acid_fragment" color="E8EEC1" x="1520" y="256" />
-		<entity schema="knowledgebase" name="colony" color="E8EEC1" x="960" y="400" />
+		<entity schema="knowledgebase" name="colony" color="E8EEC1" x="992" y="416" />
 		<entity schema="knowledgebase" name="colony_photo" color="E8EEC1" x="960" y="240" />
 		<entity schema="knowledgebase" name="coral_species" color="E8EEC1" x="592" y="192" />
 		<entity schema="knowledgebase" name="dive" color="E8EEC1" x="656" y="592" />
@@ -592,14 +640,12 @@ The columns of this table will change according to how integration with AWS Cogn
 		<entity schema="knowledgebase" name="dive_user" color="E8EEC1" x="400" y="384" />
 		<entity schema="knowledgebase" name="environment_record" color="E8EEC1" x="352" y="1136" />
 		<entity schema="knowledgebase" name="fragment" color="E8EEC1" x="1248" y="384" />
-		<entity schema="knowledgebase" name="fragment_photo" color="E8EEC1" x="1248" y="544" />
-		<entity schema="knowledgebase" name="heat_stress_profile" color="E8EEC1" x="1328" y="896" />
+		<entity schema="knowledgebase" name="heat_stress_profile" color="E8EEC1" x="1472" y="912" />
 		<entity schema="knowledgebase" name="ncbi_biosample" color="E8EEC1" x="2160" y="368" />
 		<entity schema="knowledgebase" name="region" color="E8EEC1" x="176" y="928" />
-		<entity schema="knowledgebase" name="sequencing_effort" color="E8EEC1" x="1824" y="368" />
+		<entity schema="knowledgebase" name="sequencing_effort" color="E8EEC1" x="1808" y="400" />
 		<entity schema="knowledgebase" name="sequencing_effort_barcode" color="E8EEC1" x="1776" y="48" />
 		<entity schema="knowledgebase" name="sequencing_effort_metagenomic" color="E8EEC1" x="1760" y="272" />
-		<entity schema="knowledgebase" name="sequencing_effort_protocol" color="E8EEC1" x="1824" y="496" />
 		<entity schema="knowledgebase" name="sequencing_effort_rna_seq" color="E8EEC1" x="1776" y="176" />
 		<entity schema="knowledgebase" name="site" color="E8EEC1" x="400" y="880" />
 		<entity schema="knowledgebase" name="user" color="E8EEC1" x="224" y="384" />
