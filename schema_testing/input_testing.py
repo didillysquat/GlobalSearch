@@ -1,3 +1,22 @@
+"""
+This script aims to test the barebones version of the KnowledgeBase db schema
+
+To test that the schema is suitable, we will perform one full submission of an acutal dataset.
+In parallel to testing the schema, this will also allow us to make sure that the input sheets (workbook)
+are suitably formatted and contain all the required information.
+
+I have tried to comment thoroughly so that you can read through the various sections to see how
+the input excel columns relate to the db tables and columns.
+
+Please see the models.py for the db schema. I hope that the table
+and column names are self explanatory.
+
+The walkthrough of the submission starts at the start method of the GSSchemaTest class.
+
+Any questions or if I've forgotten something, please don't hestitate to get in touch:
+benjamin[D0t]humeATuni-konstanz.de
+"""
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm.exc import NoResultFound
 from config import DATABASE_URI
@@ -808,8 +827,6 @@ class GSSchemaTest:
         return df
 
 with session_scope() as s:
-    # TODO this is where we need to read in the input excel workbooks and coerse them into
-    # proper database objects.
 
     schema_test = GSSchemaTest(s_scope=s, use_cache=True).start()
     
