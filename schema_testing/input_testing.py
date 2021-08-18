@@ -137,6 +137,19 @@ class GSSchemaTest:
         # From the SITE sheet we create the Site and EnvironmentRecord objects in that order.
         # EnvironmentRecord is related to Site.
 
+        # You'll see that there is also a Region table in the models.py schema.
+        # I need to catch up with Chris about whether we will still make use of this table is.
+        # The problem with the region concept is: how do you define a region? and how 
+        # do you control what submitting users consider a region?
+        # For example there are some standardised lists of regions hosted by e.g. NATO
+        # but this is probably not the resolution at which Chris envisaged us tracking regions.
+        # So, for the time being I have not included the Region in this script, but I have fully
+        # implemented the tables and relations in the models.py database so that it can be used
+        # at a later date. We can likely control the use of Region in the excel submission
+        # workbook by using a controlled vocab (i.e. drop down). You'll see that I have currently
+        # removed Region from the submission work book. Please note: the 'sub-region' is not
+        # relate to the Region table. This is something different.
+
         # CHECKS
         # CHECK to see that all required fields have been populated (after removing user entries like "na", "NA", "N/A").
         # I will not implement this check here, but I imagine it will need to be done for the full implementation
