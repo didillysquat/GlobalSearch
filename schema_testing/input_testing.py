@@ -37,7 +37,7 @@ def recreate_database():
 
 class GSSchemaTest:
     def __init__(self, s_scope, use_cache=True):
-        self.submission_work_book_path = "/home/humebc/projects/GlobalSearch/20210813_input_template_bh/20210813_CBASS_submission_workbook_bh.xlsx"
+        self.submission_work_book_path = "/home/humebc/projects/GlobalSearch/20210813_input_template_bh/20210813_CBASS_submission_workbook_CBASS84_bh.xlsx"
         # Why is read_excel so Fing slow!!
         # I will implement a quick cache so that we don't have to read these in multiple times
         self.s = s_scope
