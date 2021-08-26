@@ -118,7 +118,22 @@ We will only hold the accession of the NCBI BioProject. We will not hold any oth
 				<fk_column name="lead_user" pk="id" />
 			</fk>
 		</table>
-		<table name="campaign_user" prior="expedition_user" >
+		<table name="campaign_contributing_user" prior="tbl" >
+			<comment><![CDATA[Join table to allow for a collection of user who can upload files to the db]]></comment>
+			<column name="id" type="integer" jt="4" mandatory="y" />
+			<column name="user_id" type="integer" jt="4" mandatory="y" />
+			<column name="campaign_id" type="integer" jt="4" mandatory="y" />
+			<index name="pk_campaign_contributing_user_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_campaign_contributing_user_user" to_schema="knowledgebase" to_table="user" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+			<fk name="fk_campaign_contributing_user_campaign" to_schema="knowledgebase" to_table="campaign" >
+				<fk_column name="campaign_id" pk="id" />
+			</fk>
+		</table>
+		<table name="campaign_participating_user" prior="campaign_user" >
 			<comment><![CDATA[Join table. One  user can take part in multiple expeditions. One expeditions contains multiple users.]]></comment>
 			<column name="id" type="integer" jt="4" mandatory="y" />
 			<column name="user_id" type="integer" jt="4" mandatory="y" />
@@ -624,10 +639,11 @@ The columns of this table will change according to how integration with AWS Cogn
 		<entity schema="knowledgebase" name="analysis_assay" color="C1D8EE" x="1456" y="1424" />
 		<entity schema="knowledgebase" name="analysis_assay_sequencing_effort" color="C1D8EE" x="1632" y="1424" />
 		<entity schema="knowledgebase" name="assay" color="E8EEC1" x="784" y="816" />
-		<entity schema="knowledgebase" name="assay_user" color="C1D8EE" x="912" y="608" />
+		<entity schema="knowledgebase" name="assay_user" color="E8EEC1" x="912" y="608" />
 		<entity schema="knowledgebase" name="calcification_assay" color="E8EEC1" x="704" y="1184" />
 		<entity schema="knowledgebase" name="campaign" color="E8EEC1" x="64" y="672" />
-		<entity schema="knowledgebase" name="campaign_user" color="E8EEC1" x="48" y="544" />
+		<entity schema="knowledgebase" name="campaign_contributing_user" color="C1D8EE" x="352" y="688" />
+		<entity schema="knowledgebase" name="campaign_participating_user" color="E8EEC1" x="48" y="544" />
 		<entity schema="knowledgebase" name="cbass_assay" color="E8EEC1" x="1072" y="960" />
 		<entity schema="knowledgebase" name="cbass_assay_fragment" color="E8EEC1" x="1488" y="560" />
 		<entity schema="knowledgebase" name="cbass_fragment_photo" color="E8EEC1" x="1872" y="704" />

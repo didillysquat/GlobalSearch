@@ -309,11 +309,11 @@ assay ref environment_record ( environment_record_id -&gt; id )</title>
 assay ref environment_record ( environment_record_id -&gt; id )</title></path>
 <text x='631' y='859' transform='rotate(0 631,859)' class='relName'>environment_record_id</text>
 <!-- == Fk 'assay_fk_assay_expedition' == -->
-<path id='assay_fk_assay_expedition'  onmouseover="hghl(['assay_fk_assay_expedition','knowledgebase.assay.campaign_id','knowledgebase.campaign.id'])" onmouseout="uhghl(['assay_fk_assay_expedition','knowledgebase.assay.campaign_id','knowledgebase.campaign.id'])" transform='translate(8,0)' class='unhighlight' d='M 768,880L 616,880Q 608,880 608,872L 608,712Q 608,704 600,704L 288,704' >
+<path id='assay_fk_assay_expedition'  onmouseover="hghl(['assay_fk_assay_expedition','knowledgebase.assay.campaign_id','knowledgebase.campaign.id'])" onmouseout="uhghl(['assay_fk_assay_expedition','knowledgebase.assay.campaign_id','knowledgebase.campaign.id'])" transform='translate(8,0)' class='unhighlight' d='M 768,880L 616,880Q 608,880 608,872L 608,808Q 608,800 600,800L 328,800Q 320,800 320,792L 320,760Q 320,752 312,752L 304,752' >
 	<title>Fk fk_assay_expedition
 assay ref campaign ( campaign_id -&gt; id )</title>
 </path>
-<path transform='translate(8,0)' marker-start='url(#foot1)'     d='M 768,880L 616,880Q 608,880 608,872L 608,712Q 608,704 600,704L 288,704' ><title>Fk fk_assay_expedition
+<path transform='translate(8,0)' marker-start='url(#foot1)'     d='M 768,880L 616,880Q 608,880 608,872L 608,808Q 608,800 600,800L 328,800Q 320,800 320,792L 320,760Q 320,752 312,752L 304,752' ><title>Fk fk_assay_expedition
 assay ref campaign ( campaign_id -&gt; id )</title></path>
 <text x='699' y='875' transform='rotate(0 699,875)' class='relName'>campaign_id</text>
 <!-- == Fk 'assay_fk_assay_site' == -->
@@ -349,29 +349,45 @@ calcification_assay ref assay ( id )</title>
 calcification_assay ref assay ( id )</title></path>
 <text x='858' y='1211' transform='rotate(0 858,1211)' class='relName'>id</text>
 <!-- == Fk 'campaign_fk_expedition_user' == -->
-<path id='campaign_fk_expedition_user'  onmouseover="hghl(['campaign_fk_expedition_user','knowledgebase.campaign.lead_user','knowledgebase.user.id'])" onmouseout="uhghl(['campaign_fk_expedition_user','knowledgebase.campaign.lead_user','knowledgebase.user.id'])" transform='translate(8,0)' class='unhighlight' d='M 288,768L 520,768Q 528,768 528,760L 528,424Q 528,416 520,416L 512,416' >
+<path id='campaign_fk_expedition_user'  onmouseover="hghl(['campaign_fk_expedition_user','knowledgebase.campaign.lead_user','knowledgebase.user.id'])" onmouseout="uhghl(['campaign_fk_expedition_user','knowledgebase.campaign.lead_user','knowledgebase.user.id'])" transform='translate(8,0)' class='unhighlight' d='M 48,768L 24,768Q 16,768 16,760L 16,576' >
 	<title>Fk fk_expedition_user
 campaign ref user ( lead_user -&gt; id )</title>
 </path>
-<path transform='translate(8,0)' marker-start='url(#foot1)'     d='M 288,768L 520,768Q 528,768 528,760L 528,424Q 528,416 520,416L 512,416' ><title>Fk fk_expedition_user
+<path transform='translate(8,0)' marker-start='url(#foot1)'     d='M 48,768L 24,768Q 16,768 16,760L 16,576' ><title>Fk fk_expedition_user
 campaign ref user ( lead_user -&gt; id )</title></path>
-<text x='298' y='763' transform='rotate(0 298,763)' class='relName'>lead_user</text>
-<!-- == Fk 'campaign_user_fk_expedition_user_user' == -->
-<path id='campaign_user_fk_expedition_user_user'  onmouseover="hghl(['campaign_user_fk_expedition_user_user','knowledgebase.campaign_user.user_id','knowledgebase.user.id'])" onmouseout="uhghl(['campaign_user_fk_expedition_user_user','knowledgebase.campaign_user.user_id','knowledgebase.user.id'])" transform='translate(8,0)' class='unhighlight' d='M 176,592L 184,592Q 192,592 192,584L 192,424Q 192,416 200,416L 208,416' >
+<text x='-3' y='763' transform='rotate(0 -3,763)' class='relName'>lead_user</text>
+<!-- == Fk 'campaign_contributing_user_fk_campaign_contributing_user_user' == -->
+<path id='campaign_contributing_user_fk_campaign_contributing_user_user'  onmouseover="hghl(['campaign_contributing_user_fk_campaign_contributing_user_user','knowledgebase.campaign_contributing_user.user_id','knowledgebase.user.id'])" onmouseout="uhghl(['campaign_contributing_user_fk_campaign_contributing_user_user','knowledgebase.campaign_contributing_user.user_id','knowledgebase.user.id'])" transform='translate(8,0)' class='unhighlight' d='M 544,736L 552,736Q 560,736 560,728L 560,424Q 560,416 552,416L 544,416' >
+	<title>Fk fk_campaign_contributing_user_user
+campaign_contributing_user ref user ( user_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1)'     d='M 544,736L 552,736Q 560,736 560,728L 560,424Q 560,416 552,416L 544,416' ><title>Fk fk_campaign_contributing_user_user
+campaign_contributing_user ref user ( user_id -&gt; id )</title></path>
+<text x='554' y='731' transform='rotate(0 554,731)' class='relName'>user_id</text>
+<!-- == Fk 'campaign_contributing_user_fk_campaign_contributing_user_campaign' == -->
+<path id='campaign_contributing_user_fk_campaign_contributing_user_campaign'  onmouseover="hghl(['campaign_contributing_user_fk_campaign_contributing_user_campaign','knowledgebase.campaign_contributing_user.campaign_id','knowledgebase.campaign.id'])" onmouseout="uhghl(['campaign_contributing_user_fk_campaign_contributing_user_campaign','knowledgebase.campaign_contributing_user.campaign_id','knowledgebase.campaign.id'])" transform='translate(8,0)' class='unhighlight' d='M 336,752L 312,752Q 304,752 304,744L 304,712Q 304,704 296,704L 288,704' >
+	<title>Fk fk_campaign_contributing_user_campaign
+campaign_contributing_user ref campaign ( campaign_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1)' marker-end='url(#arrow1u)'    d='M 336,752L 312,752Q 304,752 304,744L 304,712Q 304,704 296,704L 288,704' ><title>Fk fk_campaign_contributing_user_campaign
+campaign_contributing_user ref campaign ( campaign_id -&gt; id )</title></path>
+<text x='267' y='747' transform='rotate(0 267,747)' class='relName'>campaign_id</text>
+<!-- == Fk 'campaign_participating_user_fk_expedition_user_user' == -->
+<path id='campaign_participating_user_fk_expedition_user_user'  onmouseover="hghl(['campaign_participating_user_fk_expedition_user_user','knowledgebase.campaign_participating_user.user_id','knowledgebase.user.id'])" onmouseout="uhghl(['campaign_participating_user_fk_expedition_user_user','knowledgebase.campaign_participating_user.user_id','knowledgebase.user.id'])" transform='translate(8,0)' class='unhighlight' d='M 32,592L 24,592Q 16,592 16,584L 16,424Q 16,416 24,416L 208,416' >
 	<title>Fk fk_expedition_user_user
-campaign_user ref user ( user_id -&gt; id )</title>
+campaign_participating_user ref user ( user_id -&gt; id )</title>
 </path>
-<path transform='translate(8,0)' marker-start='url(#foot1)'     d='M 176,592L 184,592Q 192,592 192,584L 192,424Q 192,416 200,416L 208,416' ><title>Fk fk_expedition_user_user
-campaign_user ref user ( user_id -&gt; id )</title></path>
-<text x='186' y='587' transform='rotate(0 186,587)' class='relName'>user_id</text>
-<!-- == Fk 'campaign_user_fk_expedition_user_expedition' == -->
-<path id='campaign_user_fk_expedition_user_expedition'  onmouseover="hghl(['campaign_user_fk_expedition_user_expedition','knowledgebase.campaign_user.campaign_id','knowledgebase.campaign.id'])" onmouseout="uhghl(['campaign_user_fk_expedition_user_expedition','knowledgebase.campaign_user.campaign_id','knowledgebase.campaign.id'])" transform='translate(8,0)' class='unhighlight' d='M 176,608L 296,608Q 304,608 304,616L 304,696Q 304,704 296,704L 288,704' >
+<path transform='translate(8,0)' marker-start='url(#foot1)'     d='M 32,592L 24,592Q 16,592 16,584L 16,424Q 16,416 24,416L 208,416' ><title>Fk fk_expedition_user_user
+campaign_participating_user ref user ( user_id -&gt; id )</title></path>
+<text x='-3' y='587' transform='rotate(0 -3,587)' class='relName'>user_id</text>
+<!-- == Fk 'campaign_participating_user_fk_expedition_user_expedition' == -->
+<path id='campaign_participating_user_fk_expedition_user_expedition'  onmouseover="hghl(['campaign_participating_user_fk_expedition_user_expedition','knowledgebase.campaign_participating_user.campaign_id','knowledgebase.campaign.id'])" onmouseout="uhghl(['campaign_participating_user_fk_expedition_user_expedition','knowledgebase.campaign_participating_user.campaign_id','knowledgebase.campaign.id'])" transform='translate(8,0)' class='unhighlight' d='M 256,608L 296,608Q 304,608 304,616L 304,696Q 304,704 296,704L 288,704' >
 	<title>Fk fk_expedition_user_expedition
-campaign_user ref campaign ( campaign_id -&gt; id )</title>
+campaign_participating_user ref campaign ( campaign_id -&gt; id )</title>
 </path>
-<path transform='translate(8,0)' marker-start='url(#foot1)' marker-end='url(#arrow1u)'    d='M 176,608L 296,608Q 304,608 304,616L 304,696Q 304,704 296,704L 288,704' ><title>Fk fk_expedition_user_expedition
-campaign_user ref campaign ( campaign_id -&gt; id )</title></path>
-<text x='186' y='603' transform='rotate(0 186,603)' class='relName'>campaign_id</text>
+<path transform='translate(8,0)' marker-start='url(#foot1)'     d='M 256,608L 296,608Q 304,608 304,616L 304,696Q 304,704 296,704L 288,704' ><title>Fk fk_expedition_user_expedition
+campaign_participating_user ref campaign ( campaign_id -&gt; id )</title></path>
+<text x='266' y='603' transform='rotate(0 266,603)' class='relName'>campaign_id</text>
 <!-- == Fk 'cbass_assay_fk_cbass_assay_assay_0' == -->
 <path id='cbass_assay_fk_cbass_assay_assay_0'  onmouseover="hghl(['cbass_assay_fk_cbass_assay_assay_0','knowledgebase.cbass_assay.id','knowledgebase.assay.id'])" onmouseout="uhghl(['cbass_assay_fk_cbass_assay_assay_0','knowledgebase.cbass_assay.id','knowledgebase.assay.id'])" transform='translate(8,0)' class='unhighlight' d='M 1056,992L 1000,992Q 992,992 992,984L 992,976' >
 	<title>Fk fk_cbass_assay_assay_0
@@ -641,8 +657,8 @@ a unique identifier that is human readable</title></a>
 <text x='973' y='916' text-anchor='end' class='colType'>t</text>
 <!-- == Table 'assay_user' == -->
 <rect class='entity' style='stroke:none;' x='912' y='600' width='96' height='96' rx='8' ry='8' />
-<path d='M 912 628 L 912 608 Q 912 600 920 600 L 1000 600 Q 1008 600 1008 608 L 1008 628 L912 628 ' style='fill:url(#tbg_C1D8EE);stroke:1;stroke-opacity:0.1;' />
-<rect class='entity' x='912' y='600' width='96' height='96' rx='8' ry='8' style='fill:none;stroke:#CBD9E8'/>
+<path d='M 912 628 L 912 608 Q 912 600 920 600 L 1000 600 Q 1008 600 1008 608 L 1008 628 L912 628 ' style='fill:url(#tbg_E8EEC1);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='912' y='600' width='96' height='96' rx='8' ry='8' style='fill:none;stroke:#E4E8CB'/>
 <a xlink:href='#knowledgebase.assay_user'><text x='922' y='619' >assay_user</text><title>Table knowledgebase.assay_user
 Join table for many to many relationship between Assay and User. An Assay will have multiple Users associated with it. A User can be take part in multiple Assays.
 
@@ -672,10 +688,12 @@ Multiple different assay types will be held in the KnowledgeBase. The first to b
 <rect class='entity' x='64' y='664' width='224' height='144' rx='8' ry='8' style='fill:none;stroke:#E4E8CB'/>
 <a xlink:href='#knowledgebase.campaign'><text x='142' y='683' >campaign</text><title>Table knowledgebase.campaign
 This is a collection object to which multiple dives and assays can be associated. It will be very useful when making broad scale conclusions on the use of the Global Search. For example, how may expeditions have there been? Or how many assays were conducted as part of expedition XXX.</title></a>
-  <use id='nn' x='66' y='701' xlink:href='#nn'/><use id='pk' x='66' y='700' xlink:href='#pk'><title>Unq unq_expedition_id ( id ) Pk pk_expedition_id ( id ) </title></use><a xlink:href='#knowledgebase.campaign_id'><text id='knowledgebase.campaign.id' x='83' y='711' onmouseover="hghl(['assay_fk_assay_expedition','knowledgebase.assay.campaign_id','campaign_user_fk_expedition_user_expedition','knowledgebase.campaign_user.campaign_id'])" onmouseout="uhghl(['assay_fk_assay_expedition','knowledgebase.assay.campaign_id','campaign_user_fk_expedition_user_expedition','knowledgebase.campaign_user.campaign_id'])">id</text><title>id
+  <use id='nn' x='66' y='701' xlink:href='#nn'/><use id='pk' x='66' y='700' xlink:href='#pk'><title>Unq unq_expedition_id ( id ) Pk pk_expedition_id ( id ) </title></use><a xlink:href='#knowledgebase.campaign_id'><text id='knowledgebase.campaign.id' x='83' y='711' onmouseover="hghl(['assay_fk_assay_expedition','knowledgebase.assay.campaign_id','campaign_participating_user_fk_expedition_user_expedition','knowledgebase.campaign_participating_user.campaign_id','campaign_contributing_user_fk_campaign_contributing_user_campaign','knowledgebase.campaign_contributing_user.campaign_id','campaign_contributing_user_fk_campaign_contributing_user_campaign','knowledgebase.campaign_contributing_user.campaign_id'])" onmouseout="uhghl(['assay_fk_assay_expedition','knowledgebase.assay.campaign_id','campaign_participating_user_fk_expedition_user_expedition','knowledgebase.campaign_participating_user.campaign_id','campaign_contributing_user_fk_campaign_contributing_user_campaign','knowledgebase.campaign_contributing_user.campaign_id','campaign_contributing_user_fk_campaign_contributing_user_campaign','knowledgebase.campaign_contributing_user.campaign_id'])">id</text><title>id
 * integer</title></a>
 <a xlink:href='#knowledgebase.campaign.id'><use id='ref' x='276' y='700' xlink:href='#ref'/><title>Referred by assay ( campaign_id -&gt; id ) 
-Referred by campaign_user ( campaign_id -&gt; id ) </title></a>
+Referred by campaign_participating_user ( campaign_id -&gt; id ) 
+Referred by campaign_contributing_user ( campaign_id -&gt; id ) 
+Referred by campaign_contributing_user ( campaign_id -&gt; id ) </title></a>
   <use id='nn' x='66' y='717' xlink:href='#nn'/><a xlink:href='#knowledgebase.campaign_name'><text id='knowledgebase.campaign.name' x='83' y='727'>name</text><title>name
 * varchar(100)
 A unique name for the expeditions. This should be informative, e.g. 20210720_read_sea_voolstra or something similar.</title></a>
@@ -695,20 +713,35 @@ This will be the NCBI BioProject accession that is assigned AFTER we have submit
 
 We will only hold the accession of the NCBI BioProject. We will not hold any other information relating to the BioProject.</title></a>
 <text x='285' y='788' text-anchor='end' class='colType'>t</text>
-<!-- == Table 'campaign_user' == -->
-<rect class='entity' style='stroke:none;' x='48' y='536' width='128' height='96' rx='8' ry='8' />
-<path d='M 48 564 L 48 544 Q 48 536 56 536 L 168 536 Q 176 536 176 544 L 176 564 L48 564 ' style='fill:url(#tbg_E8EEC1);stroke:1;stroke-opacity:0.1;' />
-<rect class='entity' x='48' y='536' width='128' height='96' rx='8' ry='8' style='fill:none;stroke:#E4E8CB'/>
-<a xlink:href='#knowledgebase.campaign_user'><text x='61' y='555' >campaign_user</text><title>Table knowledgebase.campaign_user
+<!-- == Table 'campaign_contributing_user' == -->
+<rect class='entity' style='stroke:none;' x='352' y='680' width='192' height='96' rx='8' ry='8' />
+<path d='M 352 708 L 352 688 Q 352 680 360 680 L 536 680 Q 544 680 544 688 L 544 708 L352 708 ' style='fill:url(#tbg_C1D8EE);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='352' y='680' width='192' height='96' rx='8' ry='8' style='fill:none;stroke:#CBD9E8'/>
+<a xlink:href='#knowledgebase.campaign_contributing_user'><text x='355' y='699' >campaign_contributing_user</text><title>Table knowledgebase.campaign_contributing_user
+Join table to allow for a collection of user who can upload files to the db</title></a>
+  <use id='nn' x='354' y='717' xlink:href='#nn'/><use id='pk' x='354' y='716' xlink:href='#pk'><title>Pk pk_campaign_contributing_user_id ( id ) </title></use><a xlink:href='#knowledgebase.campaign_contributing_user_id'><text id='knowledgebase.campaign_contributing_user.id' x='371' y='727'>id</text><title>id
+* integer</title></a>
+<text x='541' y='724' text-anchor='end' class='colType'>#</text>  <use id='nn' x='354' y='733' xlink:href='#nn'/><a xlink:href='#knowledgebase.campaign_contributing_user_user_id'><text id='knowledgebase.campaign_contributing_user.user_id' x='371' y='743' onmouseover="hghl(['campaign_contributing_user_fk_campaign_contributing_user_user','knowledgebase.user.id'])" onmouseout="uhghl(['campaign_contributing_user_fk_campaign_contributing_user_user','knowledgebase.user.id'])">user_id</text><title>user_id
+* integer</title></a>
+<a xlink:href='#knowledgebase.campaign_contributing_user.user_id'><use id='fk' x='532' y='732' xlink:href='#fk'/><title>References user ( user_id -&gt; id ) </title></a>
+  <use id='nn' x='354' y='749' xlink:href='#nn'/><a xlink:href='#knowledgebase.campaign_contributing_user_campaign_id'><text id='knowledgebase.campaign_contributing_user.campaign_id' x='371' y='759' onmouseover="hghl(['campaign_contributing_user_fk_campaign_contributing_user_campaign','knowledgebase.campaign.id'])" onmouseout="uhghl(['campaign_contributing_user_fk_campaign_contributing_user_campaign','knowledgebase.campaign.id'])">campaign_id</text><title>campaign_id
+* integer</title></a>
+<a xlink:href='#knowledgebase.campaign_contributing_user.campaign_id'><use id='fk' x='532' y='748' xlink:href='#fk'/><title>References campaign ( campaign_id -&gt; id ) </title></a>
+
+<!-- == Table 'campaign_participating_user' == -->
+<rect class='entity' style='stroke:none;' x='48' y='536' width='208' height='96' rx='8' ry='8' />
+<path d='M 48 564 L 48 544 Q 48 536 56 536 L 248 536 Q 256 536 256 544 L 256 564 L48 564 ' style='fill:url(#tbg_E8EEC1);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='48' y='536' width='208' height='96' rx='8' ry='8' style='fill:none;stroke:#E4E8CB'/>
+<a xlink:href='#knowledgebase.campaign_participating_user'><text x='57' y='555' >campaign_participating_user</text><title>Table knowledgebase.campaign_participating_user
 Join table. One  user can take part in multiple expeditions. One expeditions contains multiple users.</title></a>
-  <use id='nn' x='50' y='573' xlink:href='#nn'/><use id='pk' x='50' y='572' xlink:href='#pk'><title>Pk pk_expedition_user_id ( id ) </title></use><a xlink:href='#knowledgebase.campaign_user_id'><text id='knowledgebase.campaign_user.id' x='67' y='583'>id</text><title>id
+  <use id='nn' x='50' y='573' xlink:href='#nn'/><use id='pk' x='50' y='572' xlink:href='#pk'><title>Pk pk_expedition_user_id ( id ) </title></use><a xlink:href='#knowledgebase.campaign_participating_user_id'><text id='knowledgebase.campaign_participating_user.id' x='67' y='583'>id</text><title>id
 * integer</title></a>
-<text x='173' y='580' text-anchor='end' class='colType'>#</text>  <use id='nn' x='50' y='589' xlink:href='#nn'/><a xlink:href='#knowledgebase.campaign_user_user_id'><text id='knowledgebase.campaign_user.user_id' x='67' y='599' onmouseover="hghl(['campaign_user_fk_expedition_user_user','knowledgebase.user.id'])" onmouseout="uhghl(['campaign_user_fk_expedition_user_user','knowledgebase.user.id'])">user_id</text><title>user_id
+<text x='253' y='580' text-anchor='end' class='colType'>#</text>  <use id='nn' x='50' y='589' xlink:href='#nn'/><a xlink:href='#knowledgebase.campaign_participating_user_user_id'><text id='knowledgebase.campaign_participating_user.user_id' x='67' y='599' onmouseover="hghl(['campaign_participating_user_fk_expedition_user_user','knowledgebase.user.id'])" onmouseout="uhghl(['campaign_participating_user_fk_expedition_user_user','knowledgebase.user.id'])">user_id</text><title>user_id
 * integer</title></a>
-<a xlink:href='#knowledgebase.campaign_user.user_id'><use id='fk' x='164' y='588' xlink:href='#fk'/><title>References user ( user_id -&gt; id ) </title></a>
-  <use id='nn' x='50' y='605' xlink:href='#nn'/><a xlink:href='#knowledgebase.campaign_user_campaign_id'><text id='knowledgebase.campaign_user.campaign_id' x='67' y='615' onmouseover="hghl(['campaign_user_fk_expedition_user_expedition','knowledgebase.campaign.id'])" onmouseout="uhghl(['campaign_user_fk_expedition_user_expedition','knowledgebase.campaign.id'])">campaign_id</text><title>campaign_id
+<a xlink:href='#knowledgebase.campaign_participating_user.user_id'><use id='fk' x='244' y='588' xlink:href='#fk'/><title>References user ( user_id -&gt; id ) </title></a>
+  <use id='nn' x='50' y='605' xlink:href='#nn'/><a xlink:href='#knowledgebase.campaign_participating_user_campaign_id'><text id='knowledgebase.campaign_participating_user.campaign_id' x='67' y='615' onmouseover="hghl(['campaign_participating_user_fk_expedition_user_expedition','knowledgebase.campaign.id'])" onmouseout="uhghl(['campaign_participating_user_fk_expedition_user_expedition','knowledgebase.campaign.id'])">campaign_id</text><title>campaign_id
 * integer</title></a>
-<a xlink:href='#knowledgebase.campaign_user.campaign_id'><use id='fk' x='164' y='604' xlink:href='#fk'/><title>References campaign ( campaign_id -&gt; id ) </title></a>
+<a xlink:href='#knowledgebase.campaign_participating_user.campaign_id'><use id='fk' x='244' y='604' xlink:href='#fk'/><title>References campaign ( campaign_id -&gt; id ) </title></a>
 
 <!-- == Table 'cbass_assay' == -->
 <rect class='entity' style='stroke:none;' x='1072' y='952' width='160' height='176' rx='8' ry='8' />
@@ -1226,12 +1259,14 @@ I have put a controlled vocab inplace for this on the input excel workbook.</tit
 This user object will represent users who register on the Global Search web UI and users who partake in expeditions.
 
 The columns of this table will change according to how integration with AWS Cognito works. For example, if a user logs in with their Google credentials, will we have access to an email? Maybe not. The credentials stored for the users will therefore change according to how the integration with cognito works.</title></a>
-  <use id='nn' x='226' y='413' xlink:href='#nn'/><use id='pk' x='226' y='412' xlink:href='#pk'><title>Pk pk_tbl_id ( id ) </title></use><a xlink:href='#knowledgebase.user_id'><text id='knowledgebase.user.id' x='243' y='423' onmouseover="hghl(['assay_user_fk_assay_user_user','knowledgebase.assay_user.assay_id','campaign_fk_expedition_user','knowledgebase.campaign.lead_user','campaign_user_fk_expedition_user_user','knowledgebase.campaign_user.user_id','dive_user_fk_dive_user_user','knowledgebase.dive_user.user_id'])" onmouseout="uhghl(['assay_user_fk_assay_user_user','knowledgebase.assay_user.assay_id','campaign_fk_expedition_user','knowledgebase.campaign.lead_user','campaign_user_fk_expedition_user_user','knowledgebase.campaign_user.user_id','dive_user_fk_dive_user_user','knowledgebase.dive_user.user_id'])">id</text><title>id
+  <use id='nn' x='226' y='413' xlink:href='#nn'/><use id='pk' x='226' y='412' xlink:href='#pk'><title>Pk pk_tbl_id ( id ) </title></use><a xlink:href='#knowledgebase.user_id'><text id='knowledgebase.user.id' x='243' y='423' onmouseover="hghl(['assay_user_fk_assay_user_user','knowledgebase.assay_user.assay_id','campaign_fk_expedition_user','knowledgebase.campaign.lead_user','campaign_participating_user_fk_expedition_user_user','knowledgebase.campaign_participating_user.user_id','dive_user_fk_dive_user_user','knowledgebase.dive_user.user_id','campaign_contributing_user_fk_campaign_contributing_user_user','knowledgebase.campaign_contributing_user.user_id','campaign_contributing_user_fk_campaign_contributing_user_user','knowledgebase.campaign_contributing_user.user_id'])" onmouseout="uhghl(['assay_user_fk_assay_user_user','knowledgebase.assay_user.assay_id','campaign_fk_expedition_user','knowledgebase.campaign.lead_user','campaign_participating_user_fk_expedition_user_user','knowledgebase.campaign_participating_user.user_id','dive_user_fk_dive_user_user','knowledgebase.dive_user.user_id','campaign_contributing_user_fk_campaign_contributing_user_user','knowledgebase.campaign_contributing_user.user_id','campaign_contributing_user_fk_campaign_contributing_user_user','knowledgebase.campaign_contributing_user.user_id'])">id</text><title>id
 * integer</title></a>
 <a xlink:href='#knowledgebase.user.id'><use id='ref' x='372' y='412' xlink:href='#ref'/><title>Referred by assay_user ( assay_id -&gt; id ) 
 Referred by campaign ( lead_user -&gt; id ) 
-Referred by campaign_user ( user_id -&gt; id ) 
-Referred by dive_user ( user_id -&gt; id ) </title></a>
+Referred by campaign_participating_user ( user_id -&gt; id ) 
+Referred by dive_user ( user_id -&gt; id ) 
+Referred by campaign_contributing_user ( user_id -&gt; id ) 
+Referred by campaign_contributing_user ( user_id -&gt; id ) </title></a>
   <use id='nn' x='226' y='429' xlink:href='#nn'/><a xlink:href='#knowledgebase.user_role'><text id='knowledgebase.user.role' x='243' y='439'>role</text><title>role
 * varchar(10) default guest
 A field that will be used to control the extent of access to the Global Search web UI. This will lkely be a controlled vocab of possibly 3 different roles. These roles will be further solidified as part of the interviews that FIVE will be conducting.</title></a>
@@ -1257,7 +1292,7 @@ The date the user was registered on the system</title></a>
 <div class='container pt-2'>
 
 <br><br>
-<div class='card'><div class='card-body'><a name='knowledgebase.analysis' onclick='window.scrollTo(1112, 1440);return false;' style='cursor:pointer;'><h5 class='card-title'>Table analysis</h5></a>
+<div class='card'><div class='card-body'><a name='knowledgebase.analysis' onclick='window.scrollTo(1112, 1440);return false;' style='cursor:pointer;'><h5 class='card-title'>Schema knowledgebase</h5><h5 class='card-title'>Table analysis</h5></a>
 <p class="text-muted">This is a place holder table that will have no immediate purpose for the &#39;bare bones&#39; level of the application&#46; However&#44; once we move onto the next iteration of the application&#44; we will want to start to host nalysed data in the database&#46; For example&#44; a user will do a CBASS expedition and the result will be 1 &#41; a collection of input tables that will be loaded into the web UI to make the meta data that is hosted in the current bare bones tables and 2&#41; a load of sequencing data that will be submitted to NCBI&#46; However&#44; the scientists will then analyse this sequencing data and produce a derived product&#46; This derived product will &#40;to the best of my understanding&#41; be hosted in this db&#46; This &#39;analysis&#39; table represents a Superclass for the various different  derived products &#40;analyses&#41; that will be stored&#46; As such&#44; i see it as the &#39;bolt on&#39; point for when further db development occurs&#46;</p>
 <table class='table table-sm table-bordered small' style='table-layout: fixed; word-wrap: break-word;'>
 <thead>
@@ -1566,7 +1601,52 @@ The date the user was registered on the system</title></a>
 </table></div></div>
 
 <br><br>
-<div class='card'><div class='card-body'><a name='knowledgebase.campaign_user' onclick='window.scrollTo(60, 544);return false;' style='cursor:pointer;'><h5 class='card-title'>Table campaign_user</h5></a>
+<div class='card'><div class='card-body'><a name='knowledgebase.campaign_contributing_user' onclick='window.scrollTo(152, 688);return false;' style='cursor:pointer;'><h5 class='card-title'>Table campaign_contributing_user</h5></a>
+<p class="text-muted">Join table to allow for a collection of user who can upload files to the db</p>
+<table class='table table-sm table-bordered small' style='table-layout: fixed; word-wrap: break-word;'>
+<thead>
+<tr><th style='width:5%'>Idx</th><th style='width:20%'>Field Name</th><th style='width:23%'>Data Type</th><th style='width:52%'>Description</th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg></td>
+		<td><a name='knowledgebase.campaign_contributing_user_id'>id</a></td>
+		<td> integer  </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='knowledgebase.campaign_contributing_user_user_id'>user&#95;id</a></td>
+		<td> integer  </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='knowledgebase.campaign_contributing_user_campaign_id'>campaign&#95;id</a></td>
+		<td> integer  </td>
+		<td>  </td>
+	</tr>
+<tr><th colspan='4'>Indexes</th></tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#pk'/></svg></td><td>pk&#95;campaign&#95;contributing&#95;user&#95;id</td>
+		<td> ON id</td>
+		<td>  </td>
+	</tr>
+<tr><th colspan='4'>Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>fk_campaign_contributing_user_user</td>
+		<td > ( user&#95;id ) ref <a href='#knowledgebase&#46;user'>user</a> (id) </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>fk_campaign_contributing_user_campaign</td>
+		<td > ( campaign&#95;id ) ref <a href='#knowledgebase&#46;campaign'>campaign</a> (id) </td>
+		<td>  </td>
+	</tr>
+</tbody>
+</table></div></div>
+
+<br><br>
+<div class='card'><div class='card-body'><a name='knowledgebase.campaign_participating_user' onclick='window.scrollTo(60, 544);return false;' style='cursor:pointer;'><h5 class='card-title'>Table campaign_participating_user</h5></a>
 <p class="text-muted">Join table&#46; One  user can take part in multiple expeditions&#46; One expeditions contains multiple users&#46;</p>
 <table class='table table-sm table-bordered small' style='table-layout: fixed; word-wrap: break-word;'>
 <thead>
@@ -1575,19 +1655,19 @@ The date the user was registered on the system</title></a>
 <tbody>
 	<tr>
 		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg></td>
-		<td><a name='knowledgebase.campaign_user_id'>id</a></td>
+		<td><a name='knowledgebase.campaign_participating_user_id'>id</a></td>
 		<td> integer  </td>
 		<td>  </td>
 	</tr>
 	<tr>
 		<td>*<svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
-		<td><a name='knowledgebase.campaign_user_user_id'>user&#95;id</a></td>
+		<td><a name='knowledgebase.campaign_participating_user_user_id'>user&#95;id</a></td>
 		<td> integer  </td>
 		<td>  </td>
 	</tr>
 	<tr>
 		<td>*<svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
-		<td><a name='knowledgebase.campaign_user_campaign_id'>campaign&#95;id</a></td>
+		<td><a name='knowledgebase.campaign_participating_user_campaign_id'>campaign&#95;id</a></td>
 		<td> integer  </td>
 		<td>  </td>
 	</tr>
